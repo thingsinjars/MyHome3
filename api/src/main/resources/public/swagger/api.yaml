@@ -1,0 +1,1403 @@
+openapi: 3.0.2
+servers:
+  - url: http://localhost:8080/
+info:
+  description: This is a OpenApi specification for MyHome backend service.
+  version: 2.0.0
+  title: Swagger MyHome - OpenAPI 3.0
+tags:
+  - name: Authentication
+  - name: Users
+  - name: Documents
+  - name: Communities
+  - name: Amenities
+  - name: Houses
+  - name: Payments
+  - name: Members
+paths:
+  /auth/login:
+    post:
+      tags:
+        - Authentication
+      description: Login user to system
+      operationId: login
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LoginRequest'
+          application/xml:
+            schema:
+              $ref: '#/components/schemas/LoginRequest'
+      responses:
+        '200':
+          description: Login successful
+
+  /users/password:
+    post:
+      tags:
+        - Users
+      description: Request reset password or reset password
+      parameters:
+        - in: query
+          name: action
+          required: true
+          schema:
+            type: string
+            enum: [ FORGOT, RESET ]
+          description: Acton with user password (forgot or reset)
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ForgotPasswordRequest'
+          application/xml:
+            schema:
+              $ref: '#/components/schemas/ForgotPasswordRequest'
+      responses:
+        '200':
+          description: If password reset
+        '400':
+          description: If wrong password reset token
+  /amenities/{amenityId}:
+    get:
+      security:
+        - bearerAuth: [ ]
+      tags:
+        - Amenities
+      description: Get details about the amenity
+      operationId: getAmenityDetails
+      parameters:
+        - in: path
+          name: amenityId
+          required: true
+          schema:
+            type: string
+          description: Id of the amenity to get details
+      responses:
+        '200':
+          description: If details found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetAmenityDetailsResponse'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/GetAmenityDetailsResponse'
+        '404':
+          description: If params are invalid
+    delete:
+      security:
+        - bearerAuth: [ ]
+      tags:
+        - Amenities
+      description: Remove amenity
+      operationId: deleteAmenity
+      parameters:
+        - in: path
+          name: amenityId
+          required: true
+          schema:
+            type: string
+      responses:
+        '204':
+          description: If amenity deleted
+        '404':
+          description: If params are invalid
+    put:
+      security:
+        - bearerAuth: [ ]
+      tags:
+        - Amenities
+      description: Update an amenity
+      operationId: updateAmenity
+      parameters:
+        - in: path
+          name: amenityId
+          required: true
+          schema:
+            type: string
+      requestBody:
+        description: UpdateAmenityRequest update amenity
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateAmenityRequest'
+          application/xml:
+            schema:
+              $ref: '#/components/schemas/UpdateAmenityRequest'
+      responses:
+        '204':
+          description: If updated successfully
+        '400':
+          description: If amenity is not found
+  /amenities/{amenityId}/bookings/{bookingId}:
+    delete:
+      security:
+        - bearerAuth: [ ]
+      tags:
+        - Bookings
+      description: Remove booking
+      operationId: deleteBooking
+      parameters:
+        - in: path
+          name: amenityId
+          required: true
+          schema:
+            type: string
+        - in: path
+          name: bookingId
+          required: true
+          schema:
+            type: string
+      responses:
+        '204':
+          description: If booking deleted
+        '404':
+          description: If params are invalid
+  /communities/{communityId}/amenities:
+    get:
+      security:
+        - bearerAuth: [ ]
+      tags:
+        - Amenities
+      description: Get all amenities of community
+      operationId: listAllAmenities
+      parameters:
+        - in: path
+          name: communityId
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Returns list of amenities
+          content:
+            application/json:
+              schema:
+                type: array
+                uniqueItems: true
+                items:
+                  $ref: '#/components/schemas/GetAmenityDetailsResponse'
+            application/xml:
+              schema:
+                type: array
+                uniqueItems: true
+                items:
+                  $ref: '#/components/schemas/GetAmenityDetailsResponse'
+        '404':
+          description: If params are invalid
+    post:
+      security:
+        - bearerAuth: [ ]
+      tags:
+        - Amenities
+      description: Adds amenity to community
+      operationId: addAmenityToCommunity
+      requestBody:
+        required: false
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AddAmenityRequest'
+          application/xml:
+            schema:
+              $ref: '#/components/schemas/AddAmenityRequest'
+      parameters:
+        - in: path
+          name: communityId
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: If amenity add successful
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AddAmenityResponse'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/AddAmenityResponse'
+        '404':
+          description: If community not found
+  /users:
+    post:
+      tags:
+        - Users
+      description: Create a new user
+      operationId: signUp
+      requestBody:
+        description: CreateUserRequest aggregate fields
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateUserRequest'
+          application/xml:
+            schema:
+              $ref: '#/components/schemas/CreateUserRequest'
+      responses:
+        '201':
+          description: If user created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CreateUserResponse'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/CreateUserResponse'
+        '409':
+          description: If user already exists
+    get:
+      security:
+        - bearerAuth: [ ]
+      tags:
+        - Users
+      description: Lists all users
+      operationId: listAllUsers
+      parameters:
+        - in: query
+          name: pageable
+          required: false
+          schema:
+            $ref: '#/components/schemas/Pageable'
+      responses:
+        '200':
+          description: Returns list of users
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetUserDetailsResponse'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/GetUserDetailsResponse'
+  /users/{userId}:
+    get:
+      security:
+        - bearerAuth: [ ]
+      tags:
+        - Users
+      description: Get details of a user given userId
+      operationId: getUserDetails
+      parameters:
+        - in: path
+          name: userId
+          schema:
+            type: string
+          required: true
+          description: ID of the user to get
+      responses:
+        '200':
+          description: If userId is valid. Response body has the details
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetUserDetailsResponseUser'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/GetUserDetailsResponseUser'
+        '404':
+          description: If userId is invalid
+  /users/{userId}/email-confirm/{emailConfirmToken}:
+    get:
+      tags:
+        - Users
+      description: Confirm user email
+      operationId: confirmEmail
+      parameters:
+        - in: path
+          name: userId
+          schema:
+            type: string
+          required: true
+          description: Id of the user for confirm email
+        - in: path
+          name: emailConfirmToken
+          schema:
+            type: string
+          required: true
+          description: Tocken from user email
+      responses:
+        '200':
+          description: Email was successfully confirmed
+        '400':
+          description: Email confirmation error
+  /users/{userId}/email-confirm-resend:
+    get:
+      tags:
+        - Users
+      description: "Resend email confirm mail"
+      operationId: resendConfirmEmailMail
+      parameters:
+        - in: path
+          name: userId
+          schema:
+            type: string
+          required: true
+          description: ID of the user for resend confirm email
+      responses:
+        '200':
+          description: Email was successfully send
+        '400':
+          description: Email send error
+  /users/{userId}/housemates:
+    get:
+      security:
+        - bearerAuth: [ ]
+      tags:
+        - Users
+      description: Lists all members from all houses of a user
+      operationId: listAllHousemates
+      parameters:
+        - in: path
+          name: userId
+          schema:
+            type: string
+          required: true
+          description: ID of the user for which to find housemates
+        - in: query
+          name: pageable
+          required: false
+          schema:
+            $ref: '#/components/schemas/Pageable'
+      responses:
+        '200':
+          description: Returns list of all members from all houses of the specified user
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ListHouseMembersResponse'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/ListHouseMembersResponse'
+  /members/{memberId}/documents:
+    get:
+      security:
+        - bearerAuth: [ ]
+      tags:
+        - Documents
+      description: Returns house member's documents
+      operationId: getHouseMemberDocument
+      parameters:
+        - in: path
+          name: memberId
+          schema:
+            type: string
+          required: true
+      responses:
+        '200':
+          description: If document present
+          content:
+            image/jpeg:
+              schema:
+                type: string
+                format: byte
+        '404':
+          description: If params are invalid
+    post:
+      security:
+        - bearerAuth: [ ]
+      tags:
+        - Documents
+      description: Add house member's documents
+      operationId: uploadHouseMemberDocument
+      parameters:
+        - in: path
+          name: memberId
+          schema:
+            type: string
+          required: true
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                memberDocument:
+                  type: string
+                  format: binary
+      responses:
+        '204':
+          description: If document saved
+        '409':
+          description: If document save error
+        '413':
+          description: If document file too large
+        '404':
+          description: If params are invalid
+    put:
+      security:
+        - bearerAuth: [ ]
+      tags:
+        - Documents
+      description: Update house member's documents
+      operationId: updateHouseMemberDocument
+      parameters:
+        - in: path
+          name: memberId
+          schema:
+            type: string
+          required: true
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                memberDocument:
+                  type: string
+                  format: binary
+      responses:
+        '204':
+          description: If document updated
+        '409':
+          description: If document update error
+        '413':
+          description: If document file too large
+        '404':
+          description: If params are invalid
+    delete:
+      security:
+        - bearerAuth: [ ]
+      tags:
+        - Documents
+      description: Delete house member's documents
+      operationId: deleteHouseMemberDocument
+      parameters:
+        - in: path
+          name: memberId
+          schema:
+            type: string
+          required: true
+      responses:
+        '204':
+          description: If document deleted
+        '404':
+          description: If params are invalid
+  /communities:
+    post:
+      security:
+        - bearerAuth: [ ]
+      tags:
+        - Communities
+      description: Create a new community
+      operationId: createCommunity
+      requestBody:
+        description: CreateCommunityRequest aggregate fields
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateCommunityRequest'
+          application/xml:
+            schema:
+              $ref: '#/components/schemas/CreateCommunityRequest'
+      responses:
+        '201':
+          description: If community was created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CreateCommunityResponse'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/CreateCommunityResponse'
+    get:
+      security:
+        - bearerAuth: [ ]
+      tags:
+        - Communities
+      description: List all communities which are registered
+      operationId: listAllCommunity
+      parameters:
+        - in: query
+          name: pageable
+          required: false
+          schema:
+            $ref: '#/components/schemas/Pageable'
+      responses:
+        '200':
+          description: Returns list of communities
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetCommunityDetailsResponse'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/GetCommunityDetailsResponse'
+  /communities/{communityId}:
+    get:
+      security:
+        - bearerAuth: [ ]
+      tags:
+        - Communities
+      description: Get details about the community given a community id
+      operationId: listCommunityDetails
+      parameters:
+        - in: path
+          name: communityId
+          schema:
+            type: string
+          required: true
+      responses:
+        '200':
+          description: If community exists
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetCommunityDetailsResponse'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/GetCommunityDetailsResponse'
+        '404':
+          description: If params are invalid
+    delete:
+      security:
+        - bearerAuth: [ ]
+      tags:
+        - Communities
+      description: Deletion community with given community id
+      operationId: deleteCommunity
+      parameters:
+        - in: path
+          name: communityId
+          schema:
+            type: string
+          required: true
+      responses:
+        '204':
+          description: If community was removed
+        '404':
+          description: If params are invalid
+  /communities/{communityId}/admins:
+    get:
+      security:
+        - bearerAuth: [ ]
+      tags:
+        - Communities
+      description: List all admins of the community given a community id
+      operationId: listCommunityAdmins
+      parameters:
+        - in: path
+          name: communityId
+          schema:
+            type: string
+          required: true
+        - in: query
+          name: pageable
+          required: false
+          schema:
+            $ref: '#/components/schemas/Pageable'
+      responses:
+        '200':
+          description: If community exists
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ListCommunityAdminsResponse'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/ListCommunityAdminsResponse'
+        '404':
+          description: If params are invalid
+    post:
+      security:
+        - bearerAuth: [ ]
+      tags:
+        - Communities
+      description: Add a new admin to the community given a community id
+      operationId: addCommunityAdmins
+      parameters:
+        - in: path
+          name: communityId
+          schema:
+            type: string
+          required: true
+      requestBody:
+        description: AddCommunityAdminRequest aggregate fields
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AddCommunityAdminRequest'
+          application/xml:
+            schema:
+              $ref: '#/components/schemas/AddCommunityAdminRequest'
+      responses:
+        '204':
+          description: If admins were created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AddCommunityAdminResponse'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/AddCommunityAdminResponse'
+        '404':
+          description: If params are invalid
+  /communities/{communityId}/admins/{adminId}:
+    delete:
+      security:
+        - bearerAuth: [ ]
+      tags:
+        - Communities
+      description: Remove of admin associated with a community
+      operationId: removeAdminFromCommunity
+      parameters:
+        - in: path
+          name: communityId
+          schema:
+            type: string
+          required: true
+        - in: path
+          name: adminId
+          schema:
+            type: string
+          required: true
+      responses:
+        '204':
+          description: If admin was removed
+        '404':
+          description: If params are invalid
+  /communities/{communityId}/houses:
+    get:
+      security:
+        - bearerAuth: [ ]
+      tags:
+        - Communities
+      description: List all houses of the community given a community id
+      operationId: listCommunityHouses
+      parameters:
+        - in: path
+          name: communityId
+          schema:
+            type: string
+          required: true
+        - in: query
+          name: pageable
+          required: false
+          schema:
+            $ref: '#/components/schemas/Pageable'
+      responses:
+        '200':
+          description: If community exists
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetHouseDetailsResponse'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/GetHouseDetailsResponse'
+        '404':
+          description: If params are invalid
+    post:
+      tags:
+        - Communities
+      description: Add a new house to the community given a community id
+      operationId: addCommunityHouses
+      parameters:
+        - in: path
+          name: communityId
+          schema:
+            type: string
+          required: true
+      requestBody:
+        description: AddCommunityHouseRequest aggregate fields
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AddCommunityHouseRequest'
+          application/xml:
+            schema:
+              $ref: '#/components/schemas/AddCommunityHouseRequest'
+      responses:
+        '204':
+          description: If houses were added
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AddCommunityHouseResponse'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/AddCommunityHouseResponse'
+        '400':
+          description: If params are invalid
+  /communities/{communityId}/houses/{houseId}:
+    delete:
+      security:
+        - bearerAuth: [ ]
+      tags:
+        - Communities
+      description: Remove of house from the community given a community id and a house id
+      operationId: removeCommunityHouse
+      parameters:
+        - in: path
+          name: communityId
+          schema:
+            type: string
+          required: true
+        - in: path
+          name: houseId
+          schema:
+            type: string
+          required: true
+      responses:
+        '204':
+          description: If house was removed
+        '400':
+          description: If params are invalid
+  /houses:
+    get:
+      security:
+        - bearerAuth: [ ]
+      tags:
+        - Houses
+      description: List all houses of the community given a community id
+      operationId: listAllHouses
+      parameters:
+        - in: query
+          name: pageable
+          required: false
+          schema:
+            $ref: '#/components/schemas/Pageable'
+      responses:
+        '200':
+          description: If community exists
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetHouseDetailsResponse'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/GetHouseDetailsResponse'
+  /houses/{houseId}:
+    get:
+      security:
+        - bearerAuth: [ ]
+      tags:
+        - Houses
+      description: Get house detail by a given ID
+      operationId: getHouseDetails
+      parameters:
+        - in: path
+          name: houseId
+          schema:
+            type: string
+          required: true
+          description: ID of the house to get
+      responses:
+        '200':
+          description: If house present
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetHouseDetailsResponse'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/GetHouseDetailsResponse'
+        '404':
+          description: If params are invalid
+  /houses/{houseId}/members:
+    get:
+      security:
+        - bearerAuth: [ ]
+      tags:
+        - Houses
+      description: List all members of the house given a house id
+      operationId: listAllMembersOfHouse
+      parameters:
+        - in: path
+          name: houseId
+          schema:
+            type: string
+          required: true
+        - in: query
+          name: pageable
+          required: false
+          schema:
+            $ref: '#/components/schemas/Pageable'
+      responses:
+        '200':
+          description: If house present
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ListHouseMembersResponse'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/ListHouseMembersResponse'
+        '404':
+          description: If params are invalid
+    post:
+      security:
+        - bearerAuth: [ ]
+      tags:
+        - Houses
+      description: Add new members to the house given a house id. Responds with member id which were added
+      operationId: addHouseMembers
+      parameters:
+        - in: path
+          name: houseId
+          schema:
+            type: string
+          required: true
+      requestBody:
+        description: AddHouseMemberRequest aggregate fields
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AddHouseMemberRequest'
+          application/xml:
+            schema:
+              $ref: '#/components/schemas/AddHouseMemberRequest'
+      responses:
+        '201':
+          description: If members were added to house
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AddHouseMemberResponse'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/AddHouseMemberResponse'
+        '404':
+          description: If parameters are invalid
+  /houses/{houseId}/members/{memberId}:
+    delete:
+      security:
+        - bearerAuth: [ ]
+      tags:
+        - Houses
+      description: Deletion of member associated with a house
+      operationId: deleteHouseMember
+      parameters:
+        - in: path
+          name: houseId
+          schema:
+            type: string
+          required: true
+        - in: path
+          name: memberId
+          schema:
+            type: string
+          required: true
+      responses:
+        '204':
+          description: If house member was removed from house
+        '400':
+          description: If params are invalid
+
+  /payments:
+    post:
+      security:
+        - bearerAuth: [ ]
+      tags:
+        - Payments
+      description: Schedule a new payment
+      operationId: schedulePayment
+      requestBody:
+        description: CreateUserRequest aggregate fields
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SchedulePaymentRequest'
+          application/xml:
+            schema:
+              $ref: '#/components/schemas/SchedulePaymentRequest'
+      responses:
+        '201':
+          description: If schedule payment is created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SchedulePaymentResponse'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/SchedulePaymentResponse'
+  /payments/{paymentId}:
+    get:
+      security:
+        - bearerAuth: [ ]
+      tags:
+        - Payments
+      description: Get details about a payment with the given payment id
+      operationId: listPaymentDetails
+      parameters:
+        - in: path
+          name: paymentId
+          schema:
+            type: string
+          required: true
+          description: Payment ID
+      responses:
+        '200':
+          description: If payment is valid. Response body has the details
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SchedulePaymentResponse'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/SchedulePaymentResponse'
+        '404':
+          description: If paymentId is invalid
+  /members/{memberId}/payments:
+    get:
+      security:
+        - bearerAuth: [ ]
+      tags:
+        - Payments
+      description: Get all payments for the specified member
+      operationId: listAllMemberPayments
+      parameters:
+        - in: path
+          name: memberId
+          schema:
+            type: string
+          required: true
+          description: Member Id to use for getting all payments
+      responses:
+        '200':
+          description: If memberId is valid. Response body has the details
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ListMemberPaymentsResponse'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/ListMemberPaymentsResponse'
+        '404':
+          description: If memberId is invalid
+  /communities/{communityId}/admins/{adminId}/payments:
+    get:
+      security:
+        - bearerAuth: [ ]
+      tags:
+        - Payments
+      description: Get all payments scheduled by the specified admin
+      operationId: listAllAdminScheduledPayments
+      parameters:
+        - in: path
+          name: communityId
+          schema:
+            type: string
+          required: true
+          description: The id of community
+        - in: path
+          name: adminId
+          schema:
+            type: string
+          required: true
+          description: The id of admin
+        - in: query
+          name: pageable
+          required: false
+          schema:
+            $ref: '#/components/schemas/Pageable'
+      responses:
+        '200':
+          description: If communityId and adminId are valid. Response body has the details
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ListAdminPaymentsResponse'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/ListAdminPaymentsResponse'
+        '404':
+          description: If communityId or adminId are invalid
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+  schemas:
+    ForgotPasswordRequest:
+      type: object
+      properties:
+        email:
+          type: string
+        token:
+          type: string
+        newPassword:
+          type: string
+    GetAmenityDetailsResponse:
+      type: object
+      properties:
+        amenityId:
+          type: string
+        description:
+          type: string
+    UpdateAmenityRequest:
+      type: object
+      properties:
+        name:
+          type: string
+        description:
+          type: string
+        price:
+          type: integer
+          format: int64
+        communityId:
+          type: string
+    AmenityDto:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+        amenityId:
+          type: string
+        name:
+          type: string
+        description:
+          type: string
+        price:
+          type: number
+        communityId:
+          type: string
+    AddAmenityRequest:
+      type: object
+      properties:
+        amenities:
+          type: array
+          uniqueItems: true
+          items:
+            $ref: '#/components/schemas/AmenityDto'
+    AddAmenityResponse:
+      type: object
+      properties:
+        amenities:
+          type: array
+          items:
+            $ref: '#/components/schemas/AmenityDto'
+    CreateUserRequest:
+      type: object
+      required:
+        - name
+      properties:
+        name:
+          type: string
+        email:
+          type: string
+          format: email
+        password:
+          type: string
+          minLength: 8
+          maxLength: 80
+    CreateUserResponse:
+      type: object
+      properties:
+        userId:
+          type: string
+        name:
+          type: string
+        email:
+          type: string
+    GetUserDetailsResponse:
+      type: object
+      required:
+        - users
+      properties:
+        users:
+          type: array
+          uniqueItems: true
+          items:
+            $ref: '#/components/schemas/GetUserDetailsResponseUser'
+    GetUserDetailsResponseUser:
+      type: object
+      properties:
+        userId:
+          type: string
+        name:
+          type: string
+        email:
+          type: string
+        communityIds:
+          type: array
+          uniqueItems: true
+          items:
+            type: string
+    Pageable:
+      description: Pageable query parameters
+      type: object
+      properties:
+        page:
+          type: integer
+        size:
+          type: integer
+    PageInfo:
+      description: Page info
+      type: object
+      properties:
+        currentPage:
+          type: integer
+        pageLimit:
+          type: integer
+        totalPages:
+          type: integer
+        totalElements:
+          type: integer
+          format: int64
+
+    CreateCommunityRequest:
+      type: object
+      required:
+        - name
+        - district
+      properties:
+        name:
+          type: string
+        district:
+          type: string
+    CreateCommunityResponse:
+      type: object
+      required:
+        - communityId
+      properties:
+        communityId:
+          type: string
+    GetCommunityDetailsResponse:
+      type: object
+      required:
+        - communities
+      properties:
+        communities:
+          type: array
+          uniqueItems: true
+          items:
+            $ref: '#/components/schemas/GetCommunityDetailsResponseCommunity'
+    GetCommunityDetailsResponseCommunity:
+      type: object
+      properties:
+        communityId:
+          type: string
+        name:
+          type: string
+        district:
+          type: string
+    ListCommunityAdminsResponse:
+      type: object
+      required:
+        - admins
+      properties:
+        admins:
+          type: array
+          uniqueItems: true
+          items:
+            $ref: '#/components/schemas/ListCommunityAdminsResponseCommunityAdmin'
+    ListCommunityAdminsResponseCommunityAdmin:
+      type: object
+      properties:
+        adminId:
+          type: string
+    AddCommunityAdminRequest:
+      type: object
+      required:
+        - admins
+      properties:
+        admins:
+          type: array
+          uniqueItems: true
+          items:
+            type: string
+    AddCommunityAdminResponse:
+      type: object
+      required:
+        - admins
+      properties:
+        admins:
+          type: array
+          uniqueItems: true
+          items:
+            type: string
+    GetHouseDetailsResponse:
+      type: object
+      required:
+        - houses
+      properties:
+        houses:
+          type: array
+          uniqueItems: true
+          items:
+            $ref: '#/components/schemas/GetHouseDetailsResponseCommunityHouse'
+    GetHouseDetailsResponseCommunityHouse:
+      type: object
+      properties:
+        houseId:
+          type: string
+        name:
+          type: string
+    AddCommunityHouseRequest:
+      type: object
+      required:
+        - houses
+      properties:
+        houses:
+          type: array
+          uniqueItems: true
+          items:
+            $ref: '#/components/schemas/CommunityHouseName'
+    CommunityHouseName:
+      type: object
+      properties:
+        name:
+          type: string
+    AddCommunityHouseResponse:
+      type: object
+      required:
+        - houses
+      properties:
+        houses:
+          type: array
+          uniqueItems: true
+          items:
+            type: string
+    HouseMember:
+      type: object
+      required:
+        - memberId
+        - name
+      properties:
+        memberId:
+          type: string
+        name:
+          type: string
+    ListHouseMembersResponse:
+      type: object
+      required:
+        - members
+      properties:
+        members:
+          type: array
+          uniqueItems: true
+          items:
+            $ref: '#/components/schemas/HouseMember'
+    HouseMemberDto:
+      type: object
+      required:
+        - memberId
+        - name
+      properties:
+        id:
+          type: integer
+          format: int64
+        memberId:
+          type: string
+        name:
+          type: string
+    AddHouseMemberRequest:
+      type: object
+      required:
+        - members
+      properties:
+        members:
+          type: array
+          uniqueItems: true
+          items:
+            $ref: '#/components/schemas/HouseMemberDto'
+    AddHouseMemberResponse:
+      type: object
+      required:
+        - members
+      properties:
+        members:
+          type: array
+          uniqueItems: true
+          items:
+            $ref: '#/components/schemas/HouseMember'
+    SchedulePaymentRequest:
+      type: object
+      required:
+        - description
+      properties:
+        type:
+          type: string
+        description:
+          type: string
+          minLength: 5
+          maxLength: 300
+        recurring:
+          type: boolean
+        charge:
+          type: number
+        dueDate:
+          type: string
+        adminId:
+          type: string
+        memberId:
+          type: string
+    SchedulePaymentResponse:
+      type: object
+      properties:
+        paymentId:
+          type: string
+        charge:
+          type: number
+        type:
+          type: string
+        description:
+          type: string
+        recurring:
+          type: boolean
+        dueDate:
+          type: string
+        adminId:
+          type: string
+        memberId:
+          type: string
+    MemberPayment:
+      type: object
+      properties:
+        memberId:
+          type: string
+        paymentId:
+          type: string
+        charge:
+          type: number
+        dueDate:
+          type: string
+    ListMemberPaymentsResponse:
+      type: object
+      properties:
+        payments:
+          type: array
+          items:
+            $ref: '#/components/schemas/MemberPayment'
+          uniqueItems: true
+    AdminPayment:
+      type: object
+      properties:
+        adminId:
+          type: string
+        paymentId:
+          type: string
+        charge:
+          type: number
+        dueDate:
+          type: string
+    ListAdminPaymentsResponse:
+      type: object
+      properties:
+        payments:
+          type: array
+          items:
+            $ref: '#/components/schemas/AdminPayment'
+          uniqueItems: true
+        pageInfo:
+          $ref: '#/components/schemas/PageInfo'
+    LoginRequest:
+      type: object
+      properties:
+        email:
+          type: string
+        password:
+          type: string

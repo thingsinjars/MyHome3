@@ -1,0 +1,14 @@
+version: '3.0'
+
+services:
+  myhome-service:
+    image: jmprathab/myhome-service:${TAG:-latest}
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: "myhome-service"
+    expose:
+      - "8080"
+    ports:
+      - "8080:8080"
+
