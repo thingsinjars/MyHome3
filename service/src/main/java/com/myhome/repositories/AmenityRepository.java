@@ -23,6 +23,10 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
+/**
+ * provides methods for retrieving Optional<Amenity> objects representing amenities
+ * based on their amenityId, using Spring Data JPA queries and entity graphs.
+ */
 public interface AmenityRepository extends JpaRepository<Amenity, Long> {
 
   @Query("from Amenity amenity where amenity.amenityId = :amenityId")

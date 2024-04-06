@@ -32,6 +32,28 @@ import lombok.NoArgsConstructor;
  * Entity identifying a payment in the service. This could be an electricity bill, house rent, water
  * charge etc
  */
+/**
+ * represents an entity for a payment made by a User to a HouseMember, with fields
+ * for payment ID, charge amount, type, description, recurring status, and due date,
+ * as well as relationships with the admin and member entities.
+ * Fields:
+ * 	- paymentId (String): in the Payment entity represents a unique identifier for
+ * each payment made by a user.
+ * 	- charge (BigDecimal): in the Payment entity represents an amount of money to be
+ * paid by the user or member.
+ * 	- type (String): in the Payment entity represents the category of the payment,
+ * such as "electricity bill", "house rent", or "water charge".
+ * 	- description (String): in the Payment entity represents a brief textual description
+ * of the payment, possibly including information about the type of charge or the
+ * date it was due.
+ * 	- recurring (boolean): in the Payment entity indicates whether the payment is
+ * recurring or not.
+ * 	- dueDate (LocalDate): represents the date on which the payment is due to be made,
+ * represented in the format 'yyyy-MM-dd'.
+ * 	- admin (User): in the Payment class represents the user who made the payment.
+ * 	- member (HouseMember): in the Payment class represents an association between a
+ * payment and a house member.
+ */
 @AllArgsConstructor
 @NoArgsConstructor
 @Data

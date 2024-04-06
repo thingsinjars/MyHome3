@@ -19,6 +19,9 @@ import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 
+/**
+ * TODO
+ */
 public class BookingSDJpaServiceTest {
 
   private static final String TEST_BOOKING_ID = "test-booking-id";
@@ -32,11 +35,19 @@ public class BookingSDJpaServiceTest {
   @InjectMocks
   private BookingSDJpaService bookingSDJpaService;
 
+  /**
+   * initialize Mockito Annotations for the current class, enabling mocking of classes
+   * and methods.
+   */
   @BeforeEach
   private void init() {
     MockitoAnnotations.initMocks(this);
   }
 
+  /**
+   * deletes a booking item from the repository, given the amenity ID and booking ID.
+   * It utilizes mocking to verify the correct calls to the `bookingItemRepository`.
+   */
   @Test
   void deleteBookingItem() {
     // given
@@ -56,6 +67,11 @@ public class BookingSDJpaServiceTest {
     verify(bookingItemRepository).delete(testBookingItem);
   }
 
+  /**
+   * verifies that a booking with the given amenity ID and booking ID does not exist
+   * before deleting it, using the `bookingSDJpaService` to delete the booking and
+   * verify the `bookingItemRepository`.
+   */
   @Test
   void deleteBookingNotExists() {
     // given
@@ -71,6 +87,11 @@ public class BookingSDJpaServiceTest {
     verify(bookingItemRepository, never()).delete(any());
   }
 
+  /**
+   * tests the deletion of a booking amenity that does not exist in the database. It
+   * verifies that the method returns `false`, updates the amenity ID of the booking
+   * item, and calls the `verify` methods to confirm the expected actions on the repository.
+   */
   @Test
   void deleteBookingAmenityNotExists() {
     // given
@@ -90,6 +111,16 @@ public class BookingSDJpaServiceTest {
     verify(bookingItemRepository, never()).delete(any());
   }
 
+  /**
+   * creates a new instance of `AmenityBookingItem` with a predefined ID for testing purposes.
+   * 
+   * @returns a new instance of `AmenityBookingItem` with a pre-defined ID.
+   * 
+   * 	- `AmenityBookingItemId`: This is an identifier for the booking item, set to a
+   * specific value (`TEST_BOOKING_ID`).
+   * 	- The `AmenityBookingItem` class itself, which represents a booking item with its
+   * own properties and methods.
+   */
   private AmenityBookingItem getTestBookingItem() {
     return new AmenityBookingItem()
         .withAmenityBookingItemId(TEST_BOOKING_ID);

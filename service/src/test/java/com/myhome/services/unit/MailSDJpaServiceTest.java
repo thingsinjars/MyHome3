@@ -42,6 +42,10 @@ class MailSDJpaServiceTest {
 
   private MailProperties mailProperties = TestUtils.MailPropertiesHelper.getTestMailProperties();
 
+  /**
+   * initializes MockitoAnnotations and sets up a mock HTTP request object and associated
+   * attributes, as well as creating an instance of `MailSDJpaService`.
+   */
   @BeforeEach
   private void init() {
     MockitoAnnotations.initMocks(this);
@@ -54,6 +58,10 @@ class MailSDJpaServiceTest {
     mailSDJpaService = new MailSDJpaService(emailTemplateEngine, mailSender, messageSource, mailProperties);
   }
 
+  /**
+   * tests the sendPasswordRecoverCode method of the MailSDJpaService class by throwing
+   * a MailSendException when sending the password recover code email.
+   */
   @Test
   void sendPasswordRecoverCodeMailException() {
     // given
@@ -72,6 +80,10 @@ class MailSDJpaServiceTest {
     assertFalse(mailSent);
   }
 
+  /**
+   * tests whether an exception is thrown when sending a password change notification
+   * email using the `mailSDJpaService`.
+   */
   @Test
   void sendPasswordSuccessfullyChangedMailException() {
     // given
@@ -90,6 +102,10 @@ class MailSDJpaServiceTest {
     assertFalse(mailSent);
   }
 
+  /**
+   * tests the mail sender service's ability to send an account confirmation email when
+   * an exception occurs during the email creation process.
+   */
   @Test
   void sendEmailConfirmedMailException() {
     // given
@@ -108,6 +124,10 @@ class MailSDJpaServiceTest {
     assertFalse(mailSent);
   }
 
+  /**
+   * tests whether an exception is thrown when sending an email for an account creation
+   * with a malformed token.
+   */
   @Test
   void sendEmailCreatedMailException() {
     // given
@@ -128,6 +148,11 @@ class MailSDJpaServiceTest {
     assertFalse(mailSent);
   }
 
+  /**
+   * creates a new `User` object with an email address for testing purposes.
+   * 
+   * @returns a `User` object with an email address of "test-email".
+   */
   private User getTestUser() {
     User user = new User();
     user.setEmail("test-email");

@@ -27,6 +27,21 @@ import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import lombok.With;
 
+/**
+ * is a subclass of the BaseEntity class and has additional fields for memberId,
+ * houseMemberDocument, name, and communityHouse, with relationships defined between
+ * these fields and other entities.
+ * Fields:
+ * 	- memberId (String): represents a unique identifier for each member of a community
+ * house, as defined in the provided Java code.
+ * 	- houseMemberDocument (HouseMemberDocument): represents an association between a
+ * House Member entity and a House Member Document entity, facilitating the storage
+ * and retrieval of related data.
+ * 	- name (String): in the `HouseMember` class represents a string value that
+ * identifies the member's name within the community house they belong to.
+ * 	- communityHouse (CommunityHouse): in the HouseMember class represents an association
+ * between a member and a community house.
+ */
 @Entity
 @AllArgsConstructor
 @NoArgsConstructor

@@ -19,6 +19,10 @@ import com.myhome.domain.Payment;
 import java.util.Optional;
 import org.springframework.data.jpa.repository.JpaRepository;
 
+/**
+ * defines a set of methods for interacting with payments in a database using Spring
+ * Data JPA.
+ */
 public interface PaymentRepository extends JpaRepository<Payment, Long> {
   Optional<Payment> findByPaymentId(String paymentId);
 

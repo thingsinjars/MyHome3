@@ -34,6 +34,10 @@ public class SecurityTokenSDJpaServiceTest {
   @InjectMocks
   private SecurityTokenSDJpaService securityTokenSDJpaService;
 
+  /**
+   * sets fields on a security token SD Jpa service, including the pass reset token
+   * time and email confirm token time, using ReflectionTestUtils.
+   */
   @BeforeEach
   private void init() {
     MockitoAnnotations.initMocks(this);
@@ -43,6 +47,11 @@ public class SecurityTokenSDJpaServiceTest {
         TEST_TOKEN_LIFETIME_SECONDS);
   }
 
+  /**
+   * creates a new security token for a user based on their unique ID and security token
+   * type, saves it to the repository, and returns the token object with relevant
+   * information such as creation date, expiry date, lifetime, owner, and token.
+   */
   @Test
   void createSecurityToken() {
     // given
@@ -67,6 +76,10 @@ public class SecurityTokenSDJpaServiceTest {
     verify(securityTokenRepository).save(any());
   }
 
+  /**
+   * creates a new security token for password reset and saves it to the repository,
+   * returning the created token.
+   */
   @Test
   void createPasswordResetToken() {
     // given
@@ -90,6 +103,10 @@ public class SecurityTokenSDJpaServiceTest {
     verify(securityTokenRepository).save(any());
   }
 
+  /**
+   * creates an email confirm token for a user, sets its properties, and saves it to
+   * the repository.
+   */
   @Test
   void createEmailConfirmToken() {
     // given

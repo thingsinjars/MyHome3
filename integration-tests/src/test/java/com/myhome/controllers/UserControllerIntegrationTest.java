@@ -20,6 +20,9 @@ import java.util.Optional;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+/**
+ * TODO
+ */
 @ExtendWith(SpringExtension.class)
 @SpringBootTest(
     classes = MyHomeServiceApplication.class,
@@ -41,6 +44,13 @@ class UserControllerIntegrationTest {
   @Autowired
   private UserRepository userRepository;
 
+  /**
+   * tests the successful creation of a new user through a REST API. It verifies that
+   * the response status code is `CREATED`, and that the returned user object matches
+   * the input parameters withigning fields other than the `userId`. Additionally, it
+   * checks if there is a corresponding user stored in the database with matching name
+   * and email.
+   */
   @Test
   void shouldSignUpSuccessful() {
     // Given a request

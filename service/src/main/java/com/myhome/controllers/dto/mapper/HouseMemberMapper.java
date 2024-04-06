@@ -21,6 +21,10 @@ import com.myhome.model.HouseMemberDto;
 import java.util.Set;
 import org.mapstruct.Mapper;
 
+/**
+ * provides mapping between House Member objects and their corresponding REST API
+ * response versions.
+ */
 @Mapper
 public interface HouseMemberMapper {
   Set<com.myhome.model.HouseMember> houseMemberSetToRestApiResponseHouseMemberSet(
