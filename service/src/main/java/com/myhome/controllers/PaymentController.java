@@ -49,7 +49,13 @@ import org.springframework.web.bind.annotation.RestController;
  * REST Controller which provides endpoints for managing payments
  */
 /**
- * TODO
+ * in this Java code provides RESTful API endpoints for handling payment-related
+ * requests. It handles requests to create, read, update, and delete payments, as
+ * well as listing all payments for a particular member or admin. The controller uses
+ * dependency injection to inject required services, such as the PaymentService,
+ * CommunityService, and SchedulePaymentApiMapper, which are used to handle payment-related
+ * tasks. The controller also includes validation and error handling mechanisms to
+ * ensure that requests are processed correctly and errors are handled appropriately.
  */
 @RestController
 @RequiredArgsConstructor
@@ -60,50 +66,27 @@ public class PaymentController implements PaymentsApi {
   private final SchedulePaymentApiMapper schedulePaymentApiMapper;
 
   /**
-   * receives a request to schedule a payment, checks if the user is an admin of the
-   * community and the house, then schedules the payment using the `schedulePayment`
-   * API and returns the response.
+   * receives a `SchedulePaymentRequest` from an admin and checks if the user is an
+   * admin of the community house. If so, it enriches the request with additional data,
+   * schedules the payment through the `schedulePayment` API, and returns the response.
    * 
-   * @param request SchedulePaymentRequest object containing information necessary for
-   * scheduling a payment, which is passed through the function's methods to generate
-   * a PaymentDto and then a SchedulePaymentResponse.
+   * @param request SchedulePaymentRequest object containing the information necessary
+   * to schedule a payment for a community house member.
    * 
-   * 	- `request.getMemberId()`: The ID of the house member who is requesting the payment.
-   * 	- `request.getAdminId()`: The ID of the community admin who is responsible for
-   * processing the payment.
-   * 	- `paymentService.getHouseMember(request.getMemberId())`: This method retrieves
-   * a `HouseMember` object from the service, using the `request.getMemberId()` as the
-   * parameter. If the house member with the given ID does not exist, a `RuntimeException`
-   * is thrown.
-   * 	- `communityService.findCommunityAdminById(request.getAdminId())`: This method
-   * retrieves a `User` object from the service, using the `request.getAdminId()` as
-   * the parameter. If the admin with the given ID does not exist, a `RuntimeException`
-   * is thrown.
-   * 	- `isUserAdminOfCommunityHouse(houseMember.getCommunityHouse(), admin)`: This
-   * method checks whether the admin is an admin of the community house associated with
-   * the request. If the admin is not an admin of the community house, the method returns
-   * `false`.
+   * 	- `request.getMemberId()`: The ID of the house member for whom payment is being
+   * scheduled.
+   * 	- `request.getAdminId()`: The ID of the community admin who is scheduling the payment.
    * 
-   * The rest of the function proceeds to schedule the payment using the enriched
-   * `SchedulePaymentRequest`, and finally returns a `ResponseEntity` with the scheduled
-   * payment response.
+   * @returns a `SchedulePaymentResponse` object representing the scheduled payment details.
    * 
-   * @returns a `SchedulePaymentResponse` object containing the scheduled payment details.
-   * 
-   * 	- `ResponseEntity`: This is a class that represents an HTTP response with a status
-   * code and a body. In this case, the status code is `HttpStatus.CREATED`, which
-   * indicates that the payment has been scheduled successfully.
-   * 	- `body`: This is the body of the response, which contains the `SchedulePaymentResponse`
-   * object.
-   * 	- `SchedulePaymentResponse`: This class represents the response to the API call,
-   * containing information about the scheduled payment. The properties of this class
-   * include:
-   * 	+ `status`: This indicates the status of the payment schedule, such as "scheduled"
-   * or "cancelled".
-   * 	+ `message`: This is a message indicating the result of the payment schedule,
-   * such as "Payment scheduled successfully" or "Payment could not be scheduled".
-   * 	+ `paymentId`: This is the ID of the payment that was scheduled.
-   * 	+ `createdAt`: This is the date and time when the payment was scheduled.
+   * 	- `ResponseEntity`: This is an instance of the `ResponseEntity` class, which
+   * represents a response to a request. The status code of the response is set to
+   * `HttpStatus.CREATED`, indicating that the payment has been scheduled successfully.
+   * 	- `body`: This property contains the `SchedulePaymentResponse` object, which
+   * provides information about the scheduled payment.
+   * 	- `SchedulePaymentResponse`: This class represents the response to the `schedulePayment`
+   * function, providing details about the scheduled payment, such as the payment date,
+   * amount, and status.
    */
   @Override
   public ResponseEntity<SchedulePaymentResponse> schedulePayment(@Valid
@@ -132,26 +115,32 @@ public class PaymentController implements PaymentsApi {
   }
 
   /**
-   * checks if a user is an admin of a community house by checking if their username
-   * is present in the community's admin list.
+   * checks if a given User is an administrator of a CommunityHouse by checking if their
+   * ID exists in the community House's admin list.
    * 
-   * @param communityHouse community house that is being checked for the administrator
-   * role of the given `admin`.
+   * @param communityHouse Community House object that is being checked for admin status
+   * by the `isUserAdminOfCommunityHouse()` function.
    * 
-   * 1/ `communityHouse`: A `CommunityHouse` object that represents the community house
-   * being checked for the user's admin status.
-   * 2/ `getCommunity()`: A method that returns a `Community` object, which represents
-   * the community associated with the `CommunityHouse`.
-   * 3/ `getAdmins()`: A method that returns a `List<User>` object, which contains the
-   * list of admins for the community associated with the `CommunityHouse`.
+   * 	- `communityHouse`: This is an instance of the `CommunityHouse` class, which
+   * likely has various attributes or properties that describe its characteristics.
+   * 	- `getCommunity()`: This method returns a reference to the `Community` object
+   * associated with the `communityHouse` instance.
+   * 	- `getAdmins()`: This method returns a list of `User` objects representing the
+   * administrators of the community.
    * 
-   * @param admin User object that the function checks if it is an administrator of the
+   * The function then checks if the specified `admin` is present in the list of admins
+   * returned by `getAdmins()`. If it is, the function returns `true`, indicating that
+   * the user is an administrator of the community; otherwise, it returns `false`.
+   * 
+   * @param admin User object that is being checked if they are an administrator of the
    * CommunityHouse.
    * 
-   * 	- `CommunityHouse communityHouse`: The class representing a community house, which
-   * contains information about the community and its members.
-   * 	- `getAdmins()`: A method that returns a list of users who are admins of the
-   * community house.
+   * 	- `CommunityHouse communityHouse`: This is an instance of the `CommunityHouse`
+   * class, which represents a community house.
+   * 	- `getAdmins()`: This method returns a list of `User` objects that represent the
+   * admins of the community house.
+   * 	- `contains()`: This method checks if the given `User` object is present in the
+   * list of admins returned by `getAdmins()`.
    * 
    * @returns a boolean value indicating whether the specified user is an administrator
    * of the community house.
@@ -163,43 +152,20 @@ public class PaymentController implements PaymentsApi {
   }
 
   /**
-   * receives a payment ID and retrieves the associated payment details from the payment
-   * service using the `getPaymentDetails` method. It then maps the payment details to
-   * a `SchedulePaymentResponse` object using the `paymentToSchedulePaymentResponse`
-   * function and returns a `ResponseEntity` with an `OK` status code if the payment
-   * details are found, or an `NOT_FOUND` status code otherwise.
+   * retrieves payment details for a given payment ID from the payment service and maps
+   * them to a `SchedulePaymentResponse` object using the `paymentToSchedulePaymentResponse`
+   * mapper. It then returns a `ResponseEntity` with an `OK` status code or an empty
+   * entity if the payment ID is not found.
    * 
-   * @param paymentId id of the payment for which details are being requested.
+   * @param paymentId identifier of the payment for which details are to be retrieved.
    * 
-   * 	- `log.trace`: Emits a trace message indicating that the method has received a
-   * request to retrieve details about a payment with the specified `paymentId`.
-   * 	- `paymentService.getPaymentDetails(paymentId)`: Calls the `getPaymentDetails()`
-   * method of the `paymentService` object, passing in the `paymentId` as a parameter.
-   * This method retrieves the details of a specific payment based on its ID.
-   * 	- `schedulePaymentApiMapper.paymentToSchedulePaymentResponse(payment)`: Maps the
-   * deserialized `payment` object to a `SchedulePaymentResponse` object using the
-   * `schedulePaymentApiMapper` object. This mapping is necessary because the `payment`
-   * object does not directly correspond to the expected response type of the API.
-   * 	- `map(ResponseEntity::ok)`: Maps the result of the previous step to an instance
-   * of `ResponseEntity` with a status code of 200 (OK).
-   * 	- `orElseGet(() -> ResponseEntity.notFound().build())`: Provides an alternative
-   * response in case the `paymentService.getPaymentDetails()` method does not return
-   * a valid result. In this case, the alternative response is a `ResponseEntity` with
-   * a status code of 404 (NOT FOUND) and a built message indicating that the payment
-   * with the specified ID could not be found.
+   * @returns a `ResponseEntity` object containing the payment details if the payment
+   * ID exists, or a `ResponseEntity.notFound()` object otherwise.
    * 
-   * @returns a `ResponseEntity` object containing the details of the specified payment.
-   * 
-   * 	- `paymentId`: The identifier of the payment for which details are being requested.
-   * 	- `paymentService`: A service used to retrieve payment details.
-   * 	- `schedulePaymentApiMapper`: An API mapper used to transform payment details
-   * into a `SchedulePaymentResponse` object.
-   * 	- `ResponseEntity`: A class representing a response entity, which is used to wrap
-   * the returned payment details in an HTTP response.
-   * 
-   * The function returns a `ResponseEntity` object with an `ok` status code if the
-   * payment details are successfully retrieved, or an `notFound` status code if there
-   * is no matching payment.
+   * 	- `paymentId`: The unique identifier for the payment being retrieved.
+   * 	- `paymentToSchedulePaymentResponse`: A mapping from the payment details to a
+   * `SchedulePaymentResponse` object, which contains information about the scheduled
+   * payment.
    */
   @Override
   public ResponseEntity<SchedulePaymentResponse> listPaymentDetails(String paymentId) {
@@ -212,47 +178,26 @@ public class PaymentController implements PaymentsApi {
   }
 
   /**
-   * retrieves a member's payments from the payment service and maps them to a response
-   * entity using the `memberPaymentSetToRestApiResponseMemberPaymentSet` method.
+   * retrieves all payments for a specific member ID using multiple calls to other
+   * functions, transforms the response into a list of `MemberPaymentSet`, and returns
+   * it as a `ResponseEntity`.
    * 
-   * @param memberId unique identifier for the member whose payments are to be listed.
+   * @param memberId House member for whom all payments should be listed.
    * 
-   * 	- `log.trace()`: This line logs a trace message with the ID of the member for
-   * whom payments are being listed.
-   * 	- `paymentService.getHouseMember(memberId)`: This line retrieves the house member
-   * associated with the given `memberId`. The method returns an Optional<HouseMember>,
-   * which contains the house member if found, or an empty optional if not.
-   * 	- ` paymentService.getPaymentsByMember(memberId)`: This line retrieves all payments
-   * made by the house member associated with the given `memberId`. The method returns
-   * an Optional<List<Payment>>, which contains the list of payments if found, or an
-   * empty optional if not.
-   * 	- `schedulePaymentApiMapper.memberPaymentSetToRestApiResponseMemberPaymentSet()`:
-   * This line maps the list of payments to a response entity with the appropriate
-   * structure for the API. The method takes the list of payments as input and returns
-   * a ResponseEntity containing the mapped data.
-   * 	- `new List Member Payments Response().payments(memberPayments)`: This line
-   * constructs a new instance of the `ListMemberPaymentsResponse` class, passing in
-   * the list of payments retrieved from the API. The response entity contains the list
-   * of payments.
-   * 	- `map(ResponseEntity::ok)`: This line maps the response entity to an HTTP 200
-   * status code (OK), indicating that the list of payments was successfully retrieved.
-   * 	- `orElseGet(() -> ResponseEntity.notFound().build())`: This line provides a
-   * default response if the previous mapping fails, indicating that the house member
-   * with the given ID could not be found. The response entity contains a 404 status
-   * code (Not Found).
+   * @returns a `ResponseEntity` object containing a `List Member Payments Response`
+   * with the list of payments for the specified member.
    * 
-   * @returns a `List Member Payments Response` containing the member's payments.
-   * 
-   * 	- `ResponseEntity`: This is the primary output of the function, representing a
-   * response entity with an `ok` status and a `ListMemberPaymentsResponse` body
-   * containing the list of member payments.
-   * 	- `ListMemberPaymentsResponse`: This class represents the response body of the
-   * function, which contains a list of `MemberPayment` objects. Each `MemberPayment`
-   * object in the list represents a payment made by a house member.
-   * 	- `payments()`: This method returns a list of `MemberPayment` objects, which are
-   * the payments made by the house members.
-   * 	- `memberId`: This is the parameter passed to the function, representing the ID
-   * of the house member for whom the payments are being listed.
+   * 	- `ResponseEntity<ListMemberPaymentsResponse>`: This is the generic type of the
+   * response entity, which represents a list of member payments.
+   * 	- `List Member Payments Response`: This is a nested class within `ListMemberPaymentsResponse`,
+   * which contains the list of member payments.
+   * 	- `payments()`: This method returns a list of `Payment` objects, which represent
+   * the member payments.
+   * 	- `ok()`: This method builds an `ResponseEntity` with a status code of 200 (OK)
+   * and a body containing the list of member payments.
+   * 	- `notFound()`: This method builds an `ResponseEntity` with a status code of 404
+   * (Not Found) and a body containing an error message indicating that no member
+   * payments could be found.
    */
   @Override
   public ResponseEntity<ListMemberPaymentsResponse> listAllMemberPayments(String memberId) {
@@ -268,46 +213,31 @@ public class PaymentController implements PaymentsApi {
   }
 
   /**
-   * retrieves a list of payments scheduled by an admin with a given ID, checks if the
-   * admin is in the community, and returns the list of payments in a REST API response.
+   * receives a community ID, an admin ID, and a pageable parameter, and lists all
+   * payments scheduled by the admin with that ID within the given community.
    * 
-   * @param communityId community for which the scheduled payments are being listed,
-   * and is used to filter the payments returned in the response.
+   * @param communityId community for which the admin is searching scheduled payments.
    * 
-   * 	- `communityId`: This is an String property that represents the community ID for
-   * which the payments are being listed.
+   * @param adminId ID of the admin for whom scheduled payments are to be listed.
    * 
-   * @param adminId ID of the admin who is authorized to view and manage payments within
-   * a specific community, and it is used to filter the list of payments returned in
-   * the response.
+   * @param pageable pagination information for the payments to be listed, allowing the
+   * function to retrieve only the requested portion of the list.
    * 
-   * 	- `communityId`: The ID of the community that the admin belongs to.
-   * 	- `adminId`: The ID of the admin who is requesting the list of scheduled payments.
-   * 	- `pageable`: A Pageable object used to paginate the results.
+   * 	- `communityId`: A string representing the ID of the community for which the
+   * payments are being listed.
+   * 	- `adminId`: A string representing the ID of the admin for whom the payments are
+   * being listed.
+   * 	- `Pageable`: An object representing a page of payments, with properties such as
+   * `pageNumber`, `pageSize`, and `totalElements`.
    * 
-   * @param pageable page number and size of the payment list that the admin wants to
-   * see, allowing the function to paginate the list of payments accordingly.
+   * @returns a `ResponseEntity` object containing a `ListAdminPaymentsResponse` object
+   * with scheduled payments for the provided admin ID.
    * 
-   * 	- `communityId`: The ID of the community for which the payments are to be listed.
-   * 	- `adminId`: The ID of the admin for whom the payments are to be listed.
-   * 	- `isAdminInGivenCommunity`: A boolean indicating whether the admin with the given
-   * ID is present in the specified community.
-   * 	- `paymentService`: An instance of a payment service used to retrieve the payments
-   * scheduled by the admin.
-   * 	- `pageable`: A `Pageable` object representing the pagination information for the
-   * payments.
-   * 
-   * @returns a `ResponseEntity` with a list of `AdminPayment` objects and a `PageInfo`
-   * object.
-   * 
-   * 	- `payments`: A list of `AdminPayment` objects representing the scheduled payments
-   * for the given admin and community.
-   * 	- `pageInfo`: Contains information about the page of payments, including the total
-   * number of payments and the current page number.
-   * 
-   * The function returns a `ResponseEntity` object with the list of scheduled payments
-   * in the `body` field, and a `StatusCode` indicating whether the request was successful
-   * or not in the `status` field.
+   * 	- `payments`: A list of `AdminPayment` objects, representing the scheduled payments
+   * for the admin with the given ID.
+   * 	- `pageInfo`: Represents the pagination information for the payments, including
+   * the total number of payments and the current page being displayed.
+   * 	- `response`: The response entity with the list of payments and pagination information.
    */
   @Override
   public ResponseEntity<ListAdminPaymentsResponse> listAllAdminScheduledPayments(
@@ -333,47 +263,30 @@ public class PaymentController implements PaymentsApi {
   }
 
   /**
-   * checks if a user is an administrator in a specific community by retrieving the
-   * community details and admins, then filtering the admins based on the user ID, and
-   * finally returning whether the user is an admin or not.
+   * retrieves the details of a community and its admins, filters the list of admins
+   * based on the provided admin ID, and returns a boolean value indicating whether the
+   * specified admin is an admin in the given community.
    * 
-   * @param communityId ID of a community that is being checked for an admin with the
-   * provided `adminId`.
+   * @param communityId ID of the community for which admin status is to be checked.
    * 
-   * 	- `communityId`: A string that represents the ID of a community. This property
-   * is used to identify the community in question.
-   * 
-   * The function first retrieves the details of the community with the given ID using
-   * `communityService.getCommunityDetailsByIdWithAdmins()`.
-   * 
-   * Next, it maps the admins of the community to a stream of Boolean values using
-   * `map(Community::getAdmins)`. This is done to filter out any non-admin users from
-   * the community.
-   * 
-   * Finally, the function checks if there are any admin users in the community with
-   * the given ID and user ID using `map(admins -> admins.stream().anyMatch(admin ->
-   * admin.getUserId().equals(adminId))).orElseThrow()`. If no such admin is found, a
-   * `RuntimeException` is thrown.
-   * 
-   * @param adminId 12-digit unique identifier of an administrator for a specific community.
-   * 
-   * 	- `adminId`: A string representing the ID of an administrator in the community.
-   * 	- `getUserId()`: Returns the user ID of the administrator.
+   * @param adminId ID of the administrator being checked for membership in the specified
+   * community.
    * 
    * @returns a boolean value indicating whether the specified admin is an administrator
    * of the given community.
    * 
    * 	- The function returns a `Boolean` value indicating whether an admin with the
    * given `adminId` exists in the specified `communityId`.
-   * 	- The function first retrieves the community details along with its admins using
-   * the `communityService.getCommunityDetailsByIdWithAdmins()` method.
-   * 	- It then maps the admins to a stream of admins, using the `map()` method.
-   * 	- The stream is then filtered using the `anyMatch()` method to check if any admin
-   * with the given `adminId` exists in the community.
-   * 	- If no admin is found, the function throws a `RuntimeException`.
-   * 
-   * In summary, the function returns `True` if an admin with the given `adminId` exists
-   * in the specified `communityId`, and `False` otherwise.
+   * 	- If there is no admin with the given `adminId` in the community, the function
+   * will throw a `RuntimeException`.
+   * 	- The function first retrieves the details of the community with the given
+   * `communityId`, using the `communityService.getCommunityDetailsByIdWithAdmins()` method.
+   * 	- It then maps the admins of the community to a stream of admins, using the `map()`
+   * method.
+   * 	- Finally, it maps the stream of admins to a boolean value indicating whether an
+   * admin with the given `adminId` exists in the community, using the `stream().anyMatch()`
+   * method. If no such admin exists, the function returns `false`. Otherwise, it returns
+   * `true`.
    */
   private Boolean isAdminInGivenCommunity(String communityId, String adminId) {
     return communityService.getCommunityDetailsByIdWithAdmins(communityId)
