@@ -37,23 +37,20 @@ import lombok.With;
  * Entity identifying a valid user in the service.
  */
 /**
- * represents a valid user in the service, with attributes for name, communityId,
- * district, admins, houses, amenities, and relationships with other entities through
- * many-to-many and one-to-many associations.
+ * represents a valid user in the service, with attributes for name, community ID,
+ * district, and set of admins, houses, and amenities.
  * Fields:
- * 	- admins (Set<User>): in the Community class represents a set of user accounts
- * associated with the community.
- * 	- houses (Set<CommunityHouse>): of the Community class contains a set of House
- * objects associated with each community.
- * 	- name (String): in the Community class represents a unique identifier for a
- * community within a specific district.
- * 	- communityId (String): in the Community class represents an identifier for a
- * specific community within the application's scope.
- * 	- district (String): represents a string value representing a geographical location
- * associated with the Community entity.
- * 	- amenities (Set<Amenity>): in the Community class represents a set of Amenity
- * objects associated with the community, which can be retrieved through the many-to-many
- * relationship with the Amenity class.
+ * 	- admins (Set<User>): a set of users who are administrators of the community,
+ * managed through a many-to-many relationship with the User entity.
+ * 	- houses (Set<CommunityHouse>): a set of houses associated with each community
+ * entity, where each house is linked to its corresponding community through an
+ * optional one-to-one relationship.
+ * 	- name (String): a string identifier for a specific community.
+ * 	- communityId (String): an identifier for a specific community.
+ * 	- district (String): a string value indicating the geographical area where the
+ * community is located.
+ * 	- amenities (Set<Amenity>): a set of Amenity objects related to the Community
+ * entity, where each Amenity object has a reference to the community it belongs to.
  */
 @AllArgsConstructor
 @NoArgsConstructor
