@@ -24,41 +24,43 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 /**
- * TODO
+ * is a Spring Boot application that provides a password encoder using BCrypt algorithm.
+ * It also includes a main method for launching the application and configuration
+ * properties scan to enable the auto-discovery of spring boot configurations.
  */
 @SpringBootApplication
 @ConfigurationPropertiesScan
 public class MyHomeServiceApplication {
 
   /**
-   * runs a Spring application instance of `MyHomeServiceApplication`.
+   * runs a Spring application, specifically the `MyHomeServiceApplication`, passing
+   * the `args` array as a parameter to the `SpringApplication.run()` method.
    * 
-   * @param args command-line arguments passed to the `SpringApplication.run()` method
-   * when executing the application.
+   * @param args command-line arguments passed to the program when it is executed
+   * directly from the command line or launched by some other application.
    * 
-   * 	- `args`: An array of strings representing command-line arguments passed to the
-   * application. Each string in the array represents an individual argument.
+   * The input `args` is an array of strings that contains the command-line arguments
+   * passed to the program by the user.
+   * 
+   * Each element in the array represents a separate argument, and can be accessed using
+   * its index position within the array. For example, `args[0]` represents the first
+   * argument passed to the program.
    */
   public static void main(String[] args) {
     SpringApplication.run(MyHomeServiceApplication.class, args);
   }
 
   /**
-   * returns a `BCryptPasswordEncoder` instance, which is a widely-used password hashing
-   * algorithm that provides strong security against brute force attacks.
+   * returns a `BCryptPasswordEncoder` instance, which is used to encrypt passwords
+   * using the BCrypt algorithm.
    * 
-   * @returns a BCryptPasswordEncoder object, which is used to encrypt passwords securely.
+   * @returns a BCryptPasswordEncoder instance.
    * 
-   * The PasswordEncoder object returned is an instance of BCryptPasswordEncoder, which
-   * is a secure password hashing algorithm. This class provides password encryption
-   * using the bcrypt algorithm, which is more secure than the traditional MD5 or SHA-256
-   * hash functions. It also includes features like salt generation and incremental
-   * hashing to improve security.
-   * 
-   * The BCryptPasswordEncoder instance returned can be used to encrypt passwords by
-   * calling its encode() method, passing in the password to be encrypted as a string
-   * argument. The resulting encoded password is a secure representation of the original
-   * password that can be stored or compared for authentication purposes.
+   * The `BCryptPasswordEncoder` object represents a password encryption algorithm that
+   * uses the bcrypt hashing algorithm to securely store and hash passwords.
+   * It provides several methods for encrypting, hashing, and verifying passwords.
+   * The encoder is designed to handle strong password validation and is suitable for
+   * use in web applications.
    */
   @Bean
   public PasswordEncoder getPasswordEncoder() {
