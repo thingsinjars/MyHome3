@@ -41,23 +41,19 @@ import java.util.Set;
  * Entity identifying a valid user in the service.
  */
 /**
- * represents a valid user in a service and contains fields for user ID, email, name,
- * encrypted password, community membership, and security token ownership.
+ * represents a valid user in the service, with attributes for name, userId, email,
+ * and encrypted password, as well as relationships for communities and userTokens.
  * Fields:
- * 	- name (String): in the User class represents a string value that identifies a
- * user's name.
- * 	- userId (String): represents a unique identifier for each user in the system.
- * 	- email (String): in the User class represents an email address associated with
- * the user account.
- * 	- emailConfirmed (boolean): indicates whether an email associated with the user
- * has been confirmed by the user.
- * 	- encryptedPassword (String): stores a string value representing a password for
- * the user to access their account securely.
- * 	- communities (Set<Community>): represents a many-to-many relationship between
- * the User entity and the Community entity, where users can belong to multiple
- * communities and communities can have multiple users.
- * 	- userTokens (Set<SecurityToken>): is a set of SecurityToken objects associated
- * with the User entity through the mappedBy attribute in the OneToMany annotation.
+ * 	- name (String): a user's username or handle within an application or service.
+ * 	- userId (String): a unique identifier for a valid user in the service.
+ * 	- email (String): a string value that identifies the user's email address.
+ * 	- emailConfirmed (boolean): a boolean flag indicating whether an email address
+ * associated with the user has been confirmed.
+ * 	- encryptedPassword (String): an encrypted password for the user.
+ * 	- communities (Set<Community>): a set of Community objects related to the User
+ * entity through a many-to-many relationship.
+ * 	- userTokens (Set<SecurityToken>): a set of SecurityToken objects associated with
+ * the User entity, which can be retrieved through the mappedBy attribute "tokenOwner".
  */
 @AllArgsConstructor
 @Getter
