@@ -10,7 +10,12 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
 
 /**
- * TODO
+ * is a Java class that implements the BookingsApi interface and provides methods for
+ * managing bookings. The class has a single method, deleteBooking(), which takes two
+ * path variables (amenityId and bookingId) and uses the BookingService to delete a
+ * booking. If the booking is successfully deleted, a ResponseEntity with a status
+ * code of NO_CONTENT is returned. Otherwise, a ResponseEntity with a status code of
+ * NOT_FOUND is returned.
  */
 @RestController
 @Slf4j
@@ -20,25 +25,30 @@ public class BookingController implements BookingsApi {
   private final BookingService bookingSDJpaService;
 
   /**
-   * deletes a booking based on its amenity ID and ID, returning a HTTP status code
-   * indicating whether the operation was successful or not.
+   * deletes a booking based on the provided amenity ID and booking ID, returning a
+   * ResponseEntity with a status code indicating whether the operation was successful
+   * or not.
    * 
-   * @param amenityId ID of an amenity that is associated with the booking to be deleted.
+   * @param amenityId unique identifier for an amenity associated with the booking being
+   * deleted.
    * 
-   * 	- `amenityId`: A string representing the unique identifier for an amenity.
+   * @param bookingId ID of the booking that needs to be deleted.
    * 
-   * @param bookingId unique identifier of the booking to be deleted.
+   * @returns a `ResponseEntity` with a status code of either `NO_CONTENT` or `NOT_FOUND`,
+   * depending on whether the booking was successfully deleted.
    * 
-   * 	- `amenityId`: The ID of the amenity for which the booking is to be deleted.
-   * 	- `bookingId`: The unique identifier of the booking to be deleted.
+   * 	- `ResponseEntity`: This is the class that represents an HTTP response entity,
+   * which contains the status code and body of the response. In this case, the status
+   * code is `NO_CONTENT` or `NOT_FOUND`, depending on whether the booking was successfully
+   * deleted or not.
+   * 	- `status`: This is a method that returns the HTTP status code of the response
+   * entity. The value of this method is `NO_CONTENT` if the booking was successfully
+   * deleted, and `NOT_FOUND` otherwise.
+   * 	- `build()`: This is a method that builds the response entity by setting its
+   * status code and body.
    * 
-   * @returns a `ResponseEntity` with a `NO_CONTENT` status code if the booking was
-   * successfully deleted, or a `NOT_FOUND` status code otherwise.
-   * 
-   * 	- `isBookingDeleted`: This boolean property indicates whether the booking was
-   * successfully deleted or not.
-   * 	- `HttpStatus`: The HTTP status code returned by the function, which can be either
-   * `NO_CONTENT` (204) or `NOT_FOUND` (404).
+   * In summary, the output of the `deleteBooking` function is an HTTP response entity
+   * with a status code indicating whether the booking was successfully deleted or not.
    */
   @Override
   public ResponseEntity<Void> deleteBooking(@PathVariable String amenityId,
