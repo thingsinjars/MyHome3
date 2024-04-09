@@ -65,11 +65,18 @@ class PaymentSDJpaServiceTest {
   @InjectMocks
   private PaymentSDJpaService paymentSDJpaService;
 
+  /**
+   * initializes Mockito mocks for the test class, allowing for effective unit testing.
+   */
   @BeforeEach
   private void init() {
     MockitoAnnotations.initMocks(this);
   }
 
+  /**
+   * maps a `PaymentDto` object to a `Payment` object, then persistently saves both the
+   * user and payment objects in the database.
+   */
   @Test
   void schedulePayment() {
     //given
@@ -89,6 +96,10 @@ class PaymentSDJpaServiceTest {
     assertEquals(basePaymentDto,testPaymentScheduled); //Completion: method returns what is expected
   }
 
+  /**
+   * retrieves a PaymentDto object with payment details given an ID. It fetches data
+   * from the repository and maps it to the expected PaymentDto format using the mapper.
+   */
   @Test
   void getPaymentDetails() {
     //when
@@ -108,6 +119,9 @@ class PaymentSDJpaServiceTest {
     assertEquals(optionalOfTestPaymentDto,testPaymentDetails); //Completion: method returns what is expected
   }
 
+  /**
+   * fetches a HouseMember object from the repository based on a given member ID.
+   */
   @Test
   void getHouseMember() {
     //given
@@ -126,6 +140,10 @@ class PaymentSDJpaServiceTest {
     assertEquals(baseHouseMemberOptional,testHouseMember); //Completion: method returns what is expected
   }
 
+  /**
+   * retrieves payments associated with a given member ID from the repository and returns
+   * them.
+   */
   @Test
   void getPaymentsByMember() {
     //given
@@ -159,6 +177,10 @@ class PaymentSDJpaServiceTest {
     assertEquals(expectedReturn1,testPaymentByMember1); //Completion: method returns what is expected
   }
 
+  /**
+   * queries the payment repository to retrieve payments associated with a given admin
+   * user ID, and returns them in a pageable format.
+   */
   @Test
   void getPaymentsByAdmin() {
     //given

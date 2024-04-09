@@ -33,6 +33,9 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.verify;
 
+/**
+ * TODO
+ */
 class HouseMemberDocumentTest {
 
   private static final String MEMBER_ID = "test-member-id";
@@ -48,11 +51,19 @@ class HouseMemberDocumentTest {
   @InjectMocks
   private HouseMemberDocumentController houseMemberDocumentController;
 
+  /**
+   * initializes mock objects using the `MockitoAnnotations.initMocks()` method.
+   */
   @BeforeEach
   private void init() {
     MockitoAnnotations.initMocks(this);
   }
 
+  /**
+   * tests the House Member Document Controller's ability to retrieve a house member
+   * document successfully, by providing the MEMBER_ID and verifying the response status
+   * code, content, and headers.
+   */
   @Test
   void shouldGetDocumentSuccess() {
     // given
@@ -68,6 +79,11 @@ class HouseMemberDocumentTest {
     verify(houseMemberDocumentService).findHouseMemberDocument(MEMBER_ID);
   }
 
+  /**
+   * tests the house member document controller's method to retrieve a house member
+   * document by ID. It asserts that the HTTP status code is `NOT_FOUND` when no document
+   * is found.
+   */
   @Test
   void shouldGetDocumentFailure() {
     // given
@@ -81,6 +97,11 @@ class HouseMemberDocumentTest {
     verify(houseMemberDocumentService).findHouseMemberDocument(MEMBER_ID);
   }
 
+  /**
+   * tests the `uploadHouseMemberDocument` controller method by providing a multipart
+   * file and verifying that it triggers the creation of a new house member document
+   * and returns a successful HTTP status code without content.
+   */
   @Test
   void shouldPostDocumentSuccess() {
     // given
@@ -94,6 +115,11 @@ class HouseMemberDocumentTest {
     verify(houseMemberDocumentService).createHouseMemberDocument(MULTIPART_FILE, MEMBER_ID);
   }
 
+  /**
+   * verifies that when a document cannot be created for a member due to an empty result
+   * from the `createHouseMemberDocument` method, the resulting HTTP status code is 404
+   * (Not Found) and the mocked service call is verified to have been made.
+   */
   @Test
   void shouldPostDocumentFailureNotFound() {
     // given
@@ -107,6 +133,11 @@ class HouseMemberDocumentTest {
     verify(houseMemberDocumentService).createHouseMemberDocument(MULTIPART_FILE, MEMBER_ID);
   }
 
+  /**
+   * tests the `updateHouseMemberDocument` method of the `HouseMemberDocumentController`.
+   * It provides a mocked implementation of the `houseMemberDocumentService` to update
+   * a house member document, and verifies that the expected response is returned.
+   */
   @Test
   void shouldPutDocumentSuccess() {
     // given
@@ -120,6 +151,11 @@ class HouseMemberDocumentTest {
     verify(houseMemberDocumentService).updateHouseMemberDocument(MULTIPART_FILE, MEMBER_ID);
   }
 
+  /**
+   * tests the updateHouseMemberDocument method by verifying that a failure to find the
+   * member document in the database returns a NOT_FOUND status code and calls the
+   * underlying service with the correct parameters.
+   */
   @Test
   void shouldPutDocumentFailureNotFound() {
     // given
@@ -133,6 +169,11 @@ class HouseMemberDocumentTest {
     verify(houseMemberDocumentService).updateHouseMemberDocument(MULTIPART_FILE, MEMBER_ID);
   }
 
+  /**
+   * tests the `deleteHouseMemberDocument` controller method by providing a mocked
+   * response from the `houseMemberDocumentService` and verifying that the correct HTTP
+   * status code is returned and the mocked method call is verified.
+   */
   @Test
   void shouldDeleteDocumentSuccess() {
     // given
@@ -146,6 +187,10 @@ class HouseMemberDocumentTest {
     verify(houseMemberDocumentService).deleteHouseMemberDocument(MEMBER_ID);
   }
 
+  /**
+   * tests the scenario where the house member document is not found, and it fails to
+   * delete it.
+   */
   @Test
   void shouldDeleteDocumentFailureNotFound() {
     // given

@@ -27,6 +27,15 @@ import lombok.Setter;
  *
  * @see CreateUserRequest
  */
+/**
+ * represents a model for responding to a create user request with attributes for
+ * user ID, name, and email.
+ * Fields:
+ * 	- userId (String): represents a unique identifier for a user in the system.
+ * 	- name (String): of the CreateUserResponse class holds a string value representing
+ * the user's name.
+ * 	- email (String): represents a string value in the CreateUserResponse class.
+ */
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter

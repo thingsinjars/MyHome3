@@ -19,5 +19,9 @@ package com.myhome.repositories;
 import com.myhome.domain.HouseMemberDocument;
 import org.springframework.data.jpa.repository.JpaRepository;
 
+/**
+ * defines a JpaRepository interface for managing HouseMemberDocuments using Spring
+ * Data JPA.
+ */
 public interface HouseMemberDocumentRepository extends JpaRepository<HouseMemberDocument, Long> {
 }

@@ -21,6 +21,21 @@ import lombok.*;
 import java.time.LocalDateTime;
 import javax.persistence.*;
 
+/**
+ * represents a booking item for an amenity with unique amenity ID and booking user,
+ * along with start and end dates for the booking.
+ * Fields:
+ * 	- amenityBookingItemId (String): in the AmenityBookingItem class represents a
+ * unique identifier for each booking item, used to distinguish it from other bookings
+ * of the same amenity by different users.
+ * 	- amenity (Amenity): in the AmenityBookingItem entity represents an amenity or
+ * service associated with a booking item.
+ * 	- bookingStartDate (LocalDateTime): represents the date and time when the booking
+ * for the amenity started.
+ * 	- bookingEndDate (LocalDateTime): represents the end time of a booking for an amenity.
+ * 	- bookingUser (User): in the AmenityBookingItem class represents the user who
+ * made the booking for the amenity item.
+ */
 @Entity
 @AllArgsConstructor
 @NoArgsConstructor

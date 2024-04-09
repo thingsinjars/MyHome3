@@ -20,6 +20,10 @@ import com.myhome.domain.HouseMemberDocument;
 import java.util.Optional;
 import org.springframework.web.multipart.MultipartFile;
 
+/**
+ * provides methods for managing House Member Documents, including deleting, finding,
+ * updating, and creating new ones.
+ */
 public interface HouseMemberDocumentService {
 
   boolean deleteHouseMemberDocument(String memberId);

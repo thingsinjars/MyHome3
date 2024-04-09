@@ -21,6 +21,11 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+/**
+ * from the given file represents a response containing a CommunityHouseDto object.
+ * Fields:
+ * 	- house (CommunityHouseDto): in HouseDetailResponse contains CommunityHouseDto objects.
+ */
 @NoArgsConstructor
 @AllArgsConstructor
 @Data

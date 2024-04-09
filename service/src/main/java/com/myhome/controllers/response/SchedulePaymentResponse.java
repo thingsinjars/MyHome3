@@ -21,6 +21,28 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+/**
+ * represents a response for scheduling payments, including payment ID, charge amount,
+ * payment type, description, recurring status, due date, and administrative and
+ * member IDs.
+ * Fields:
+ * 	- paymentId (String): in the SchedulePaymentResponse class represents a unique
+ * identifier for a payment.
+ * 	- charge (BigDecimal): in the SchedulePaymentResponse class represents a monetary
+ * value.
+ * 	- type (String): represents the type of payment being scheduled, which could be
+ * one of several possibilities such as "credit card", "bank transfer", or "other".
+ * 	- description (String): in the SchedulePaymentResponse class likely represents a
+ * brief or concise textual explanation of the payment or charge being made, provided
+ * by the user or administrator.
+ * 	- recurring (boolean): in the SchedulePaymentResponse class indicates whether the
+ * payment is a one-time payment or a recurring payment.
+ * 	- dueDate (String): represents a date when a payment is expected to be made.
+ * 	- adminId (String): represents an identifier for the administrator who manages
+ * the payment schedule.
+ * 	- memberId (String): represents a unique identifier for a member associated with
+ * the payment schedule.
+ */
 @AllArgsConstructor
 @NoArgsConstructor
 @Data

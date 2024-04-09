@@ -40,6 +40,21 @@ import java.util.Set;
 /**
  * Entity identifying a valid user in the service.
  */
+/**
+ * represents a valid user in the service, with attributes for name, userId, email,
+ * and encrypted password, as well as relationships for communities and userTokens.
+ * Fields:
+ * 	- name (String): a user's username or handle within an application or service.
+ * 	- userId (String): a unique identifier for a valid user in the service.
+ * 	- email (String): a string value that identifies the user's email address.
+ * 	- emailConfirmed (boolean): a boolean flag indicating whether an email address
+ * associated with the user has been confirmed.
+ * 	- encryptedPassword (String): an encrypted password for the user.
+ * 	- communities (Set<Community>): a set of Community objects related to the User
+ * entity through a many-to-many relationship.
+ * 	- userTokens (Set<SecurityToken>): a set of SecurityToken objects associated with
+ * the User entity, which can be retrieved through the mappedBy attribute "tokenOwner".
+ */
 @AllArgsConstructor
 @Getter
 @NoArgsConstructor

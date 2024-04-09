@@ -27,6 +27,17 @@ import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import lombok.With;
 
+/**
+ * represents an individual member of a house with unique identification, name, and
+ * relationship to a community house through its memberId.
+ * Fields:
+ * 	- memberId (String): a unique identifier for each house member.
+ * 	- houseMemberDocument (HouseMemberDocument): a document related to the member's
+ * membership in a community house.
+ * 	- name (String): a string value of a person's name associated with a particular
+ * community house.
+ * 	- communityHouse (CommunityHouse): a reference to a CommunityHouse object.
+ */
 @Entity
 @AllArgsConstructor
 @NoArgsConstructor

@@ -52,6 +52,9 @@ import static org.mockito.BDDMockito.then;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoInteractions;
 
+/**
+ * TODO
+ */
 class UserControllerTest {
 
   private static final String TEST_ID = "1";
@@ -77,11 +80,19 @@ class UserControllerTest {
   @InjectMocks
   private UserController userController;
 
+  /**
+   * initializes mock objects using MockitoAnnotations.
+   */
   @BeforeEach
   private void init() {
     MockitoAnnotations.initMocks(this);
   }
 
+  /**
+   * tests the sign-up functionality of the `UserController`. It creates a user request
+   * and passes it to the controller, verifying that the response is a `CreateUserResponse`
+   * with the expected user data.
+   */
   @Test
   void shouldSignUpSuccessful() {
     // given
@@ -117,6 +128,11 @@ class UserControllerTest {
     verify(userApiMapper).userDtoToCreateUserResponse(userDto);
   }
 
+  /**
+   * tests the `listAllUsers` method of a user controller by providing a page request
+   * with a limit and start value, and asserts that the response contains the expected
+   * users in the format specified by the API.
+   */
   @Test
   void shouldListUsersSuccess() {
     // given
@@ -154,6 +170,13 @@ class UserControllerTest {
     verify(userApiMapper).userSetToRestApiResponseUserSet(users);
   }
 
+  /**
+   * tests the `getUserDetails()` method of the `UserController`, given a non-existent
+   * user ID, and verifies that the response status code is `HttpStatus.NOT_FOUND` and
+   * the response body is `null`. Additionally, it verifies that the `getUserDetails()`
+   * method of the `UserService` was called with the non-existent user ID and that there
+   * were no interactions between the `UserApiMapper`.
+   */
   @Test
   void shouldGetUserDetailsSuccessWithNoResults() {
     // given
@@ -171,6 +194,10 @@ class UserControllerTest {
     verifyNoInteractions(userApiMapper);
   }
 
+  /**
+   * verifies that the `getUserDetails` endpoint returns a successful response with the
+   * correct user details when given a valid user ID.
+   */
   @Test
   void shouldGetUserDetailsSuccessWithResults() {
     // given
@@ -199,6 +226,10 @@ class UserControllerTest {
     verify(userApiMapper).userDtoToGetUserDetailsResponse(userDto);
   }
 
+  /**
+   * verifies that the user password is reset successfully when a forgotten password
+   * request is made using the `usersPasswordPost` method.
+   */
   @Test
   void userForgotPasswordRequestResetSuccess() {
     // given
@@ -213,6 +244,12 @@ class UserControllerTest {
     verify(userService, never()).resetPassword(forgotPasswordRequest);
   }
 
+  /**
+   * tests whether the user controller's `usersPasswordPost` method fails to request a
+   * password reset for a given user. It creates a `ForgotPasswordRequest`, passes it
+   * to the `usersPasswordPost` method, and verifies the status code and the call to
+   * either `requestResetPassword` or `resetPassword`.
+   */
   @Test
   void userForgotPasswordRequestResetFailure() {
     // given
@@ -227,6 +264,12 @@ class UserControllerTest {
     verify(userService, never()).resetPassword(forgotPasswordRequest);
   }
 
+  /**
+   * tests the successful reset of a user's password through the `usersPasswordPost`
+   * endpoint. It verifies that the response status code is `HttpStatus.OK` and that
+   * the `userService` methods `requestResetPassword` and `resetPassword` are called
+   * once each with the correct parameters.
+   */
   @Test
   void userForgotPasswordResetSuccess() {
     // given
@@ -242,6 +285,10 @@ class UserControllerTest {
     verify(userService).resetPassword(forgotPasswordRequest);
   }
 
+  /**
+   * verifies that attempting to reset a password fails with a BAD_REQUEST status code
+   * when the user service returns false for the reset password method.
+   */
   @Test
   void userForgotPasswordResetFailure() {
     // given
@@ -257,6 +304,25 @@ class UserControllerTest {
     verify(userService).resetPassword(forgotPasswordRequest);
   }
 
+  /**
+   * creates a new `ForgotPasswordRequest` object with predefined email, password and
+   * token.
+   * 
+   * @returns a `ForgotPasswordRequest` object containing the email, new password, and
+   * token for the forgotten password.
+   * 
+   * 	- `ForgotPasswordRequest request`: This is an instance of the `ForgotPasswordRequest`
+   * class, which contains information related to forgotten password requests.
+   * 	- `setEmail(TEST_EMAIL)`: This method sets the email address of the user who is
+   * making the forgot password request. The value of `TEST_EMAIL` is a hardcoded string
+   * that represents the email address.
+   * 	- `setNewPassword(TESS_NEW_PASSWORD)`: This method sets the new password for the
+   * user's account. The value of `TESS_NEW_PASSWORD` is also a hardcoded string that
+   * represents the new password.
+   * 	- `setToken(TEST_TOKEN)`: This method sets a unique token for the forgotten
+   * password request. The value of `TEST_TOKEN` is also a hardcoded string that
+   * represents the token.
+   */
   private ForgotPasswordRequest getForgotPasswordRequest() {
     ForgotPasswordRequest request = new ForgotPasswordRequest();
     request.setEmail(TEST_EMAIL);
@@ -265,6 +331,11 @@ class UserControllerTest {
     return request;
   }
 
+  /**
+   * tests the `listAllHousemates` method of the `UserController` class. It verifies
+   * that when no results are found, the method returns a `HttpStatus.NOT_FOUND` status
+   * code and an empty list of `HouseMembers`.
+   */
   void shouldListAllHousematesSuccessWithNoResults() {
     // given
     String userId = TEST_ID;
@@ -288,6 +359,11 @@ class UserControllerTest {
     then(userApiMapper).shouldHaveNoInteractions();
   }
 
+  /**
+   * tests the `listAllHousmates` endpoint, verifying that it returns a list of house
+   * members for the given user ID and pagination parameters, and that the response is
+   * in the expected format.
+   */
   @Test
   void shouldListAllHousematesSuccessWithResults() {
     // given

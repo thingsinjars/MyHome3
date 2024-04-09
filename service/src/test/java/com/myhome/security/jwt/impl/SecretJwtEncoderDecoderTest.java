@@ -23,6 +23,9 @@ import java.time.LocalDateTime;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
+/**
+ * TODO
+ */
 class SecretJwtEncoderDecoderTest {
   private static final String TEST_USER_ID = "test-user-id";
 
@@ -37,6 +40,10 @@ class SecretJwtEncoderDecoderTest {
       + "secretsecretsecretsecretsecretsecretsecretsecret"
       + "secretsecretsecretsecretsecretsecretsecretsecret";
 
+  /**
+   * tests whether the `SecretJwtEncoderDecoder` class can successfully encode an JWT
+   * token using a provided secret.
+   */
   @Test
   void jwtEncodeSuccess() {
     // given
@@ -49,6 +56,11 @@ class SecretJwtEncoderDecoderTest {
     Assertions.assertNotNull(jwtEncoderDecoder.encode(appJwt, VALID_SECRET));
   }
 
+  /**
+   * tests the behavior of the `SecretJwtEncoderDecoder` class when an invalid secret
+   * key is provided during JWT encoding. It asserts that an exception of type
+   * `WeakKeyException` is thrown when an invalid secret key is used.
+   */
   @Test
   void jwtEncodeFailWithException() {
     // given
@@ -60,6 +72,10 @@ class SecretJwtEncoderDecoderTest {
         () -> jwtEncoderDecoder.encode(appJwt, INVALID_SECRET));
   }
 
+  /**
+   * tests the successful decoding of a JWT token using a secret key. It verifies that
+   * the decoded JWT has the expected user ID and expiration time.
+   */
   @Test
   void jwtDecodeSuccess() {
     // given
@@ -77,6 +93,10 @@ class SecretJwtEncoderDecoderTest {
     Assertions.assertNotNull(decodedJwt.getExpiration());
   }
 
+  /**
+   * tests whether an exception is thrown when attempting to decode an expired JWT using
+   * the `SecretJwtEncoderDecoder`.
+   */
   @Test
   void jwtDecodeFailWithExpiredJwt() {
     // given
