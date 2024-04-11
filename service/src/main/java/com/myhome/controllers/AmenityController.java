@@ -41,6 +41,14 @@ import org.springframework.web.bind.annotation.RestController;
  * listing all amenities for a specific community, adding new amenities to a community,
  * deleting an amenity, and updating an existing amenity.
  */
+/**
+ * is responsible for handling HTTP requests related to amenities in a community. The
+ * controller provides endpoints for listing all amenities, adding new amenities,
+ * updating existing amenities, and deleting amenities. The controller utilizes the
+ * JPA service to interact with the database and perform CRUD operations on amenities.
+ * The controller also provides methods for handling error responses and returning
+ * appropriate status codes.
+ */
 @RestController
 @Slf4j
 @RequiredArgsConstructor
@@ -72,6 +80,28 @@ public class AmenityController implements AmenitiesApi {
    * status code is set to `HttpStatus.NOT_FOUND` and the response entity is built with
    * the appropriate details.
    */
+  /**
+   * retrieves amenity details from the database using the `amenitySDJpaService`. It
+   * then maps the result to an `AmenityDetailsResponse` object using the `amenityApiMapper`
+   * and returns a `ResponseEntity` with a status of `OK` or an error message if the
+   * amenity ID is not found.
+   * 
+   * @param amenityId identifier of an amenity that is being requested, and it is used
+   * to retrieve the details of that amenity from the database by the `amenitySDJpaService`.
+   * 
+   * @returns an `OkResponseEntity` containing the details of the amenity with the
+   * provided ID.
+   * 
+   * 	- `ResponseEntity`: This is an instance of `ResponseEntity`, which represents a
+   * response to a REST API call. It contains information about the status code and
+   * body of the response.
+   * 	- `ok`: This is a method on `ResponseEntity` that indicates whether the response
+   * was successful (i.e., with a 200 status code). If `orElse` is called with a non-empty
+   * `Optional`, this property will be set to `true`. Otherwise, it will be set to `false`.
+   * 	- `status`: This is an instance of `HttpStatus`, which represents the status code
+   * of the response. In this case, it will be either `HttpStatus.NOT_FOUND` if the
+   * amenity could not be found, or `HttpStatus.OK` otherwise.
+   */
   @Override
   public ResponseEntity<GetAmenityDetailsResponse> getAmenityDetails(
       @PathVariable String amenityId) {
@@ -102,6 +132,27 @@ public class AmenityController implements AmenitiesApi {
    * 	- `amenityApiMapper`: This is an instance of a class that maps `Amenity` objects
    * to `GetAmenityDetailsResponse` objects, which is used to transform the data returned
    * by the `listAllAmenities` method into the desired response format.
+   */
+  /**
+   * list all amenities for a given community ID and map them to `GetAmenityDetailsResponse`
+   * objects for return in a `ResponseEntity`.
+   * 
+   * @param communityId unique identifier of the community whose amenities are to be listed.
+   * 
+   * @returns a `ResponseEntity` object containing a set of `GetAmenityDetailsResponse`
+   * objects, representing the list of amenities for the specified community.
+   * 
+   * 	- `Set<GetAmenityDetailsResponse>` represents a set of `GetAmenityDetailsResponse`
+   * objects, which contain details of each amenity.
+   * 	- `amenitySDJpaService.listAllAmenities(communityId)` returns a set of `Amenity`
+   * objects, which are the entities being transformed into `GetAmenityDetailsResponse`
+   * objects.
+   * 	- `amenityApiMapper.amenitiesSetToAmenityDetailsResponseSet(amenities)` maps each
+   * `Amenity` object to a `GetAmenityDetailsResponse` object, using a custom mapping
+   * logic.
+   * 
+   * Therefore, the output of the `listAllAmenities` function is a set of
+   * `GetAmenityDetailsResponse` objects, each containing details of an amenity.
    */
   @Override
   public ResponseEntity<Set<GetAmenityDetailsResponse>> listAllAmenities(
@@ -141,6 +192,43 @@ public class AmenityController implements AmenitiesApi {
    * Overall, the function returns a response entity with an `AddAmenityResponse` message
    * and a list of `Amenity` objects representing the added amenities.
    */
+  /**
+   * adds amenities to a community through JPA service, maps the result to AddAmenityResponse
+   * object and returns ResponseEntity with ok status or notFound status if error occurs.
+   * 
+   * @param communityId ID of the community to which the amenities are being added.
+   * 
+   * @param request AddAmenityRequest object containing the amenities to be added to a
+   * community, which is used by the `amenitySDJpaService` to create new amenities in
+   * the community.
+   * 
+   * 	- `communityId`: The ID of the community to which the amenities will be added.
+   * 	- `request.getAmenities()`: An array of `AddAmenityRequest.Amenity` objects
+   * representing the amenities to be added to the community. Each object in the array
+   * contains properties such as `name`, `description`, and `type`.
+   * 
+   * @returns a `ResponseEntity` object with an `ok` status and a list of created amenities.
+   * 
+   * 	- `ResponseEntity<AddAmenityResponse>`: This is an entity that contains a
+   * `AddAmenityResponse` object and an `HttpStatusCode`. The `AddAmenityResponse`
+   * object represents the result of adding amenities to a community, and it has several
+   * attributes, including `amenities`, which is a list of added amenities.
+   * 	- `map(function)`: This method is used to map the output of the `createAmenities()`
+   * method, which returns a list of amenities, to an `AddAmenityResponse` object. The
+   * `map()` method takes a function as its argument, which in this case is a lambda
+   * expression that extracts the `amenities` list from the returned list of amenities
+   * and returns it as a `AddAmenityResponse` object.
+   * 	- `orElse(function)`: This method is used to provide an alternative output if the
+   * `createAmenities()` method returns an empty list. The `orElse()` method takes a
+   * function as its argument, which in this case is a lambda expression that creates
+   * a `ResponseEntity` with an `HttpStatusCode` of `404` and builds it using the
+   * `build()` method.
+   * 	- `map(function)`: This method is used to map the output of the `orElse()` method
+   * to an `AddAmenityResponse` object. The `map()` method takes a function as its
+   * argument, which in this case is a lambda expression that extracts the `HttpStatusCode`
+   * and the `AddAmenityResponse` object from the returned `ResponseEntity` and returns
+   * them as a single output.
+   */
   @Override
   public ResponseEntity<AddAmenityResponse> addAmenityToCommunity(
       @PathVariable String communityId,
@@ -165,6 +253,20 @@ public class AmenityController implements AmenitiesApi {
    * 	- `HttpStatus`: The HTTP status code of the response entity. In case the amenity
    * was successfully deleted, the status code is set to `NO_CONTENT` (HTTP 204),
    * otherwise it is set to `NOT_FOUND` (HTTP 404).
+   */
+  /**
+   * deletes an amenity from the database based on its ID, returning a HTTP status code
+   * indicating the result of the operation.
+   * 
+   * @param amenityId ID of the amenity to be deleted.
+   * 
+   * @returns a `ResponseEntity` object with a status code of either `NO_CONTENT` or
+   * `NOT_FOUND`, depending on whether the amenity was successfully deleted or not.
+   * 
+   * 	- `HttpStatus.NO_CONTENT`: This status code indicates that the amenity was
+   * successfully deleted and no content was returned in response.
+   * 	- `HttpStatus.NOT_FOUND`: This status code indicates that the amenity could not
+   * be found, and the function returned an error message.
    */
   @Override
   public ResponseEntity deleteAmenity(@PathVariable String amenityId) {
@@ -201,6 +303,31 @@ public class AmenityController implements AmenitiesApi {
    * successfully or not.
    * 	- `HttpStatus`: The HTTP status code associated with the response entity. In this
    * case, it can be either `NO_CONTENT` (204) or `NOT_FOUND` (404).
+   */
+  /**
+   * updates an amenity in the system by receiving a request with the amenity details
+   * and updating the amenity information in the database using the `amenitySDJpaService`.
+   * If the update is successful, it returns a `ResponseEntity` with a `HttpStatus.NO_CONTENT`.
+   * 
+   * @param amenityId unique identifier of the amenity being updated.
+   * 
+   * @param request UpdateAmenityRequest object that contains the details of the amenity
+   * to be updated.
+   * 
+   * 	- `@Valid`: Indicates that the input request body must contain valid data according
+   * to the schema defined in the JPA annotation.
+   * 	- `@RequestBody`: Marks the request body as a serialized object containing the
+   * update amenity details.
+   * 	- `UpdateAmenityRequest` is the class that contains the attributes of the amenity
+   * to be updated, along with any additional information required for the update operation.
+   * 
+   * @returns a `ResponseEntity` object with a status code indicating whether the update
+   * was successful or not.
+   * 
+   * 	- `HttpStatus.NO_CONTENT`: This indicates that the amenity was successfully
+   * updated, and no additional content was returned in the response body.
+   * 	- `HttpStatus.NOT_FOUND`: This indicates that the amenity could not be found, and
+   * the function returned an error message.
    */
   @Override
   public ResponseEntity<Void> updateAmenity(@PathVariable String amenityId,
