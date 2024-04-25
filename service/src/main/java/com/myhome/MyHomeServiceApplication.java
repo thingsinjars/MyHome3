@@ -24,27 +24,23 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 /**
- * is a Spring Boot application that provides a password encoder using BCrypt algorithm.
- * It also includes a main method for launching the application and configuration
- * properties scan to enable the auto-discovery of spring boot configurations.
+ * is a Spring Boot application that provides a BCryptPasswordEncoder instance for
+ * encrypting passwords using the BCrypt algorithm. The encoder is designed to handle
+ * strong password validation and is suitable for use in web applications.
  */
 @SpringBootApplication
 @ConfigurationPropertiesScan
 public class MyHomeServiceApplication {
 
   /**
-   * runs a Spring application, specifically the `MyHomeServiceApplication`, passing
-   * the `args` array as a parameter to the `SpringApplication.run()` method.
+   * runs a Spring Application instance of `MyHomeServiceApplication`.
    * 
-   * @param args command-line arguments passed to the program when it is executed
-   * directly from the command line or launched by some other application.
+   * @param args command-line arguments passed to the main method when the application
+   * is launched directly from the command line or through a spring boot application runner.
    * 
-   * The input `args` is an array of strings that contains the command-line arguments
-   * passed to the program by the user.
-   * 
-   * Each element in the array represents a separate argument, and can be accessed using
-   * its index position within the array. For example, `args[0]` represents the first
-   * argument passed to the program.
+   * 	- It is an array of strings denoted by the `String[]` type.
+   * 	- Its size can be accessed through the `length` property.
+   * 	- Each element within the array can be accessed using its index, starting from 0.
    */
   public static void main(String[] args) {
     SpringApplication.run(MyHomeServiceApplication.class, args);
