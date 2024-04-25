@@ -1,59 +1,69 @@
 [
   {
-    "name": "MyHomeServiceApplication.java",
-    "path": "service/src/main/java/com/myhome/MyHomeServiceApplication.java",
+    "name": "PageInfo.java",
+    "path": "api/src/main/java/com/myhome/utils/PageInfo.java",
     "content": {
       "structured": {
-        "description": "A Spring Boot application that uses the BCrypt password encryption algorithm for securely storing and hashing passwords. The `getPasswordEncoder()` method returns a `BCryptPasswordEncoder` instance, which is used to encrypt passwords. The application also includes configuration properties scanning using `@ConfigurationPropertiesScan`.",
-        "diagram": "digraph G {\n    label=\"com.todo.FixMe\"\n    bgcolor=\"#151719\"\n    fontcolor=\"#ECEDED\"\n    splines=ortho\n    fontname=\"Courier New\"\n    edge [color=\"#26de81\"]\n}\n",
+        "description": "A `PageInfo` class that contains information about a page of data. The class has four fields: currentPage, pageLimit, totalPages, and totalElements. These fields are initialized using a constructor that takes a `Pageable` object and a `Page` object as arguments. The `PageInfo` class also provides a static `of()` method for creating new instances of the class with the desired parameters.",
         "items": [
           {
-            "id": "5e94e2dd-9805-de8d-1544-5e03b5a17014",
+            "id": "e37916dd-8bd1-3285-4546-cb499bcbecf2",
             "ancestors": [],
             "type": "function",
-            "description": "is a Java class that provides a BCryptPasswordEncoder instance for encrypting passwords using the BCrypt algorithm. The encoder is designed to handle strong password validation and is suitable for use in web applications.",
-            "name": "MyHomeServiceApplication",
-            "code": "@SpringBootApplication\n@ConfigurationPropertiesScan\npublic class MyHomeServiceApplication {\n\n  public static void main(String[] args) {\n    SpringApplication.run(MyHomeServiceApplication.class, args);\n  }\n\n  /**\n   * returns a `BCryptPasswordEncoder` instance, which is used to encrypt passwords\n   * using the BCrypt algorithm.\n   * \n   * @returns a BCryptPasswordEncoder instance.\n   * \n   * The `BCryptPasswordEncoder` object represents a password encryption algorithm that\n   * uses the bcrypt hashing algorithm to securely store and hash passwords.\n   * It provides several methods for encrypting, hashing, and verifying passwords.\n   * The encoder is designed to handle strong password validation and is suitable for\n   * use in web applications.\n   */\n  @Bean\n  public PasswordEncoder getPasswordEncoder() {\n    return new BCryptPasswordEncoder();\n  }\n}",
+            "description": "is a data structure that encapsulates information about a page of results in a larger dataset. It provides the current page number, page limit, total pages, and total elements, which can be used to navigate and manipulate the larger dataset.",
+            "name": "PageInfo",
+            "code": "@EqualsAndHashCode\n@ToString\n@Getter\n@RequiredArgsConstructor(access = AccessLevel.PRIVATE)\npublic class PageInfo {\n  private final int currentPage;\n  private final int pageLimit;\n  private final int totalPages;\n  private final long totalElements;\n\n  public static PageInfo of(Pageable pageable, Page<?> page) {\n    return new PageInfo(\n        pageable.getPageNumber(),\n        pageable.getPageSize(),\n        page.getTotalPages(),\n        page.getTotalElements()\n    );\n  }\n}",
             "location": {
-              "start": 26,
-              "insert": 26,
+              "start": 11,
+              "insert": 11,
               "offset": " ",
               "indent": 0,
               "comment": null
             },
             "item_type": "class",
-            "length": 25,
+            "length": 19,
             "docLength": null,
-            "doc": "A Spring Boot application that uses the BCrypt password encryption algorithm for securely storing and hashing passwords. The `getPasswordEncoder()` method returns a `BCryptPasswordEncoder` instance, which is used to encrypt passwords. The application also includes configuration properties scanning using `@ConfigurationPropertiesScan`."
+            "doc": "A `PageInfo` class that contains information about a page of data. The class has four fields: currentPage, pageLimit, totalPages, and totalElements. These fields are initialized using a constructor that takes a `Pageable` object and a `Page` object as arguments. The `PageInfo` class also provides a static `of()` method for creating new instances of the class with the desired parameters."
           },
           {
-            "id": "842312b5-0cb0-d6ac-1c40-56060902f291",
+            "id": "94408ed9-d6ed-fb93-e247-cd1282bf389c",
             "ancestors": [
-              "5e94e2dd-9805-de8d-1544-5e03b5a17014"
+              "e37916dd-8bd1-3285-4546-cb499bcbecf2"
             ],
             "type": "function",
-            "description": "runs a Spring application named `MyHomeServiceApplication`. It starts the application using the `SpringApplication.run()` method, passing in the class and command-line arguments.",
+            "description": "creates a `PageInfo` object containing information about the number of pages and elements in a specified range.",
             "params": [
               {
-                "name": "args",
-                "type_name": "String[]",
-                "description": "command-line arguments passed to the `SpringApplication.run()` method when the application is launched.\n\n* `args`: an array of strings representing command-line arguments passed to the application\n* `MyHomeServiceApplication`: the name of the application class being executed",
+                "name": "pageable",
+                "type_name": "Pageable",
+                "description": "pagination information for the current page being processed, providing the number of pages and elements per page.\n\n* `pageNumber`: The page number of the result set.\n* `pageSize`: The number of elements in each page of the result set.\n* `totalPages`: The total number of pages in the result set.\n* `totalElements`: The total number of elements in the result set.",
+                "complex_type": true
+              },
+              {
+                "name": "page",
+                "type_name": "Page<?>",
+                "description": "current page being processed, providing the number of elements on that page and the total number of pages in the result set.\n\n* The `pageNumber` field indicates the number of the page being processed.\n* The `pageSize` field represents the number of elements in each page.\n* The `totalPages` field shows the total number of pages in the dataset.\n* The `totalElements` field displays the overall number of elements in the dataset.",
                 "complex_type": true
               }
             ],
-            "name": "main",
-            "code": "public static void main(String[] args) {\n    SpringApplication.run(MyHomeServiceApplication.class, args);\n  }",
+            "returns": {
+              "type_name": "PageInfo",
+              "description": "a `PageInfo` object containing page number, size, total pages, and total elements.\n\n* The first argument, `pageable`, is an instance of `Pageable`.\n* The second argument, `page`, is an instance of `Page`.\n* The method returns a `PageInfo` object, which contains four properties:\n\t+ `pageNumber`: the number of the current page being displayed.\n\t+ `pageSize`: the number of elements on each page.\n\t+ `totalPages`: the total number of pages in the result set.\n\t+ `totalElements`: the total number of elements in the result set.",
+              "complex_type": true
+            },
+            "name": "of",
+            "code": "public static PageInfo of(Pageable pageable, Page<?> page) {\n    return new PageInfo(\n        pageable.getPageNumber(),\n        pageable.getPageSize(),\n        page.getTotalPages(),\n        page.getTotalElements()\n    );\n  }",
             "location": {
-              "start": 30,
-              "insert": 30,
+              "start": 21,
+              "insert": 21,
               "offset": " ",
               "indent": 2,
               "comment": null
             },
             "item_type": "method",
-            "length": 3,
+            "length": 8,
             "docLength": null,
-            "doc": "A Spring Boot application that uses the BCrypt password encryption algorithm for securely storing and hashing passwords. The `getPasswordEncoder()` method returns a `BCryptPasswordEncoder` instance, which is used to encrypt passwords. The application also includes configuration properties scanning using `@ConfigurationPropertiesScan`."
+            "doc": "A `PageInfo` class that contains information about a page of data. The class has four fields: currentPage, pageLimit, totalPages, and totalElements. These fields are initialized using a constructor that takes a `Pageable` object and a `Page` object as arguments. The `PageInfo` class also provides a static `of()` method for creating new instances of the class with the desired parameters."
           }
         ]
       }
