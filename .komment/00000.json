@@ -4,13 +4,13 @@
     "path": "api/src/main/java/com/myhome/utils/PageInfo.java",
     "content": {
       "structured": {
-        "description": "A `PageInfo` class that contains information about a page of data. The class has four fields: currentPage, pageLimit, totalPages, and totalElements. It also provides a constructor for creating instances of `PageInfo` from a `Pageable` object and a `Page` object. The `PageInfo` class is used to represent the current page number, page size, total pages, and total elements in a data set.",
+        "description": "A `PageInfo` class that contains information about a page of data, including the current page number, page size, total pages, and total elements. The class uses Lombok library for generating getter, toString, equalsAndHashCode methods. Additionally, a static method `of` is provided to create a `PageInfo` instance from a `Pageable` object and a `Page` object.",
         "items": [
           {
-            "id": "2686e0c1-6016-e49f-414c-f6bd94771d02",
+            "id": "bf279781-334b-f883-5c40-c3762aaea5b8",
             "ancestors": [],
             "type": "function",
-            "description": "is a data structure that provides information about a page of results from a larger dataset. It consists of currentPage, pageLimit, totalPages, and totalElements. The class also includes a static method for creating a new instance of the class based on a Pageable object and a Page object.",
+            "description": "is a data structure that represents information about a page of results, including the current page number, page limit, total pages, and total elements. It provides a convenient way to retrieve and manipulate page-related information.",
             "name": "PageInfo",
             "code": "@EqualsAndHashCode\n@ToString\n@Getter\n@RequiredArgsConstructor(access = AccessLevel.PRIVATE)\npublic class PageInfo {\n  private final int currentPage;\n  private final int pageLimit;\n  private final int totalPages;\n  private final long totalElements;\n\n  public static PageInfo of(Pageable pageable, Page<?> page) {\n    return new PageInfo(\n        pageable.getPageNumber(),\n        pageable.getPageSize(),\n        page.getTotalPages(),\n        page.getTotalElements()\n    );\n  }\n}",
             "location": {
@@ -23,32 +23,32 @@
             "item_type": "class",
             "length": 19,
             "docLength": null,
-            "doc": "A `PageInfo` class that contains information about a page of data. The class has four fields: currentPage, pageLimit, totalPages, and totalElements. It also provides a constructor for creating instances of `PageInfo` from a `Pageable` object and a `Page` object. The `PageInfo` class is used to represent the current page number, page size, total pages, and total elements in a data set."
+            "doc": "A `PageInfo` class that contains information about a page of data, including the current page number, page size, total pages, and total elements. The class uses Lombok library for generating getter, toString, equalsAndHashCode methods. Additionally, a static method `of` is provided to create a `PageInfo` instance from a `Pageable` object and a `Page` object."
           },
           {
-            "id": "0e9797eb-ffa8-8291-954b-eaac7a3206a1",
+            "id": "257bd2b3-7864-b897-bf4a-a1c05e8df96c",
             "ancestors": [
-              "2686e0c1-6016-e49f-414c-f6bd94771d02"
+              "bf279781-334b-f883-5c40-c3762aaea5b8"
             ],
             "type": "function",
-            "description": "creates a `PageInfo` object containing information about the number of pages, page size, total pages, and total elements of a given pageable and page.",
+            "description": "generates a `PageInfo` object containing information about the number of pages, size of each page, total number of pages, and total elements for a given `Pageable` and `Page`.",
             "params": [
               {
                 "name": "pageable",
                 "type_name": "Pageable",
-                "description": "pageable object that contains information about the current page being processed, including the page number and the size of the page.\n\n* `getPageNumber()`: The page number associated with the provided `page`.\n* `getPageSize()`: The number of elements that can be displayed on a single page.\n* `getTotalPages()`: The total number of pages in the result set.\n* `getTotalElements()`: The total number of elements in the result set.",
+                "description": "pageable object that contains information about the current page of data, such as the page number and size.\n\n* `getPageNumber()` returns the current page number.\n* `getPageSize()` returns the total number of elements in this page.\n* `getTotalPages()` returns the total number of pages in the result set.\n* `getTotalElements()` returns the total number of elements in the result set.",
                 "complex_type": true
               },
               {
                 "name": "page",
                 "type_name": "Page<?>",
-                "description": "current page being processed and provides the total number of elements on that page.\n\n1. `pageNumber`: The page number of the resultant page, which is the number of the page in the paginated sequence.\n2. `pageSize`: The size of each page in the pagination sequence, indicating how many elements can be displayed on a single page.\n3. `totalPages`: The total number of pages that can be displayed based on the input `pageable` and `page`.\n4. `totalElements`: The total number of elements in the resultant paginated sequence.",
+                "description": "current page being processed, providing the total number of elements on that page and the total number of pages in the result set.\n\n* `getPageNumber()`: The page number that this page belongs to.\n* `getPageSize()`: The number of elements in each page.\n* `getTotalPages()`: The total number of pages in the result set.\n* `getTotalElements()`: The total number of elements in the result set.",
                 "complex_type": true
               }
             ],
             "returns": {
               "type_name": "PageInfo",
-              "description": "a `PageInfo` object containing information about the current page and total pages and elements.\n\n* The first element is the page number (0-based) of the current page.\n* The second element is the number of elements per page.\n* The third element is the total number of pages in the result set.\n* The fourth element is the total number of elements in the result set.",
+              "description": "a `PageInfo` object containing four properties: page number, page size, total pages, and total elements.\n\n1. pageNumber - The number of the current page being displayed.\n2. pageSize - The size of the page being displayed.\n3. totalPages - The total number of pages in the result set.\n4. totalElements - The total number of elements in the result set.",
               "complex_type": true
             },
             "name": "of",
@@ -63,7 +63,7 @@
             "item_type": "method",
             "length": 8,
             "docLength": null,
-            "doc": "A `PageInfo` class that contains information about a page of data. The class has four fields: currentPage, pageLimit, totalPages, and totalElements. It also provides a constructor for creating instances of `PageInfo` from a `Pageable` object and a `Page` object. The `PageInfo` class is used to represent the current page number, page size, total pages, and total elements in a data set."
+            "doc": "A `PageInfo` class that contains information about a page of data, including the current page number, page size, total pages, and total elements. The class uses Lombok library for generating getter, toString, equalsAndHashCode methods. Additionally, a static method `of` is provided to create a `PageInfo` instance from a `Pageable` object and a `Page` object."
           }
         ]
       }
