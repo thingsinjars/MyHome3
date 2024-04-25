@@ -20,15 +20,16 @@ public class PageInfo {
 
   /**
    * generates high-quality documentation for code given to it by returning a `PageInfo`
-   * object containing information about the specified pageable and page.
+   * object containing information about the number of pages and elements in a pageable.
    * 
-   * @param pageable pagination information for thePage<?> object passed as an argument
-   * to the function.
+   * @param pageable pagination information for the retrieved data, providing the current
+   * page number, page size, total pages, and total elements.
    * 
-   * @param page current page being processed, providing its total elements and pages
-   * count to construct the `PageInfo` object.
+   * @param page current page being processed, providing information on its position,
+   * size, and total count within the larger dataset.
    * 
-   * @returns a `PageInfo` object containing page-related information.
+   * @returns a `PageInfo` object containing page number, size, total pages, and total
+   * elements.
    */
   public static PageInfo of(Pageable pageable, Page<?> page) {
     return new PageInfo(
