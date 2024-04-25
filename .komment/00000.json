@@ -4,14 +4,14 @@
     "path": "service/src/main/java/com/myhome/MyHomeServiceApplication.java",
     "content": {
       "structured": {
-        "description": "A Spring Boot application and configuration properties scan. It also provides a BCryptPasswordEncoder instance for encrypting passwords using the bcrypt algorithm. The `getPasswordEncoder()` method returns an instance of `BCryptPasswordEncoder`, which is used to securely store and hash passwords in the application.",
+        "description": "A Spring Boot application that uses the BCrypt password encryption algorithm for securely storing and hashing passwords. The `getPasswordEncoder()` method returns a `BCryptPasswordEncoder` instance, which is used to encrypt passwords. The application also includes configuration properties scanning using `@ConfigurationPropertiesScan`.",
         "diagram": "digraph G {\n    label=\"com.todo.FixMe\"\n    bgcolor=\"#151719\"\n    fontcolor=\"#ECEDED\"\n    splines=ortho\n    fontname=\"Courier New\"\n    edge [color=\"#26de81\"]\n}\n",
         "items": [
           {
-            "id": "b385bd6b-f3a4-3d9b-e745-2f42ee572901",
+            "id": "5e94e2dd-9805-de8d-1544-5e03b5a17014",
             "ancestors": [],
             "type": "function",
-            "description": "is a Spring Boot application that provides a BCryptPasswordEncoder instance for encrypting passwords using the BCrypt algorithm. The encoder is designed to handle strong password validation and is suitable for use in web applications.",
+            "description": "is a Java class that provides a BCryptPasswordEncoder instance for encrypting passwords using the BCrypt algorithm. The encoder is designed to handle strong password validation and is suitable for use in web applications.",
             "name": "MyHomeServiceApplication",
             "code": "@SpringBootApplication\n@ConfigurationPropertiesScan\npublic class MyHomeServiceApplication {\n\n  public static void main(String[] args) {\n    SpringApplication.run(MyHomeServiceApplication.class, args);\n  }\n\n  /**\n   * returns a `BCryptPasswordEncoder` instance, which is used to encrypt passwords\n   * using the BCrypt algorithm.\n   * \n   * @returns a BCryptPasswordEncoder instance.\n   * \n   * The `BCryptPasswordEncoder` object represents a password encryption algorithm that\n   * uses the bcrypt hashing algorithm to securely store and hash passwords.\n   * It provides several methods for encrypting, hashing, and verifying passwords.\n   * The encoder is designed to handle strong password validation and is suitable for\n   * use in web applications.\n   */\n  @Bean\n  public PasswordEncoder getPasswordEncoder() {\n    return new BCryptPasswordEncoder();\n  }\n}",
             "location": {
@@ -24,20 +24,20 @@
             "item_type": "class",
             "length": 25,
             "docLength": null,
-            "doc": "A Spring Boot application and configuration properties scan. It also provides a BCryptPasswordEncoder instance for encrypting passwords using the bcrypt algorithm. The `getPasswordEncoder()` method returns an instance of `BCryptPasswordEncoder`, which is used to securely store and hash passwords in the application."
+            "doc": "A Spring Boot application that uses the BCrypt password encryption algorithm for securely storing and hashing passwords. The `getPasswordEncoder()` method returns a `BCryptPasswordEncoder` instance, which is used to encrypt passwords. The application also includes configuration properties scanning using `@ConfigurationPropertiesScan`."
           },
           {
-            "id": "0e337d8f-3b2e-5a82-f443-af80aec9c820",
+            "id": "842312b5-0cb0-d6ac-1c40-56060902f291",
             "ancestors": [
-              "b385bd6b-f3a4-3d9b-e745-2f42ee572901"
+              "5e94e2dd-9805-de8d-1544-5e03b5a17014"
             ],
             "type": "function",
-            "description": "runs a Spring Application instance of `MyHomeServiceApplication`.",
+            "description": "runs a Spring application named `MyHomeServiceApplication`. It starts the application using the `SpringApplication.run()` method, passing in the class and command-line arguments.",
             "params": [
               {
                 "name": "args",
                 "type_name": "String[]",
-                "description": "command-line arguments passed to the main method when the application is launched directly from the command line or through a spring boot application runner.\n\n* It is an array of strings denoted by the `String[]` type.\n* Its size can be accessed through the `length` property.\n* Each element within the array can be accessed using its index, starting from 0.",
+                "description": "command-line arguments passed to the `SpringApplication.run()` method when the application is launched.\n\n* `args`: an array of strings representing command-line arguments passed to the application\n* `MyHomeServiceApplication`: the name of the application class being executed",
                 "complex_type": true
               }
             ],
@@ -53,7 +53,7 @@
             "item_type": "method",
             "length": 3,
             "docLength": null,
-            "doc": "A Spring Boot application and configuration properties scan. It also provides a BCryptPasswordEncoder instance for encrypting passwords using the bcrypt algorithm. The `getPasswordEncoder()` method returns an instance of `BCryptPasswordEncoder`, which is used to securely store and hash passwords in the application."
+            "doc": "A Spring Boot application that uses the BCrypt password encryption algorithm for securely storing and hashing passwords. The `getPasswordEncoder()` method returns a `BCryptPasswordEncoder` instance, which is used to encrypt passwords. The application also includes configuration properties scanning using `@ConfigurationPropertiesScan`."
           }
         ]
       }
