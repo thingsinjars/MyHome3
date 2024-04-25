@@ -4,13 +4,13 @@
     "path": "api/src/main/java/com/myhome/utils/PageInfo.java",
     "content": {
       "structured": {
-        "description": "A `PageInfo` class that holds information about a page of data, including the current page number, page size, total pages, and total elements. It also provides a factory method for creating instances of `PageInfo` based on a `Pageable` object and a page of data.",
+        "description": "A class named PageInfo that contains information about a page of data fetched from a database or other source. The class has four fields: currentPage, pageLimit, totalPages, and totalElements, which represent the current page being viewed, the maximum number of pages that can be displayed, the total number of pages in the dataset, and the total number of elements in the dataset, respectively. The class also provides a static factory method named of(Pageable, Page) that creates a new instance of PageInfo by passing in a Pageable object representing the page request and a Page object containing the data for the current page.",
         "items": [
           {
-            "id": "f83d7e51-4ca3-32af-7b43-9dc19128b7d8",
+            "id": "b1ef5cb1-2e2d-a490-6d44-7420eb9b721d",
             "ancestors": [],
             "type": "function",
-            "description": "is a data structure that represents a page of results from a query. It contains information about the current page being viewed, the number of elements on the page, and the total number of pages in the result set. The class also includes methods for creating new instances of the class based on pageable and page parameters.",
+            "description": "is a data structure that provides information about a page of results from a larger dataset. It consists of four fields: currentPage, pageLimit, totalPages, and totalElements. The class also includes a static method for creating a new instance of the class based on a pageable and a page.",
             "name": "PageInfo",
             "code": "@EqualsAndHashCode\n@ToString\n@Getter\n@RequiredArgsConstructor(access = AccessLevel.PRIVATE)\npublic class PageInfo {\n  private final int currentPage;\n  private final int pageLimit;\n  private final int totalPages;\n  private final long totalElements;\n\n  public static PageInfo of(Pageable pageable, Page<?> page) {\n    return new PageInfo(\n        pageable.getPageNumber(),\n        pageable.getPageSize(),\n        page.getTotalPages(),\n        page.getTotalElements()\n    );\n  }\n}",
             "location": {
@@ -23,32 +23,32 @@
             "item_type": "class",
             "length": 19,
             "docLength": null,
-            "doc": "A `PageInfo` class that holds information about a page of data, including the current page number, page size, total pages, and total elements. It also provides a factory method for creating instances of `PageInfo` based on a `Pageable` object and a page of data."
+            "doc": "A class named PageInfo that contains information about a page of data fetched from a database or other source. The class has four fields: currentPage, pageLimit, totalPages, and totalElements, which represent the current page being viewed, the maximum number of pages that can be displayed, the total number of pages in the dataset, and the total number of elements in the dataset, respectively. The class also provides a static factory method named of(Pageable, Page) that creates a new instance of PageInfo by passing in a Pageable object representing the page request and a Page object containing the data for the current page."
           },
           {
-            "id": "c950959e-69ea-dd99-514a-c8c8dc62ecc6",
+            "id": "4ab4ba2a-c01b-47b9-a14f-c968bf9cf3b5",
             "ancestors": [
-              "f83d7e51-4ca3-32af-7b43-9dc19128b7d8"
+              "b1ef5cb1-2e2d-a490-6d44-7420eb9b721d"
             ],
             "type": "function",
-            "description": "creates a `PageInfo` object containing information about the number of pages, page size, total pages, and total elements for a given pageable and page.",
+            "description": "takes a pageable and a page object as input, returning a `PageInfo` object that contains information about the page number, size, total pages, and total elements.",
             "params": [
               {
                 "name": "pageable",
                 "type_name": "Pageable",
-                "description": "pageable object that contains information about the current page being processed, including its page number and size.\n\n* `pageable.getPageNumber()`: The page number of the current page being processed.\n* `pageable.getPageSize()`: The number of elements in each page.\n* `page.getTotalPages()`: The total number of pages in the collection.\n* `page.getTotalElements()`: The total number of elements in the collection.",
+                "description": "pagination context for the page being processed, providing information on the total number of pages and elements available for processing.\n\n* `getPageNumber()`: The page number that corresponds to the current page being rendered.\n* `getPageSize()`: The number of elements in each page of the data set.\n* `getTotalPages()`: The total number of pages in the entire data set.\n* `getTotalElements()`: The total number of elements in the data set.",
                 "complex_type": true
               },
               {
                 "name": "page",
                 "type_name": "Page<?>",
-                "description": "current page being processed, providing information on its position, size, and total pages and elements in the collection.\n\n* `pageNumber`: The page number that contains the element(s) being processed.\n* `pageSize`: The number of elements in each page.\n* `totalPages`: The total number of pages that contain elements.\n* `totalElements`: The total number of elements across all pages.",
+                "description": "current page being processed, providing information on its position within the total number of pages and the number of elements it contains.\n\n* `pageNumber`: The number of the current page being displayed.\n* `pageSize`: The number of elements in each page of the result set.\n* `totalPages`: The total number of pages in the result set.\n* `totalElements`: The total number of elements in the result set.",
                 "complex_type": true
               }
             ],
             "returns": {
               "type_name": "PageInfo",
-              "description": "a `PageInfo` object containing various metadata about a pageable and its corresponding page.\n\n* pageable.getPageNumber(): The number of the current page being accessed.\n* pageable.getPageSize(): The size of each page being displayed.\n* page.getTotalPages(): The total number of pages available in the dataset.\n* page.getTotalElements(): The total number of elements within the current page and all previous pages.",
+              "description": "a `PageInfo` object containing page number, size, total pages, and total elements.\n\n* PageNumber: The number of the current page being displayed.\n* PageSize: The number of elements on each page.\n* TotalPages: The total number of pages in the result set.\n* TotalElements: The total number of elements in the result set.",
               "complex_type": true
             },
             "name": "of",
@@ -63,7 +63,7 @@
             "item_type": "method",
             "length": 8,
             "docLength": null,
-            "doc": "A `PageInfo` class that holds information about a page of data, including the current page number, page size, total pages, and total elements. It also provides a factory method for creating instances of `PageInfo` based on a `Pageable` object and a page of data."
+            "doc": "A class named PageInfo that contains information about a page of data fetched from a database or other source. The class has four fields: currentPage, pageLimit, totalPages, and totalElements, which represent the current page being viewed, the maximum number of pages that can be displayed, the total number of pages in the dataset, and the total number of elements in the dataset, respectively. The class also provides a static factory method named of(Pageable, Page) that creates a new instance of PageInfo by passing in a Pageable object representing the page request and a Page object containing the data for the current page."
           }
         ]
       }
