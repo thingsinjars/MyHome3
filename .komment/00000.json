@@ -4,14 +4,14 @@
     "path": "service/src/main/java/com/myhome/MyHomeServiceApplication.java",
     "content": {
       "structured": {
-        "description": "A Spring Boot application that uses the `BCryptPasswordEncoder` to encrypt passwords securely. The `getPasswordEncoder()` method returns an instance of `BCryptPasswordEncoder`, which is then used throughout the application for password encryption and verification.",
+        "description": "A Spring Boot application that uses the `BCryptPasswordEncoder` to encrypt and hash passwords securely. The `getPasswordEncoder()` method returns an instance of `BCryptPasswordEncoder`, which is then used throughout the application for password validation and encryption.",
         "diagram": "digraph G {\n    label=\"com.todo.FixMe\"\n    bgcolor=\"#151719\"\n    fontcolor=\"#ECEDED\"\n    splines=ortho\n    fontname=\"Courier New\"\n    edge [color=\"#26de81\"]\n}\n",
         "items": [
           {
-            "id": "196037e9-553f-50bf-a44d-4a2b546ebd21",
+            "id": "c770ffa4-c4e4-c684-0f44-2ff22e7d1194",
             "ancestors": [],
             "type": "function",
-            "description": "is a Spring Boot application that provides a `BCryptPasswordEncoder` instance for encrypting passwords using the BCrypt algorithm. The class also includes a `@Bean` annotation to define a public method for retrieving the encoder instance.",
+            "description": "is a Spring Boot application that provides a `BCryptPasswordEncoder` instance for encrypting passwords using the BCrypt algorithm. The encoder is designed to handle strong password validation and is suitable for use in web applications.",
             "name": "MyHomeServiceApplication",
             "code": "@SpringBootApplication\n@ConfigurationPropertiesScan\npublic class MyHomeServiceApplication {\n\n  public static void main(String[] args) {\n    SpringApplication.run(MyHomeServiceApplication.class, args);\n  }\n\n  /**\n   * returns a `BCryptPasswordEncoder` instance, which is used to encrypt passwords\n   * using the BCrypt algorithm.\n   * \n   * @returns a BCryptPasswordEncoder instance.\n   * \n   * The `BCryptPasswordEncoder` object represents a password encryption algorithm that\n   * uses the bcrypt hashing algorithm to securely store and hash passwords.\n   * It provides several methods for encrypting, hashing, and verifying passwords.\n   * The encoder is designed to handle strong password validation and is suitable for\n   * use in web applications.\n   */\n  @Bean\n  public PasswordEncoder getPasswordEncoder() {\n    return new BCryptPasswordEncoder();\n  }\n}",
             "location": {
@@ -26,17 +26,17 @@
             "docLength": null
           },
           {
-            "id": "5e391f44-33c9-6d83-8443-d1a0b9ce12cc",
+            "id": "96dcc259-040f-2f93-2940-2394ea1a9ba8",
             "ancestors": [
-              "196037e9-553f-50bf-a44d-4a2b546ebd21"
+              "c770ffa4-c4e4-c684-0f44-2ff22e7d1194"
             ],
             "type": "function",
-            "description": "initiates the execution of the `MyHomeServiceApplication`.",
+            "description": "runs a SpringApplication, which initiates the execution of the `MyHomeServiceApplication`.",
             "params": [
               {
                 "name": "args",
                 "type_name": "String[]",
-                "description": "command-line arguments passed to the `SpringApplication.run()` method when the program is started.\n\n* The type of `args` is an array of `String`.\n* Its length is determined by the command-line arguments passed to the program.\n* Each element in the array represents a separate command-line argument.",
+                "description": "0 or more command line arguments passed to the `SpringApplication.run()` method when invoking the `MyHomeServiceApplication`.\n\n`args`: A `String[]` argument passed to the `SpringApplication.run()` method. It represents the command-line arguments passed to the application during its startup.",
                 "complex_type": true
               }
             ],

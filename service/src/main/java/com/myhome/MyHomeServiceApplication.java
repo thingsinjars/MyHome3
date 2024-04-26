@@ -25,22 +25,21 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 
 /**
  * is a Spring Boot application that provides a `BCryptPasswordEncoder` instance for
- * encrypting passwords using the BCrypt algorithm. The class also includes a `@Bean`
- * annotation to define a public method for retrieving the encoder instance.
+ * encrypting passwords using the BCrypt algorithm. The encoder is designed to handle
+ * strong password validation and is suitable for use in web applications.
  */
 @SpringBootApplication
 @ConfigurationPropertiesScan
 public class MyHomeServiceApplication {
 
   /**
-   * initiates the execution of the `MyHomeServiceApplication`.
+   * runs a SpringApplication, which initiates the execution of the `MyHomeServiceApplication`.
    * 
-   * @param args command-line arguments passed to the `SpringApplication.run()` method
-   * when the program is started.
+   * @param args 0 or more command line arguments passed to the `SpringApplication.run()`
+   * method when invoking the `MyHomeServiceApplication`.
    * 
-   * 	- The type of `args` is an array of `String`.
-   * 	- Its length is determined by the command-line arguments passed to the program.
-   * 	- Each element in the array represents a separate command-line argument.
+   * `args`: A `String[]` argument passed to the `SpringApplication.run()` method. It
+   * represents the command-line arguments passed to the application during its startup.
    */
   public static void main(String[] args) {
     SpringApplication.run(MyHomeServiceApplication.class, args);
