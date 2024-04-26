@@ -4,14 +4,14 @@
     "path": "service/src/main/java/com/myhome/MyHomeServiceApplication.java",
     "content": {
       "structured": {
-        "description": "A `MyHomeServiceApplication` class that serves as the main entry point for a Spring Boot application. The application includes a `BCryptPasswordEncoder` bean that provides password encryption functionality using the bcrypt algorithm.",
+        "description": "A Spring Boot application that uses the `BCryptPasswordEncoder` to encrypt passwords securely. The `getPasswordEncoder()` method returns an instance of `BCryptPasswordEncoder`, which is used for hashing and verifying passwords. The application also includes configuration properties scanning using `@ConfigurationPropertiesScan`.",
         "diagram": "digraph G {\n    label=\"com.todo.FixMe\"\n    bgcolor=\"#151719\"\n    fontcolor=\"#ECEDED\"\n    splines=ortho\n    fontname=\"Courier New\"\n    edge [color=\"#26de81\"]\n}\n",
         "items": [
           {
-            "id": "3f9c9814-39bf-be90-b04e-3cd72dca4947",
+            "id": "a039c676-4477-7496-8147-d64882e24fda",
             "ancestors": [],
             "type": "function",
-            "description": "is a Spring Boot application that provides a `BCryptPasswordEncoder` instance for encrypting passwords using the BCrypt algorithm. The encoder is designed to handle strong password validation and is suitable for use in web applications.",
+            "description": "is a Spring Boot application that uses the BCrypt algorithm for password encryption and hashing. The class provides a `BCryptPasswordEncoder` instance for encrypting and verifying passwords.",
             "name": "MyHomeServiceApplication",
             "code": "@SpringBootApplication\n@ConfigurationPropertiesScan\npublic class MyHomeServiceApplication {\n\n  public static void main(String[] args) {\n    SpringApplication.run(MyHomeServiceApplication.class, args);\n  }\n\n  /**\n   * returns a `BCryptPasswordEncoder` instance, which is used to encrypt passwords\n   * using the BCrypt algorithm.\n   * \n   * @returns a BCryptPasswordEncoder instance.\n   * \n   * The `BCryptPasswordEncoder` object represents a password encryption algorithm that\n   * uses the bcrypt hashing algorithm to securely store and hash passwords.\n   * It provides several methods for encrypting, hashing, and verifying passwords.\n   * The encoder is designed to handle strong password validation and is suitable for\n   * use in web applications.\n   */\n  @Bean\n  public PasswordEncoder getPasswordEncoder() {\n    return new BCryptPasswordEncoder();\n  }\n}",
             "location": {
@@ -26,17 +26,17 @@
             "docLength": null
           },
           {
-            "id": "8354a1d2-b07f-7d89-6241-7a355655cbda",
+            "id": "ff64c598-7731-04a1-9248-2240a354046e",
             "ancestors": [
-              "3f9c9814-39bf-be90-b04e-3cd72dca4947"
+              "a039c676-4477-7496-8147-d64882e24fda"
             ],
             "type": "function",
-            "description": "runs a SpringApplication, which launches the `MyHomeServiceApplication`.",
+            "description": "launches a SpringApplication instance for the `MyHomeServiceApplication` class, passing the `args` array as an argument.",
             "params": [
               {
                 "name": "args",
                 "type_name": "String[]",
-                "description": "0 or more command-line arguments passed to the `SpringApplication.run()` method when invoking the `main()` function.\n\n* The array `args` contains multiple command-line arguments passed to the application when it was launched.\n* Each argument in the array has a string value, which can be accessed using the `String` class methods.\n* The array `args` also includes any options or parameters passed to the application through other means, such as configuration files or environment variables.",
+                "description": "command-line arguments passed to the program when it is launched from the terminal or another application.\n\n* The length of the array is passed as an argument to `SpringApplication.run()`\n* It consists of strings that represent command-line arguments\nThese can be accessed through the `args` variable with their names and values",
                 "complex_type": true
               }
             ],
