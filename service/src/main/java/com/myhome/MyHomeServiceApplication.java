@@ -28,12 +28,10 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 public class MyHomeServiceApplication {
 
   /**
-   * initiates the execution of a Spring Boot application by invoking the
-   * `SpringApplication.run()` method and providing the name of the application class
-   * (`MyHomeServiceApplication`) as an argument.
+   * runs a SpringApplication, which initiates the execution of the `MyHomeServiceApplication`
+   * class and its associated components, services, and configurations.
    * 
-   * @param args 1 or more command line arguments passed to the `SpringApplication.run()`
-   * method when executing the application.
+   * @param args command-line arguments passed to the application when it is launched.
    */
   public static void main(String[] args) {
     SpringApplication.run(MyHomeServiceApplication.class, args);
