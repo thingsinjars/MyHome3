@@ -24,26 +24,27 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 /**
- * is a Spring Boot application that provides a password encoder using the BCrypt
- * algorithm for secure password storage and hashed passwords. The `getPasswordEncoder()`
- * method returns a `BCryptPasswordEncoder` instance, which is used to encrypt and
- * verify passwords in the application.
+ * is a Spring Boot application that provides a `BCryptPasswordEncoder` instance for
+ * encrypting passwords using the BCrypt algorithm. The encoder is designed to handle
+ * strong password validation and is suitable for use in web applications.
  */
 @SpringBootApplication
 @ConfigurationPropertiesScan
 public class MyHomeServiceApplication {
 
   /**
-   * runs a Spring application instance for the `MyHomeServiceApplication` class, passing
-   * the `args` array as a parameter to the `SpringApplication.run()` method.
+   * runs a SpringApplication instance of the `MyHomeServiceApplication` class, passing
+   * it the `args` parameter.
    * 
-   * @param args command-line arguments passed to the `SpringApplication.run()` method
-   * when it is invoked.
+   * @param args command-line arguments passed to the application when it is launched.
    * 
-   * The `SpringApplication.run()` method takes two arguments - the `MyHomeServiceApplication.class`
-   * and the `args` array. The `args` array is a serialized input passed to the application
-   * through the command-line interface (CLI). It has an unknown number of elements,
-   * each representing a command-line option or argument.
+   * 	- Length: 0 (an empty array)
+   * 	- Types: Class[]
+   * 
+   * Explanation: The `main` function is called when the Java program starts. It takes
+   * an array of strings as its only command-line argument, which is stored in the
+   * `args` variable. Since there are no arguments provided in this case, `args` is an
+   * empty array with a length of 0.
    */
   public static void main(String[] args) {
     SpringApplication.run(MyHomeServiceApplication.class, args);
