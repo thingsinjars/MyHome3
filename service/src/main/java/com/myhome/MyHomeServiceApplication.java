@@ -23,28 +23,15 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
-/**
- * is a Spring Boot application that provides a `BCryptPasswordEncoder` instance for
- * encrypting passwords using the BCrypt algorithm. The encoder is designed to handle
- * strong password validation and is suitable for use in web applications.
- */
 @SpringBootApplication
 @ConfigurationPropertiesScan
 public class MyHomeServiceApplication {
 
   /**
-   * runs a SpringApplication instance of the `MyHomeServiceApplication` class, passing
-   * it the `args` parameter.
+   * runs the `MyHomeServiceApplication` using the `SpringApplication.run()` method,
+   * allowing it to access and execute its code.
    * 
-   * @param args command-line arguments passed to the application when it is launched.
-   * 
-   * 	- Length: 0 (an empty array)
-   * 	- Types: Class[]
-   * 
-   * Explanation: The `main` function is called when the Java program starts. It takes
-   * an array of strings as its only command-line argument, which is stored in the
-   * `args` variable. Since there are no arguments provided in this case, `args` is an
-   * empty array with a length of 0.
+   * @param args
    */
   public static void main(String[] args) {
     SpringApplication.run(MyHomeServiceApplication.class, args);
