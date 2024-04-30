@@ -125,15 +125,14 @@
     "path": "service/src/main/java/com/myhome/MyHomeServiceApplication.java",
     "content": {
       "structured": {
-        "description": "A Spring Boot application with Spring Security features, including password encryption using BCrypt. The application class contains a @Bean annotation for getting a PasswordEncoder instance, which is implemented as BCryptPasswordEncoder in this example.",
+        "description": "A Spring Boot application with Spring Security features. It includes configuration properties scan and password encryption using BCryptPasswordEncoder. The main method starts the application, and a bean is defined for getting a PasswordEncoder object.",
         "items": [
           {
-            "id": "99699c05-769f-ddb2-ca41-b69e24023498",
+            "id": "98edc1ff-d2ff-0da8-3847-eed63d20a493",
             "ancestors": [],
             "type": "function",
-            "description": "is a Spring Boot application that provides a password encoder using BCrypt algorithm. It also includes a main method for launching the application and configuration properties scan to enable the auto-discovery of spring boot configurations.",
+            "description": "is a Spring Boot application that provides a password encoder using BCrypt algorithm. The class also includes a main method for launching the application and a configuration property scanning mechanism.",
             "name": "MyHomeServiceApplication",
-            "code": "@SpringBootApplication\n@ConfigurationPropertiesScan\npublic class MyHomeServiceApplication {\n\n  public static void main(String[] args) {\n    SpringApplication.run(MyHomeServiceApplication.class, args);\n  }\n\n  @Bean\n  public PasswordEncoder getPasswordEncoder() {\n    return new BCryptPasswordEncoder();\n  }\n}",
             "location": {
               "start": 26,
               "insert": 26,
@@ -142,25 +141,25 @@
               "comment": null
             },
             "item_type": "class",
-            "length": 13
+            "length": 13,
+            "docLength": null
           },
           {
-            "id": "380639fd-da13-42b9-0649-a39b9fbeb567",
+            "id": "b94abf35-e0a1-f29d-7c43-30bd60abf31d",
             "ancestors": [
-              "99699c05-769f-ddb2-ca41-b69e24023498"
+              "98edc1ff-d2ff-0da8-3847-eed63d20a493"
             ],
             "type": "function",
-            "description": "runs a Spring application, specifically the `MyHomeServiceApplication`, passing the `args` array as a parameter to the `SpringApplication.run()` method.",
+            "description": "starts a Spring application instance of `MyHomeServiceApplication`.",
             "params": [
               {
                 "name": "args",
                 "type_name": "String[]",
-                "description": "command-line arguments passed to the program when it is executed directly from the command line or launched by some other application.\n\nThe input `args` is an array of strings that contains the command-line arguments passed to the program by the user.\n\nEach element in the array represents a separate argument, and can be accessed using its index position within the array. For example, `args[0]` represents the first argument passed to the program.",
+                "description": "command-line arguments passed to the application when it is launched.\n\n* The `String[]` argument `args` represents an array of command-line arguments passed to the application.\n* Each element in the array is a string that represents a command-line option or argument.\n* The exact meaning and usage of each option or argument depends on the application and its configuration.",
                 "complex_type": true
               }
             ],
             "name": "main",
-            "code": "public static void main(String[] args) {\n    SpringApplication.run(MyHomeServiceApplication.class, args);\n  }",
             "location": {
               "start": 30,
               "insert": 30,
@@ -169,28 +168,28 @@
               "comment": null
             },
             "item_type": "method",
-            "length": 3
+            "length": 3,
+            "docLength": null
           },
           {
-            "id": "bcfc60df-8c58-e2b9-8c4c-7c6b2968bf8b",
+            "id": "0c119028-805c-d1bb-2743-b5fa83c3f400",
             "ancestors": [
-              "99699c05-769f-ddb2-ca41-b69e24023498"
+              "98edc1ff-d2ff-0da8-3847-eed63d20a493"
             ],
             "type": "function",
-            "description": "returns a `BCryptPasswordEncoder` instance, which is used to encrypt passwords using the BCrypt algorithm.",
+            "description": "retrieves a `BCryptPasswordEncoder` instance to encrypt passwords securely using a bcrypt algorithm.",
             "params": [],
             "returns": {
-              "type_name": "instance",
-              "description": "a BCryptPasswordEncoder instance.\n\nThe `BCryptPasswordEncoder` object represents a password encryption algorithm that uses the bcrypt hashing algorithm to securely store and hash passwords.\nIt provides several methods for encrypting, hashing, and verifying passwords.\nThe encoder is designed to handle strong password validation and is suitable for use in web applications.",
+              "type_name": "BCryptPasswordEncoder",
+              "description": "a BCryptPasswordEncoder instance, which is a cryptographic hash function for password storage.\n\n* The `BCryptPasswordEncoder` object is an implementation of the `PasswordEncoder` interface in Java, which enables password hashing using the Bcrypt algorithm.\n* The `BCryptPasswordEncoder` class provides methods for encrypting and decrypting passwords securely.\n* The returned encoder object can be used to hash and verify passwords in a secure manner, protecting against various types of attacks such as brute-force attacks and dictionary attacks.",
               "complex_type": true
             },
             "usage": {
               "language": "java",
-              "code": "@Bean\npublic PasswordEncoder getPasswordEncoder() {\n    return new BCryptPasswordEncoder();\n}\n",
+              "code": "@Bean\n  public PasswordEncoder getPasswordEncoder() {\n    return new BCryptPasswordEncoder();\n  }\n\n  @PostMapping(\"/users\")\n  public ResponseEntity<User> createUser(@RequestBody User user) {\n    String encodedPassword = passwordEncoder.encode(user.getPassword());\n    user.setPassword(encodedPassword);\n    return new ResponseEntity<>(userService.saveUser(user), HttpStatus.CREATED);\n  }\n",
               "description": ""
             },
             "name": "getPasswordEncoder",
-            "code": "@Bean\n  public PasswordEncoder getPasswordEncoder() {\n    return new BCryptPasswordEncoder();\n  }",
             "location": {
               "start": 34,
               "insert": 34,
@@ -199,7 +198,8 @@
               "comment": null
             },
             "item_type": "method",
-            "length": 4
+            "length": 4,
+            "docLength": null
           }
         ]
       }
