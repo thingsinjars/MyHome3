@@ -31,18 +31,6 @@ public class MyHomeServiceApplication {
     SpringApplication.run(MyHomeServiceApplication.class, args);
   }
 
-  /**
-   * returns a `BCryptPasswordEncoder` instance, which is used to encrypt passwords
-   * using the BCrypt algorithm.
-   * 
-   * @returns a BCryptPasswordEncoder instance.
-   * 
-   * The `BCryptPasswordEncoder` object represents a password encryption algorithm that
-   * uses the bcrypt hashing algorithm to securely store and hash passwords.
-   * It provides several methods for encrypting, hashing, and verifying passwords.
-   * The encoder is designed to handle strong password validation and is suitable for
-   * use in web applications.
-   */
   @Bean
   public PasswordEncoder getPasswordEncoder() {
     return new BCryptPasswordEncoder();
