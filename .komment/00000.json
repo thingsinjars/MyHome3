@@ -7,7 +7,7 @@
         "description": "",
         "items": [
           {
-            "id": "a83db3c0-2e44-4fc1-9625-455fcfeeb40c",
+            "id": "b6d8dbb0-cc0e-4f5d-95ff-46809124e9d6",
             "ancestors": [],
             "type": "function",
             "name": "of",
@@ -32,22 +32,22 @@
             "docLength": 31,
             "length": 8,
             "comment": {
-              "description": "Generates a `PageInfo` object containing information about the page and elements of a Pageable object, based on the provided page number, size, total pages, and total elements.",
+              "description": "Generates a `PageInfo` object containing information about the number of pages, size of each page, total number of pages, and total elements in the result set of a given `Pageable`.",
               "params": [
                 {
                   "name": "pageable",
                   "type": "Pageable",
-                  "description": "Pageable interface, which provides methods for navigating through a page of elements in a collection."
+                  "description": "pagination information of the page being processed, providing the page number, page size, total pages, and total elements."
                 },
                 {
                   "name": "page",
                   "type": "Page<?>",
-                  "description": "current page being processed and provides the total number of elements on that page."
+                  "description": "current page being processed, providing information on its position within the total number of pages and the number of elements it contains."
                 }
               ],
               "returns": {
                 "type": "PageInfo",
-                "description": "a `PageInfo` object containing pagination metadata."
+                "description": "a `PageInfo` object containing page number, size, total pages, and total elements."
               }
             }
           }
