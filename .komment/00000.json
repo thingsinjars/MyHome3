@@ -7,7 +7,7 @@
         "description": "",
         "items": [
           {
-            "id": "5e80a0d2-2eab-456d-81ed-7da1889f2cee",
+            "id": "15c88ce7-de01-4af9-b872-3c6724f943d3",
             "ancestors": [],
             "type": "function",
             "name": "of",
@@ -32,22 +32,22 @@
             "docLength": 31,
             "length": 8,
             "comment": {
-              "description": "Generates a `PageInfo` object containing information about a given `Pageable` and `Page`. The object contains fields for the page number, size, total pages, and total elements.",
+              "description": "Takes a `pageable` and a `page` as input, returns a `PageInfo` object containing information about the page, including the current page number, page size, total pages, and total elements.",
               "params": [
                 {
                   "name": "pageable",
                   "type": "Pageable",
-                  "description": "pageable object that contains information about the current page being processed, including the page number and size."
+                  "description": "pagination state of the page, providing the number of pages and the number of elements on each page."
                 },
                 {
                   "name": "page",
                   "type": "Page<?>",
-                  "description": "current page being processed, providing the total number of elements on that page."
+                  "description": "current page being processed, providing its total elements and pages information to be used in calculating the page number, size, and total pages."
                 }
               ],
               "returns": {
                 "type": "PageInfo",
-                "description": "a `PageInfo` object containing page number, size, total pages, and total elements."
+                "description": "a `PageInfo` object containing page metadata."
               }
             }
           }
