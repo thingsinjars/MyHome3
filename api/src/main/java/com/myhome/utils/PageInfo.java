@@ -25,17 +25,17 @@ public class PageInfo {
   private final long totalElements;
 
   /**
-   * Generates a `PageInfo` object containing information about the specified `Pageable`
-   * and `Page`.
+   * Creates a `PageInfo` object containing information about the number of pages, size
+   * of each page, total number of pages, and total elements for a given pageable and
+   * page.
    * 
-   * @param pageable Pageable object that provides the paging information for the page
-   * being processed.
+   * @param pageable pagination state of the application, providing the current page
+   * number, page size, total pages, and total elements.
    * 
-   * @param page current page of data being processed, providing the total number of
-   * elements on that page.
+   * @param page current page being processed, providing its total elements and number
+   * of pages.
    * 
-   * @returns a `PageInfo` object containing page number, size, total pages, and total
-   * elements.
+   * @returns a `PageInfo` object containing page metadata.
    */
   public static PageInfo of(Pageable pageable, Page<?> page) {
     return new PageInfo(
