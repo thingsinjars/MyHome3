@@ -25,35 +25,16 @@ public class PageInfo {
   private final long totalElements;
 
   /**
-   * generates a `PageInfo` object containing information about the number of pages,
-   * page size, total pages, and total elements of a given `Pageable` and `Page`.
+   * Creates a `PageInfo` object containing information about the number of pages, size
+   * of each page, total pages and elements in the page.
    * 
    * @param pageable pageable object that contains information about the current page
-   * being processed, including the page number and size.
+   * being processed, including its number and size.
    * 
-   * 	- The `getPageNumber()` method returns the page number.
-   * 	- The `getPageSize()` method returns the page size.
-   * 	- The `getTotalPages()` method returns the total number of pages.
-   * 	- The `getTotalElements()` method returns the total number of elements in the page.
+   * @param page page of data being processed, providing the total number of elements
+   * on that page.
    * 
-   * @param page current page of data being processed, providing the total number of
-   * elements on that page.
-   * 
-   * 	- The `pageNumber` attribute indicates the page number in the pagination sequence.
-   * 	- The `pageSize` attribute signifies the number of elements that can be displayed
-   * on a single page.
-   * 	- The `totalPages` attribute represents the total number of pages available for
-   * the given input.
-   * 	- The `totalElements` attribute indicates the overall number of elements in the
-   * input.
-   * 
-   * @returns a `PageInfo` object containing page number, size, total pages, and total
-   * elements.
-   * 
-   * 	- `pageNumber`: The page number of the resultant page.
-   * 	- `pageSize`: The size of each page in the resultant page.
-   * 	- `totalPages`: The total number of pages in the resultant page.
-   * 	- `totalElements`: The total number of elements in the resultant page.
+   * @returns a `PageInfo` object containing page metadata.
    */
   public static PageInfo of(Pageable pageable, Page<?> page) {
     return new PageInfo(

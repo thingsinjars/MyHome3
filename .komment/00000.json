@@ -4,65 +4,52 @@
     "path": "api/src/main/java/com/myhome/utils/PageInfo.java",
     "content": {
       "structured": {
-        "description": "A `PageInfo` class that contains information about a page of data. The class has four fields: currentPage, pageLimit, totalPages, and totalElements, which are initialized using a constructor. Additionally, a static method `of()` is provided to create a new `PageInfo` instance based on a `Pageable` object and a `Page` object. This summary provides an overview of the main features and functions of the code without including unnecessary details or bulletpoints.",
+        "description": "",
         "items": [
           {
-            "id": "cc5095f5-17e6-bfab-7342-59d97dd359d9",
+            "id": "936c7be3-80ae-4115-8cc5-92a86c70bbb3",
             "ancestors": [],
             "type": "function",
-            "description": "TODO",
-            "name": "PageInfo",
-            "code": "@EqualsAndHashCode\n@ToString\n@Getter\n@RequiredArgsConstructor(access = AccessLevel.PRIVATE)\npublic class PageInfo {\n  private final int currentPage;\n  private final int pageLimit;\n  private final int totalPages;\n  private final long totalElements;\n\n  public static PageInfo of(Pageable pageable, Page<?> page) {\n    return new PageInfo(\n        pageable.getPageNumber(),\n        pageable.getPageSize(),\n        page.getTotalPages(),\n        page.getTotalElements()\n    );\n  }\n}",
+            "name": "of",
             "location": {
-              "start": 11,
-              "insert": 11,
               "offset": " ",
-              "indent": 0
+              "indent": 2,
+              "insert": 27,
+              "start": 58
             },
-            "item_type": "class",
-            "length": 19
-          },
-          {
-            "id": "cb00d0f9-8ae3-51b9-624f-df4a877bd6fc",
-            "ancestors": [
-              "cc5095f5-17e6-bfab-7342-59d97dd359d9"
-            ],
-            "type": "function",
-            "description": "creates a `PageInfo` object containing information about a given pageable and page, such as page number, size, total pages, and total elements.",
+            "returns": "PageInfo",
             "params": [
               {
                 "name": "pageable",
-                "type_name": "Pageable",
-                "description": "pagination information of the data being processed, providing the number of pages and the size of each page.\n\n* `getPageNumber()`: Returns the page number of the current page being processed.\n* `getPageSize()`: Returns the number of elements in a single page.\n* `getTotalPages()`: Returns the total number of pages available for processing.\n* `getTotalElements()`: Returns the total number of elements that can be processed across all pages.",
-                "complex_type": true
+                "type": "Pageable"
               },
               {
                 "name": "page",
-                "type_name": "Page<?>",
-                "description": "current page being processed, providing the total number of elements on that page and the total number of pages in the overall result set.\n\n* `getPageNumber()` returns the page number that contains the element(s) being queried.\n* `getPageSize()` returns the number of elements per page in the query result.\n* `getTotalPages()` returns the total number of pages in the result set.\n* `getTotalElements()` returns the total number of elements in the result set.",
-                "complex_type": true
+                "type": "Page<?>"
               }
             ],
-            "returns": {
-              "type_name": "PageInfo",
-              "description": "a `PageInfo` object containing information about the current page of a paginated result set.\n\n* pageable.getPageNumber(): The number of the current page being displayed.\n* pageable.getPageSize(): The number of elements displayed on each page.\n* page.getTotalPages(): The total number of pages in the result set.\n* page.getTotalElements(): The total number of elements in the result set.",
-              "complex_type": true
-            },
-            "usage": {
-              "language": "java",
-              "code": "Pageable pageable = new PageRequest(0, 10); // get the first 10 items\nPage<?> page = someService.getAllItems();\nPageInfo pageInfo = PageInfo.of(pageable, page);\n",
-              "description": ""
-            },
-            "name": "of",
-            "code": "public static PageInfo of(Pageable pageable, Page<?> page) {\n    return new PageInfo(\n        pageable.getPageNumber(),\n        pageable.getPageSize(),\n        page.getTotalPages(),\n        page.getTotalElements()\n    );\n  }",
-            "location": {
-              "start": 21,
-              "insert": 21,
-              "offset": " ",
-              "indent": 2
-            },
-            "item_type": "method",
-            "length": 8
+            "skip": false,
+            "docLength": 31,
+            "length": 8,
+            "comment": {
+              "description": "Creates a `PageInfo` object containing information about the number of pages, size of each page, total pages and elements in the page.",
+              "params": [
+                {
+                  "name": "pageable",
+                  "type": "Pageable",
+                  "description": "pageable object that contains information about the current page being processed, including its number and size."
+                },
+                {
+                  "name": "page",
+                  "type": "Page<?>",
+                  "description": "page of data being processed, providing the total number of elements on that page."
+                }
+              ],
+              "returns": {
+                "type": "PageInfo",
+                "description": "a `PageInfo` object containing page metadata."
+              }
+            }
           }
         ]
       }
@@ -125,54 +112,41 @@
     "path": "service/src/main/java/com/myhome/MyHomeServiceApplication.java",
     "content": {
       "structured": {
-        "description": "A `MyHomeServiceApplication` class that runs a Spring Boot application. It includes configuration properties scan and uses the `BCryptPasswordEncoder` class to encrypt passwords. The `getPasswordEncoder()` method returns an instance of `BCryptPasswordEncoder` for password encryption.",
-        "diagram": "digraph G {\n    label=\"com.todo.FixMe\"\n    bgcolor=\"#151719\"\n    fontcolor=\"#ECEDED\"\n    splines=ortho\n    fontname=\"Courier New\"\n    edge [color=\"#26de81\"]\n}\n",
+        "description": "",
         "items": [
           {
-            "id": "6a725597-93c6-87bd-0b4c-c945c26d13e2",
+            "id": "6716a6b5-ab96-497a-8fcb-6af2ba19e3f6",
             "ancestors": [],
             "type": "function",
-            "description": "is a Spring Boot application that provides a password encoder using the BCrypt algorithm for secure password storage and hashed passwords. The `getPasswordEncoder()` method returns a `BCryptPasswordEncoder` instance, which is used to encrypt and verify passwords in the application.",
-            "name": "MyHomeServiceApplication",
-            "code": "@SpringBootApplication\n@ConfigurationPropertiesScan\npublic class MyHomeServiceApplication {\n\n  public static void main(String[] args) {\n    SpringApplication.run(MyHomeServiceApplication.class, args);\n  }\n\n  /**\n   * returns a `BCryptPasswordEncoder` instance, which is used to encrypt passwords\n   * using the BCrypt algorithm.\n   * \n   * @returns a BCryptPasswordEncoder instance.\n   * \n   * The `BCryptPasswordEncoder` object represents a password encryption algorithm that\n   * uses the bcrypt hashing algorithm to securely store and hash passwords.\n   * It provides several methods for encrypting, hashing, and verifying passwords.\n   * The encoder is designed to handle strong password validation and is suitable for\n   * use in web applications.\n   */\n  @Bean\n  public PasswordEncoder getPasswordEncoder() {\n    return new BCryptPasswordEncoder();\n  }\n}",
+            "name": "main",
             "location": {
-              "start": 26,
-              "insert": 26,
               "offset": " ",
-              "indent": 0,
-              "comment": null
+              "indent": 2,
+              "insert": 30,
+              "start": 30
             },
-            "item_type": "class",
-            "length": 25,
-            "docLength": null
-          },
-          {
-            "id": "1fa89457-3ffa-6394-4d4d-8e5c2584490a",
-            "ancestors": [
-              "6a725597-93c6-87bd-0b4c-c945c26d13e2"
-            ],
-            "type": "function",
-            "description": "runs a Spring application instance for the `MyHomeServiceApplication` class, passing the `args` array as a parameter to the `SpringApplication.run()` method.",
+            "returns": false,
             "params": [
               {
                 "name": "args",
-                "type_name": "String[]",
-                "description": "command-line arguments passed to the `SpringApplication.run()` method when it is invoked.\n\nThe `SpringApplication.run()` method takes two arguments - the `MyHomeServiceApplication.class` and the `args` array. The `args` array is a serialized input passed to the application through the command-line interface (CLI). It has an unknown number of elements, each representing a command-line option or argument.",
-                "complex_type": true
+                "type": "String[]"
               }
             ],
-            "name": "main",
             "code": "public static void main(String[] args) {\n    SpringApplication.run(MyHomeServiceApplication.class, args);\n  }",
-            "location": {
-              "start": 30,
-              "insert": 30,
-              "offset": " ",
-              "indent": 2,
-              "comment": null
-            },
-            "item_type": "method",
+            "skip": false,
+            "docLength": null,
             "length": 3,
-            "docLength": null
+            "comment": {
+              "description": "runs a SpringApplication, which initiates the execution of the `MyHomeServiceApplication` class and its associated components, services, and configurations.",
+              "params": [
+                {
+                  "name": "args",
+                  "type": "String[]",
+                  "description": "command-line arguments passed to the application when it is launched."
+                }
+              ],
+              "returns": null
+            }
           }
         ]
       }
