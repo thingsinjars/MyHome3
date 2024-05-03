@@ -9,7 +9,10 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
 /**
- * 
+ * is a data structure that contains information about a page of results in a larger
+ * dataset. It has four fields: currentPage, pageLimit, totalPages, and totalElements.
+ * The class also provides a constructor for creating instances of the class from a
+ * Pageable object and a Page object.
  */
 @EqualsAndHashCode
 @ToString
@@ -22,25 +25,17 @@ public class PageInfo {
   private final long totalElements;
 
   /**
-   * @param pageable pagination information for the current page being processed,
-   * including the page number, size, total pages, and total elements.
+   * Generates a `PageInfo` object with information about the specified pageable and
+   * page, including the current page number, size, total pages, and total elements.
    * 
-   * @param page current page being processed, providing the total number of elements
-   * on that page and the total number of pages available for display.
+   * @param pageable Pageable interface, which provides a way to retrieve pages of
+   * elements from a paginated data source.
    * 
-   * 	- `pageNumber`: The number of the current page being processed.
-   * 	- `pageSize`: The size of each page being processed.
-   * 	- `totalPages`: The total number of pages available for processing in the input
-   * dataset.
-   * 	- `totalElements`: The total number of elements present in the input dataset
-   * across all pages.
+   * @param page current page being processed, providing information on its position,
+   * size, total pages, and total elements.
    * 
-   * @returns a `PageInfo` object containing page-related metadata.
-   * 
-   * 	- `pageNumber`: The number of the current page being displayed.
-   * 	- `pageSize`: The number of elements on each page.
-   * 	- `totalPages`: The total number of pages in the dataset.
-   * 	- `totalElements`: The total number of elements in the dataset.
+   * @returns a `PageInfo` object containing page number, size, total pages, and total
+   * elements.
    */
   public static PageInfo of(Pageable pageable, Page<?> page) {
     return new PageInfo(
