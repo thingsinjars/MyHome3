@@ -4,13 +4,13 @@
     "path": "api/src/main/java/com/myhome/utils/PageInfo.java",
     "content": {
       "structured": {
-        "description": "A `PageInfo` class that represents information about a page of results in a larger dataset. It has four fields: currentPage, pageLimit, totalPages, and totalElements. The class also provides constructors for creating instances of the class from a Pageable object and a Page object.",
+        "description": "A `PageInfo` class that holds information about a page of data, including its page number, size, total pages, and total elements. The class provides constructors for creating instances from a `Pageable` object and a `Page` object, and it also includes methods for generating a `PageInfo` object based on a `Pageable` and a `Page`.",
         "items": [
           {
-            "id": "b2d3c99a-dce0-05a2-b146-7dd28493e22e",
+            "id": "061a4184-6284-cfa4-2a4f-85e645d19a37",
             "ancestors": [],
             "type": "function",
-            "description": "is a data structure that provides information about the number of pages, page size, total pages, and total elements of a given Pageable and Page. The class provides a constructor for creating instances of the class from a Pageable and a Page object, and also offers a static method for generating a PageInfo object based on a Pageable and a Page.",
+            "description": "is a data structure that provides information about the number of pages, page size, total pages, and total elements of a given Pageable and Page. The class offers a constructor for creating instances from a Pageable and a Page object, as well as a method for generating a PageInfo object based on the current page being processed and the total number of pages and elements available.",
             "name": "PageInfo",
             "location": {
               "start": 17,
@@ -27,29 +27,29 @@
             "docLength": 6
           },
           {
-            "id": "2a989265-c586-17ac-d446-a8f95a037e92",
+            "id": "e4bcf6b8-41d2-90a3-6b40-75bd113b258b",
             "ancestors": [
-              "b2d3c99a-dce0-05a2-b146-7dd28493e22e"
+              "061a4184-6284-cfa4-2a4f-85e645d19a37"
             ],
             "type": "function",
-            "description": "creates a `PageInfo` object containing metadata about a pageable and the page it represents, including the current page number, size, total pages, and total elements.",
+            "description": "generates a `PageInfo` object containing information about the current page of a paginated result, such as the page number, size, total pages, and total elements.",
             "params": [
               {
                 "name": "pageable",
                 "type_name": "Pageable",
-                "description": "pagination state of the data being queried, providing the current page number, page size, total pages, and total elements.\n\n* `pageable.getPageNumber()`: The page number of the resulting page.\n* `pageable.getPageSize()`: The size of each page returned by the pageable.\n* `page.getTotalPages()`: The total number of pages available for the given input.\n* `page.getTotalElements()`: The total number of elements in the result set.",
+                "description": "page request, providing the number of pages and the size of each page to generate the page information.\n\n* `getPageNumber()` returns the page number of the result set.\n* `getPageSize()` returns the number of elements in each page of the result set.\n* `getTotalPages()` returns the total number of pages in the result set.\n* `getTotalElements()` returns the total number of elements in the result set.",
                 "complex_type": true
               },
               {
                 "name": "page",
                 "type_name": "Page<?>",
-                "description": "current page being processed and provides information about its total pages and elements.\n\n1. `pageNumber`: The page number as determined by the `Pageable`.\n2. `pageSize`: The size of each page as determined by the `Pageable`.\n3. `totalPages`: The total number of pages as determined by the `Pageable`.\n4. `totalElements`: The total number of elements in all pages as determined by the `Pageable`.",
+                "description": "current page being processed, providing the number of elements it contains and the total number of pages in the dataset.\n\n* `pageNumber`: The current page number being displayed.\n* `pageSize`: The size of each page in terms of elements.\n* `totalPages`: The total number of pages available for display.\n* `totalElements`: The total number of elements available in the collection.",
                 "complex_type": true
               }
             ],
             "returns": {
               "type_name": "PageInfo",
-              "description": "a `PageInfo` object containing page number, size, total pages, and total elements.\n\n* The first parameter, `pageable`, represents the pageable object containing information about the current page being processed.\n* The second parameter, `page`, represents the page object containing information about the specific page being processed.\n* The `PageNumber` property in the return value indicates the current page number being processed.\n* The `PageSize` property indicates the size of the page being processed.\n* The `TotalPages` property represents the total number of pages in the collection.\n* The `TotalElements` property represents the total number of elements in the collection.",
+              "description": "a `PageInfo` object containing various page-related metrics.\n\n* pageable.getPageNumber(): The zero-based index of the current page being displayed.\n* pageable.getPageSize(): The number of elements in each page.\n* page.getTotalPages(): The total number of pages in the result set.\n* page.getTotalElements(): The total number of elements in the result set.",
               "complex_type": true
             },
             "name": "of",
