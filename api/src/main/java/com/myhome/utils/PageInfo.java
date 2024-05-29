@@ -11,7 +11,9 @@ import org.springframework.data.domain.Pageable;
 /**
  * is a data structure that provides information about the number of pages, page size,
  * total pages, and total elements of a given Pageable and Page. It generates a
- * PageInfo object containing these values based on the provided Pageable and Page objects.
+ * PageInfo object containing these parameters based on input from the Pageable and
+ * Page objects. The class also offers a constructor for creating instances of the
+ * class from a Pageable and a Page object.
  */
 @EqualsAndHashCode
 @ToString
@@ -24,36 +26,34 @@ public class PageInfo {
   private final long totalElements;
 
   /**
-   * creates a `PageInfo` object with information about the number of pages, size of
-   * each page, total number of pages, and total elements in a given pageable and page.
+   * transforms a `pageable` and a `page` into a `PageInfo` object containing page
+   * number, page size, total pages, and total elements.
    * 
-   * @param pageable page number and size of the current page being processed, which
-   * are used to calculate the total pages and elements in the resultant `PageInfo`.
+   * @param pageable pagination information for the current page of data, providing the
+   * page number, page size, total pages, and total elements.
    * 
-   * 	- The `pageNumber` property represents the current page number being served.
-   * 	- The `pageSize` property indicates the number of elements per page.
-   * 	- The `totalPages` property denotes the total number of pages in the result set.
-   * 	- The `totalElements` property provides the overall number of elements returned
-   * by the query.
+   * 	- `getPageNumber()`: Returns the page number as an integer value.
+   * 	- `getPageSize()`: Returns the page size as an integer value.
+   * 	- `getTotalPages()`: Returns the total number of pages as an integer value.
+   * 	- `getTotalElements()`: Returns the total number of elements as an integer value.
    * 
-   * @param page current page being processed, providing the total number of elements
-   * on that page.
+   * @param page current page of data to be processed, providing its total elements and
+   * pages count.
    * 
-   * 	- `pageNumber`: The page number that this page is associated with.
-   * 	- `pageSize`: The size of each page in the paginated data set.
-   * 	- `totalPages`: The total number of pages in the paginated data set.
-   * 	- `totalElements`: The total number of elements in the paginated data set.
+   * 	- `pageNumber`: The page number that the input belongs to.
+   * 	- `pageSize`: The number of elements in the page.
+   * 	- `totalPages`: The total number of pages in the dataset.
+   * 	- `totalElements`: The total number of elements in the dataset.
    * 
-   * @returns a `PageInfo` object containing information about the page number, size,
-   * total pages, and total elements of a given pageable and page.
+   * @returns a `PageInfo` object containing page number, page size, total pages, and
+   * total elements.
    * 
-   * 	- The first element is the page number (0-based) represented by the `Pageable`
-   * object passed in as argument 1.
-   * 	- The second element is the number of items per page, also represented by the
-   * `Pageable` object.
-   * 	- The third element is the total number of pages, computed from the last page
-   * number and the number of items per page.
-   * 	- The fourth element represents the total count of elements across all pages.
+   * 	- The first parameter, `pageable`, represents the pageable object that contains
+   * information about the current page being processed.
+   * 	- The second parameter, `page`, represents the actual page data object that is
+   * being processed.
+   * 	- The return value is a `PageInfo` object, which contains information about the
+   * current page, including its page number, page size, total pages, and total elements.
    */
   public static PageInfo of(Pageable pageable, Page<?> page) {
     return new PageInfo(
