@@ -9,10 +9,9 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
 /**
- * provides a structured representation of information about a page of data, including
- * the current page number, page size, total pages, and total elements. The class
- * offers constructors for creating instances from a Pageable object and a Page object,
- * allowing for easy generation of PageInfo objects based on input data.
+ * is a data structure that provides information about the number of pages, page size,
+ * total pages, and total elements of a given Pageable and Page. The class offers a
+ * constructor for creating instances from a Pageable and a Page object.
  */
 @EqualsAndHashCode
 @ToString
@@ -25,37 +24,34 @@ public class PageInfo {
   private final long totalElements;
 
   /**
-   * generates a `PageInfo` object containing information about the number of pages,
-   * page size, total pages, and total elements for a given `Pageable` and `Page`.
+   * creates a `PageInfo` object containing information about the number of pages, page
+   * size, total pages, and total elements of a given `Pageable` and `Page`.
    * 
-   * @param pageable pageable object that contains information about the current page
-   * being processed, including the page number and size.
+   * @param pageable pagination information for the current page of data, providing the
+   * page number, page size, total pages, and total elements.
    * 
-   * 	- `getPageNumber()` returns the current page number being displayed.
-   * 	- `getPageSize()` returns the total number of elements in the page being displayed.
-   * 	- `getTotalPages()` returns the total number of pages in the result set.
-   * 	- `getTotalElements()` returns the total number of elements in the result set.
+   * 	- `getPageNumber()` returns the page number associated with the provided pageable
+   * instance.
+   * 	- `getPageSize()` returns the page size associated with the provided pageable instance.
+   * 	- `getTotalPages()` returns the total number of pages associated with the provided
+   * pageable instance.
+   * 	- `getTotalElements()` returns the total number of elements associated with the
+   * provided pageable instance.
    * 
-   * @param page current page being processed, providing information on its number,
-   * size, total pages, and total elements.
+   * @param page current page being processed, providing the total number of elements
+   * on that page and the number of elements returned in the response.
    * 
-   * 	- `getPageNumber()`: returns the page number of the current page being processed
-   * 	- `getPageSize()`: returns the number of elements in a single page of the sequence
-   * 	- `getTotalPages()`: returns the total number of pages in the entire sequence
-   * 	- `getTotalElements()`: returns the total number of elements in the entire sequence
+   * 	- `pageNumber`: The number of the current page being displayed.
+   * 	- `pageSize`: The number of elements in each page.
+   * 	- `totalPages`: The total number of pages in the collection.
+   * 	- `totalElements`: The total number of elements in the collection.
    * 
-   * @returns a `PageInfo` object containing page number, size, total pages, and total
-   * elements.
+   * @returns a `PageInfo` object containing pagination metadata.
    * 
-   * 	- The first argument, `pageable`, is an instance of `Pageable`. This represents
-   * the pagination configuration for the page being processed.
-   * 	- The second argument, `page`, is an instance of `Page`. This represents the
-   * specific page being processed, including its position in the overall sequence of
-   * pages and the number of elements it contains.
-   * 	- The returned object, `PageInfo`, encapsulates information about the page number,
-   * size, total pages, and total elements. This allows for easy access and manipulation
-   * of these properties without having to refer to the original `Page` or `Pageable`
-   * objects.
+   * 1/ PageNumber - The number of the page being returned.
+   * 2/ PageSize - The number of elements in each page.
+   * 3/ TotalPages - The total number of pages in the dataset.
+   * 4/ TotalElements - The total number of elements in the dataset.
    */
   public static PageInfo of(Pageable pageable, Page<?> page) {
     return new PageInfo(
