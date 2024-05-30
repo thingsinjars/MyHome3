@@ -10,9 +10,8 @@ import org.springframework.data.domain.Pageable;
 
 /**
  * is a data structure that provides information about the number of pages, page size,
- * total pages, and total elements in a given dataset. It generates an object with
- * four fields: currentPage, pageLimit, totalPages, and totalElements, which are
- * calculated from a Pageable object and a Page object using a constructor.
+ * total pages, and total elements of a given Pageable and Page. The class provides
+ * a constructor for creating instances of the class from a Pageable and a Page object.
  */
 @EqualsAndHashCode
 @ToString
@@ -25,32 +24,32 @@ public class PageInfo {
   private final long totalElements;
 
   /**
-   * creates a `PageInfo` object containing information about the number of pages and
-   * elements for a given pageable and page.
+   * creates a `PageInfo` object containing information about the number of pages, size
+   * of each page, total number of pages, and total elements in a given pageable and page.
    * 
-   * @param pageable page number and size of the page being processed, which is used
-   * to calculate the total pages and elements in the PageInfo object.
+   * @param pageable pagination state of the current query, providing the number of
+   * pages and elements per page to calculate the current page and total pages.
    * 
-   * 	- `getPageNumber()`: returns the page number of the current page being processed
-   * 	- `getPageSize()`: returns the number of elements in a page
-   * 	- `getTotalPages()`: returns the total number of pages in the collection
-   * 	- `getTotalElements()`: returns the total number of elements in the collection
+   * 	- `pageNumber`: The number of the page being returned.
+   * 	- `pageSize`: The size of each page in terms of how many elements it can hold.
+   * 	- `totalPages`: The total number of pages available for the given input.
+   * 	- `totalElements`: The total number of elements available across all pages.
    * 
-   * @param page current page of data being processed, providing the total number of
-   * elements on that page.
+   * @param page current page being processed, providing information on its position
+   * and size within the overall paginated result.
    * 
-   * 	- `pageNumber`: The number of the current page.
-   * 	- `pageSize`: The size of the current page.
-   * 	- `totalPages`: The total number of pages in the collection.
-   * 	- `totalElements`: The total number of elements in the collection.
+   * 	- `pageNumber`: The page number of the pageable.
+   * 	- `pageSize`: The size of each page in the pageable.
+   * 	- `totalPages`: The total number of pages in the pageable.
+   * 	- `totalElements`: The total number of elements in the pageable.
    * 
-   * @returns a `PageInfo` object containing information about the page number, size,
-   * total pages, and total elements of a pageable.
+   * @returns a `PageInfo` object containing information about the pagination of the
+   * input `pageable` and `page`.
    * 
-   * 	- `pageNumber`: The page number of the current page being displayed.
-   * 	- `pageSize`: The number of elements on each page.
-   * 	- `totalPages`: The total number of pages in the result set.
-   * 	- `totalElements`: The total number of elements in the result set.
+   * 	- pageable.getPageNumber(): The number of the current page being displayed.
+   * 	- pageable.getPageSize(): The number of elements in each page being displayed.
+   * 	- page.getTotalPages(): The total number of pages in the dataset.
+   * 	- page.getTotalElements(): The total number of elements in the dataset.
    */
   public static PageInfo of(Pageable pageable, Page<?> page) {
     return new PageInfo(
