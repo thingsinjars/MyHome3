@@ -9,9 +9,11 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
 /**
- * provides information about the number of pages, page size, total pages, and total
- * elements in a given dataset. It generates a `PageInfo` object from a `Pageable`
- * and a `Page`, allowing for efficient retrieval of pagination information.
+ * is a data structure that provides information about the number of pages, page size,
+ * total pages, and total elements of a given Pageable and Page object. The class
+ * offers a constructor for creating instances from a Pageable and a Page object, as
+ * well as a method for generating a new PageInfo object based on the current page,
+ * page limit, total pages, and total elements of a given page.
  */
 @EqualsAndHashCode
 @ToString
@@ -24,33 +26,32 @@ public class PageInfo {
   private final long totalElements;
 
   /**
-   * transforms a `pageable` object and a `Page` object into a `PageInfo` object,
-   * providing information about the page number, size, total pages, and total elements.
+   * creates a `PageInfo` object containing information about the number of pages, size
+   * of each page, total number of pages, and total elements in the page.
    * 
-   * @param pageable Pageable object containing information about the current page of
-   * data to be processed, which is used to calculate the page number, size, and total
-   * pages and elements in the PageInfo object returned by the function.
+   * @param pageable pagination state of the application, providing the current page
+   * number, page size, total pages, and total elements.
    * 
-   * 	- `getPageNumber()` returns the current page number being viewed.
-   * 	- `getPageSize()` returns the total number of elements in the page.
-   * 	- `getTotalPages()` returns the total number of pages available for the data set.
-   * 	- `getTotalElements()` returns the total number of elements in the entire data set.
+   * 	- `getPageNumber()`: Returns the page number of the current page being processed.
+   * 	- `getPageSize()`: Returns the size of a page in the paginated result.
+   * 	- `getTotalPages()`: Returns the total number of pages in the result set.
+   * 	- `getTotalElements()`: Returns the total number of elements in the result set.
    * 
-   * @param page current page being processed, providing information on its position
-   * and size within the overall result set.
+   * @param page current page of data to be processed, providing information on its
+   * total elements and number of pages.
    * 
-   * 1/ PageNumber: The page number for which the information is being provided.
-   * 2/ PageSize: The size of the page being returned.
-   * 3/ TotalPages: The total number of pages in the result set.
-   * 4/ TotalElements: The total number of elements in the result set.
+   * 	- `pageNumber`: The page number associated with the current page of results.
+   * 	- `pageSize`: The number of elements in a page of results.
+   * 	- `totalPages`: The total number of pages available for pagination.
+   * 	- `totalElements`: The total number of elements returned by the query.
    * 
-   * @returns a `PageInfo` object containing page number, size, total pages, and total
-   * elements.
+   * @returns a `PageInfo` object containing information about the page number, size,
+   * total pages, and total elements of a given pageable and page.
    * 
-   * 1/ `pageNumber`: The number of the current page being displayed.
-   * 2/ `pageSize`: The number of elements displayed on each page.
-   * 3/ `totalPages`: The total number of pages in the result set.
-   * 4/ `totalElements`: The total number of elements in the result set.
+   * 	- pageable.getPageNumber(): The number of the current page being processed.
+   * 	- pageable.getPageSize(): The size of the page being processed.
+   * 	- page.getTotalPages(): The total number of pages in the result set.
+   * 	- page.getTotalElements(): The total number of elements in the result set.
    */
   public static PageInfo of(Pageable pageable, Page<?> page) {
     return new PageInfo(
