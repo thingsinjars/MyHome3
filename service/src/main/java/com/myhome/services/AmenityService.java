@@ -24,7 +24,7 @@ import java.util.Set;
 
 /**
  * allows for the creation, retrieval, deletion, and update of amenities within a
- * community, using a set of methods that return optional lists, single entities, or
+ * community through various methods that return optional lists, single entities, or
  * boolean values.
  */
 public interface AmenityService {

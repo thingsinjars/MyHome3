@@ -54,7 +54,13 @@ import org.springframework.web.bind.annotation.RestController;
  * REST Controller which provides endpoints for managing community
  */
 /**
- * TODO
+ * is responsible for handling requests related to managing communities in an API.
+ * It receives requests to add admins, houses, and community users, as well as remove
+ * admins, houses, and community users from a community. The controller uses the
+ * `communityService` class to perform these actions and returns a response entity
+ * indicating whether the operation was successful or not. The controller also has
+ * methods for deleting a community and returning a response entity with a status
+ * code indicating whether the deletion was successful or not.
  */
 @RequiredArgsConstructor
 @RestController
@@ -64,32 +70,32 @@ public class CommunityController implements CommunitiesApi {
   private final CommunityApiMapper communityApiMapper;
 
   /**
-   * receives a `CreateCommunityRequest` from the client and creates a new community
-   * using the provided information. It then mappers the created community into a
-   * `CreateCommunityResponse` and returns it as a response entity with a status code
-   * of `CREATED`.
+   * receives a `CreateCommunityRequest` object from the client and creates a new
+   * community instance using the provided details. It then maps the created community
+   * to a `CreateCommunityResponse` object and returns it as a response entity with a
+   * status of `HttpStatus.CREATED`.
    * 
-   * @param request CreateCommunityRequest object that contains the details of the
-   * community to be created, which is used by the method to create the community and
-   * return the response.
+   * @param request CreateCommunityRequest object containing the details of the community
+   * to be created.
    * 
-   * 	- `@Valid` - The input is validated using bean validation.
-   * 	- `@RequestBody` - The input is passed as a JSON object in the request body.
-   * 	- `CreateCommunityRequest request` - The input represents a create community
-   * request, containing attributes such as name, description, and tags.
+   * * `@Valid`: The request body is validated using the `@Valid` annotation.
+   * * `@RequestBody`: The request body is serialized and sent as a parameter to the function.
+   * * `CreateCommunityRequest`: The request class that contains the properties of the
+   * community to be created.
+   * * `log.trace()`: A log statement that traces the receipt of the create community
+   * request.
    * 
    * @returns a `CreateCommunityResponse` object containing the created community details.
    * 
-   * 	- `CreateCommunityResponse`: This class represents the response to the create
-   * community request, containing information about the created community.
-   * 	- `communityId`: A unique identifier for the created community.
-   * 	- `name`: The name of the created community.
-   * 	- `description`: A brief description of the created community.
-   * 	- `members`: A list of members in the created community.
-   * 	- `owners`: A list of owners in the created community.
-   * 
-   * The function returns a `ResponseEntity` with a status code of `CREATED` and the
-   * `CreateCommunityResponse` object as its body.
+   * * `CreateCommunityResponse createdCommunityResponse`: This is an instance of the
+   * `CreateCommunityResponse` class, which contains information about the newly created
+   * community. The response includes the ID of the created community, its name, and a
+   * URL for linking to it.
+   * * `HttpStatus.CREATED`: This is the status code returned by the server, indicating
+   * that the request was successful and the community was created.
+   * * `ResponseEntity`: This is an instance of the `ResponseEntity` class, which
+   * represents a response from the server. It contains information about the status
+   * of the request, as well as the body of the response.
    */
   @Override
   public ResponseEntity<CreateCommunityResponse> createCommunity(@Valid @RequestBody
@@ -104,26 +110,32 @@ public class CommunityController implements CommunitiesApi {
   }
 
   /**
-   * receives a `Pageable` object and lists all communities from the service, maps them
-   * to a REST API response, and returns it in a `ResponseEntity` with an HTTP status
-   * code of OK and the response body containing the listed communities.
+   * retrieves a list of communities from the service and maps them to a REST API
+   * response, which is then returned as a `GetCommunityDetailsResponse`.
    * 
-   * @param pageable page request parameters, such as the number of communities to
-   * display per page, and enables the function to retrieve the requested number of
-   * communities from the database.
+   * @param pageable page parameters for the list of communities, such as the page
+   * number and size of the list, which are used to retrieve the data from the database
+   * in a paginated manner.
    * 
-   * 	- `@PageableDefault(size = 200)` - This annotation sets the default page size to
-   * 200.
-   * 	- `Pageable` - This interface defines the methods for navigating through a page
-   * of results, such as `getPageNumber()` and `getPageSize()`.
+   * * `@PageableDefault(size = 200)` specifies that the `pageable` object has a default
+   * size of 200.
+   * * `Pageable pageable` represents an object that allows for navigating through a
+   * collection of objects, such as a list or a set, by specifying the number of elements
+   * to skip, the number of elements to include in each page, and the total number of
+   * pages.
    * 
-   * @returns a list of community details in REST API format.
+   * @returns a list of community details in a REST API response format.
    * 
-   * 	- `GetCommunityDetailsResponse`: This class represents the response to the list
-   * community request. It has a field `getCommunities()` containing a set of
-   * `GetCommunityDetailsResponseCommunity` objects.
-   * 	- `GetCommunityDetailsResponseCommunity`: This class represents an individual
-   * community detail in the response. It has fields for the community ID, name, and description.
+   * * `GetCommunityDetailsResponse`: This is the class that represents the response
+   * to the API call. It has a list of `Community` objects as its attribute.
+   * * `communitySetToRestApiResponseCommunitySet`: This is a method that maps the
+   * `Set<Community>` object returned by the `listAllCommunity` function to a corresponding
+   * `List<GetCommunityDetailsResponseCommunity>` object. This method is used to transform
+   * the internal representation of the data into the desired format for the API response.
+   * * `communityService`: This is an instance of a service class that provides access
+   * to the community data. It is used to retrieve the data from the backend system.
+   * * `log`: This is a logging utility that is used to trace the execution of the
+   * function and provide diagnostic information.
    */
   @Override
   public ResponseEntity<GetCommunityDetailsResponse> listAllCommunity(
@@ -141,69 +153,31 @@ public class CommunityController implements CommunitiesApi {
   }
 
   /**
-   * retrieves community details for a given ID using the `communityService` and maps
-   * the response to a `GetCommunityDetailsResponse`.
+   * receives a community ID and retrieves community details from the service, mapping
+   * them to a response entity for return.
    * 
    * @param communityId identifier of the community for which details are requested.
    * 
-   * 	- `log.trace("Received request to get details about community with id[{}],",
-   * communityId)`: This line logs a trace message indicating that a request has been
-   * received to retrieve details about a community with a specific ID. The ID is
-   * included in the message as a parameter.
-   * 	- `@PathVariable String communityId`: This annotation indicates that the `communityId`
-   * variable is passed in from the URL path and is of type `String`.
-   * 	- `communityService.getCommunityDetailsById(communityId)`: This line calls the
-   * `getCommunityDetailsById` method of the `communityService` class, passing in the
-   * `communityId` as a parameter. This method retrieves the details of a community
-   * with the provided ID.
-   * 	- `map(Function<T, ResponseEntity> mappingFunction)`: This line applies a mapping
-   * function to the result of the `getCommunityDetailsById` method. The function maps
-   * the resulting `Community` object to a `GetCommunityDetailsResponse` object.
-   * 	- `new GetCommunityDetailsResponse().communities(communities)`: This line creates
-   * a new instance of the `GetCommunityDetailsResponse` class and sets its `communities`
-   * field to the list of communities retrieved from the database.
-   * 	- `map(Function<T, ResponseEntity> mappingFunction)`: This line applies another
-   * mapping function to the result of the previous mapping function. The function maps
-   * the resulting `ResponseEntity` object to an instance of `ResponseEntity` with a
-   * status code of `OK`.
+   * @returns a `ResponseEntity` object containing a list of community details.
    * 
-   * Therefore, the `listCommunityDetails` function retrieves the details of a community
-   * with a specific ID and returns a `GetCommunityDetailsResponse` object containing
-   * the list of communities retrieved from the database.
+   * * `ResponseEntity<GetCommunityDetailsResponse>` is a class that represents a
+   * response entity with a status code and a body containing the details of the community.
+   * * `getCommunityDetailsById(communityId)` is a method that retrieves the details
+   * of a specific community based on its ID.
+   * * `map(Function<? super T, R> mapper)` is a method that maps the result of the
+   * previous method call to a new response entity with a different type. In this case,
+   * it maps the list of communities to a response entity with a status code of `ok`.
+   * * `orElseGet(() -> ResponseEntity.notFound().build()` is a method that provides
+   * an alternative value if the original method call returns `null`. In this case, it
+   * returns a response entity with a status code of `not Found`.
    * 
-   * @returns a `ResponseEntity` object representing a successful response with a list
-   * of communities.
+   * The various attributes of the output are:
    * 
-   * 	- `ResponseEntity<GetCommunityDetailsResponse>`: This is the type of the returned
-   * response entity, which contains a list of community details in the `communities`
-   * field.
-   * 	- `GetCommunityDetailsResponse`: This class represents the response to the request
-   * for community details. It has a single field called `communities`, which is a list
-   * of community details.
-   * 	- `communities(List<Community>)': This method converts the list of community
-   * details returned by the service into a list of `GetCommunityDetailsResponse`
-   * objects, which are then returned in the response entity.
-   * 	- `map(Function<ResponseEntity<GetCommunityDetailsResponse>,
-   * ResponseEntity<GetCommunityDetailsResponse>> mapper)`: This line uses a lambda
-   * function to map the original response entity to a new one with the same type but
-   * with additional fields added. In this case, the lambda function takes the original
-   * response entity and returns a new one with the `communities` field set to a list
-   * of community details.
-   * 	- `map(Function<ResponseEntity<GetCommunityDetailsResponse>,
-   * ResponseEntity<GetCommunityDetailsResponse>> mapper)`: This line is similar to the
-   * previous one, but it maps the original response entity to a new one with the same
-   * type but with different fields removed. In this case, the lambda function takes
-   * the original response entity and returns a new one with the `communities` field removed.
-   * 	- `map(Function<ResponseEntity<GetCommunityDetailsResponse>,
-   * ResponseEntity<GetCommunityDetailsResponse>> mapper)`: This line is similar to the
-   * previous two, but it maps the original response entity to a new one with a different
-   * type. In this case, the lambda function takes the original response entity and
-   * returns a new one with the `communities` field set to a list of `Community` objects
-   * instead of a list of `GetCommunityDetailsResponse` objects.
-   * 	- `orElseGet(() -> ResponseEntity.notFound().build())`: This line provides an
-   * alternative way to handle the response if the original request fails. It returns
-   * a `ResponseEntity.notFound()` object, which is a standard response for a 404 status
-   * code.
+   * * Status code: The status code of the response entity, which indicates whether the
+   * request was successful (200) or not (404 for example).
+   * * Body: The body of the response entity, which contains the details of the community.
+   * * Type: The type of the response entity, which is `GetCommunityDetailsResponse`
+   * in this case.
    */
   @Override
   public ResponseEntity<GetCommunityDetailsResponse> listCommunityDetails(
@@ -220,53 +194,37 @@ public class CommunityController implements CommunitiesApi {
   }
 
   /**
-   * receives a community ID and page number, retrieves the list of admins for that
-   * community from the database using `communityService.findCommunityAdminsById`, maps
-   * the results to a `HashSet`, converts the `HashSet` to a `ListCommunityAdminsResponse`
-   * object, and returns the response entity.
+   * receives a community ID and page number, retrieves the admins of that community,
+   * maps them to a Rest API response format, and returns it as a `ResponseEntity`.
    * 
-   * @param communityId ID of the community for which the admins are to be listed.
+   * @param communityId ID of the community for which the list of admins is requested.
    * 
-   * 	- `String communityId`: The ID of the community for which the admins need to be
-   * listed.
+   * @param pageable paging information for the list of community admins, allowing the
+   * method to fetch a subset of the admins starting from a specified page and with a
+   * maximum number of results per page.
    * 
-   * The function performs the following operations:
+   * * `@PageableDefault(size = 200)`: This annotation specifies the default page size
+   * for pagination, which is set to 200 in this example. The page size determines the
+   * number of community admins returned per page.
+   * * `Pageable`: This interface represents a pageable object, which provides methods
+   * for navigating through a sequence of pages. In this function, `pageable` is used
+   * to determine the pagination settings for the list of community admins.
    * 
-   * 1/ Logs a trace message to track the request.
-   * 2/ Calls the `findCommunityAdminsById` method of the `communityService` to retrieve
-   * a list of admins for the specified community ID.
-   * 3/ Maps the result to a new `HashSet` object.
-   * 4/ Calls the `communityApiMapper` to map the `CommunityAdmin` objects to the desired
-   * REST API response format.
-   * 5/ Maps the resulting `List<CommunityAdmin>` to a `ListCommunityAdminsResponse` object.
-   * 6/ Returns an `ResponseEntity` with a status code of `OK`. If the call fails, it
-   * returns an `ResponseEntity` with a status code of `NOT FOUND`.
+   * @returns a `ListCommunityAdminsResponse` object containing the list of community
+   * admins.
    * 
-   * @param pageable page number and page size of the result list, which allows for
-   * pagination of the community admins.
-   * 
-   * 	- `@PageableDefault(size = 200)` specifies that the pageable should have a default
-   * size of 200.
-   * 	- `Pageable` is an interface that provides methods for navigating through a
-   * sequence of objects, typically in a paginated manner.
-   * 	- `map()` method is used to map the deserialized input to a new object, which in
-   * this case is a `HashSet` containing the community admins.
-   * 
-   * @returns a `ResponseEntity` object containing a list of community admins.
-   * 
-   * 	- `ResponseEntity<ListCommunityAdminsResponse>`: This is the overall response
-   * entity, which contains the list of community admins in its `admins` field.
-   * 	- `ListCommunityAdminsResponse`: This class represents the list of community
-   * admins, which includes a list of `CommunityAdmin` objects.
-   * 	- `CommunityAdmin`: This class represents a single community admin, including
-   * their ID, username, and email address.
-   * 	- `HashSet<CommunityAdmin>`: This is the container for the list of community
-   * admins, which is created using the `map()` method to transform the result of the
-   * `findCommunityAdminsById()` method into a list of `CommunityAdmin` objects.
-   * 	- `communityApiMapper::communityAdminSetToRestApiResponseCommunityAdminSet`: This
-   * method is used to map the list of `CommunityAdmin` objects to a list of
-   * `ListCommunityAdminsResponse` objects, which is the desired output format for the
-   * function.
+   * * `ResponseEntity<ListCommunityAdminsResponse>`: This is the overall response
+   * entity that contains the list of community admins.
+   * * `ListCommunityAdminsResponse`: This class represents the list of community admins
+   * in a REST API format. It has an `admins` field that contains the list of admins
+   * for the specified community ID.
+   * * `map(Function<T, U> mappingFunction)`: This method is used to map the input data
+   * to the desired output format using a provided function. In this case, it maps the
+   * `HashSet` of community admins to the `ListCommunityAdminsResponse` class.
+   * * `orElseGet(() -> ResponseEntity.notFound().build())`: This method is used to
+   * provide an alternative response if the original data cannot be processed successfully.
+   * In this case, it returns a `ResponseEntity.notFound()` response if the community
+   * ID is not found.
    */
   @Override
   public ResponseEntity<ListCommunityAdminsResponse> listCommunityAdmins(
@@ -283,34 +241,37 @@ public class CommunityController implements CommunitiesApi {
   }
 
   /**
-   * receives a community ID and pageable parameters, retrieves community houses from
-   * the service, maps them to a set, converts them to a REST API response, and returns
-   * an `ResponseEntity`.
+   * receives a community ID and page number, retrieves all houses associated with that
+   * community from the database, maps them to a `HashSet`, converts them into a
+   * `GetHouseDetailsResponse`, and returns the response entity.
    * 
-   * @param communityId identifier of the community for which the user is requesting
-   * to list all houses.
+   * @param communityId unique identifier for a community that the user wants to retrieve
+   * house details for.
    * 
-   * 	- `communityId`: A string representing the unique identifier for a community.
+   * @param pageable page size and sort order for listing community houses, allowing
+   * for pagination of the results.
    * 
-   * @param pageable default page request, allowing for pagination of results from the
-   * community service.
+   * * `@PageableDefault(size = 200)`: This annotation specifies the default page size
+   * for the list of houses returned in the response. The value `200` represents the
+   * maximum number of houses to be listed per page.
+   * * `Pageable`: This is an interface that defines the `getPageNumber()` and
+   * `getPageSize()` methods, which are used to control the pagination of the list of
+   * houses.
    * 
-   * The `@PageableDefault(size = 200)` annotation on the `pageable` parameter sets the
-   * default page size to 200.
+   * @returns a `GetHouseDetailsResponse` object containing a list of houses for a
+   * specified community.
    * 
-   * @returns a `ResponseEntity` containing a list of houses belonging to the specified
-   * community.
-   * 
-   * 	- `ResponseEntity<GetHouseDetailsResponse>`: This represents an entity that
-   * contains a response to the list community houses request. The response is in the
-   * form of a list of `CommunityHouseSet`, which are sets of `CommunityHouse` objects.
-   * 	- `GetHouseDetailsResponse`: This class represents the response to the list
-   * community houses request, which contains a list of `CommunityHouse` objects.
-   * 	- `houses`: This is a list of `CommunityHouse` objects that make up the response.
-   * Each object in the list contains information about a particular house in the community.
-   * 	- `Pageable`: This represents the pageable response, which allows for pagination
-   * of the list of houses. The `size` attribute specifies the number of houses to
-   * include on each page.
+   * * `ResponseEntity<GetHouseDetailsResponse>` is an object that represents a response
+   * with a status code and a body containing the list of houses.
+   * * `getHouses()` returns a list of `CommunityHouseSet`, which is a set of house
+   * details in JSON format.
+   * * `map(Function<List<CommunityHouse>, GetHouseDetailsResponse>)` is a method that
+   * takes a function as an argument and applies it to the list of houses, transforming
+   * them into a response object.
+   * * `orElseGet(() -> ResponseEntity.notFound().build())` is a method that returns a
+   * default response if the function provided as an argument does not produce a valid
+   * response. In this case, the default response is `ResponseEntity.notFound().build()`,
+   * which means "not found".
    */
   @Override
   public ResponseEntity<GetHouseDetailsResponse> listCommunityHouses(
@@ -327,42 +288,36 @@ public class CommunityController implements CommunitiesApi {
   }
 
   /**
-   * adds admins to a community based on a request and returns a response entity with
-   * the updated community information.
+   * adds admins to a community based on a request. It retrieves the community and adds
+   * the provided admins to it, returning a response with the updated admins set.
    * 
-   * @param communityId identifier of the community whose admins are being added.
-   * 
-   * 	- `communityId`: A string representing the ID of the community for which admins
-   * are being added.
+   * @param communityId ID of the community for which admins are being added.
    * 
    * @param request AddCommunityAdminRequest object containing the information about
-   * the new admin users to be added to the community, which is validated and used to
-   * add them to the community.
+   * the admins to be added to the community.
    * 
-   * 	- `@Valid`: Indicates that the request body must contain a valid `AddCommunityAdminRequest`
-   * object.
-   * 	- `@PathVariable`: Represents the community ID passed as a path variable in the
-   * URL.
-   * 	- `@RequestBody`: Marks the `AddCommunityAdminRequest` object as the request body,
-   * which is deserialized from the JSON format.
-   * 	- `AddCommunityAdminRequest`: A Java class that contains properties for adding
-   * admins to a community. These properties may include the user IDs of the admins to
-   * be added, and other relevant details.
+   * * `@Valid`: This annotation indicates that the input request body must be validated
+   * according to the specified validation rules.
+   * * `@PathVariable`: This annotation specifies that the `communityId` parameter is
+   * passed from the URL path variable.
+   * * `AddCommunityAdminRequest`: This class represents the request body, which contains
+   * the list of admins to be added to the community. Its properties are:
+   * 	+ `admins()`: A list of admin user IDs.
    * 
-   * @returns a `ResponseEntity` with a status code of `CREATED` and a `AddCommunityAdminResponse`
-   * object containing the updated list of admins for the specified community.
+   * @returns a `ResponseEntity` object with a status code of `CREATED` and a
+   * `AddCommunityAdminResponse` object containing the set of admins for the specified
+   * community.
    * 
-   * 	- `ResponseEntity`: This is an instance of the `ResponseEntity` class, which
-   * represents a response message with a status code and a body. The status code
-   * indicates whether the request was successful or not, while the body contains the
-   * response data.
-   * 	- `status`: This is an instance of the `HttpStatus` class, which represents the
-   * HTTP status code of the response. The possible values are 200 (OK), 400 (Bad
-   * Request), 401 (Unauthorized), etc.
-   * 	- `body`: This is an instance of the `AddCommunityAdminResponse` class, which
-   * contains the response data for the request. Specifically, it has a single attribute
-   * called `admins`, which is a set of strings representing the IDs of the newly added
-   * community administrators.
+   * * `ResponseEntity`: This is an instance of the `ResponseEntity` class, which
+   * represents a response to a HTTP request. It has a status code and a body, which
+   * in this case contains the `AddCommunityAdminResponse`.
+   * * `AddCommunityAdminResponse`: This is a custom response class that contains
+   * information about the added admins to the community. It has a single attribute
+   * called `admins`, which is a set of user IDs.
+   * * `HttpStatus.CREATED`: This is an instance of the `HttpStatus` class, which
+   * represents a HTTP status code indicating that the request was successful and the
+   * resource was created.
+   * * `body`: This is the body of the response entity, which contains the `AddCommunityAdminResponse`.
    */
   @Override
   public ResponseEntity<AddCommunityAdminResponse> addCommunityAdmins(
@@ -382,73 +337,32 @@ public class CommunityController implements CommunitiesApi {
   }
 
   /**
-   * adds houses to a community identified by its ID. It receives a request with the
-   * houses to be added, converts them into a set of community house objects, and then
-   * adds them to the community using the `communityService`. If successful, it returns
-   * a response with the IDs of the added houses.
+   * adds one or more houses to a community identified by its ID. It receives a request
+   * body containing the house names and returns a response with the IDs of the added
+   * houses.
    * 
-   * @param communityId identifier of the community to which the houses are being added.
+   * @param communityId ID of the community to which new houses will be added.
    * 
-   * 	- `communityId`: A string representing the ID of the community to which houses
-   * will be added.
+   * @param request AddCommunityHouseRequest object that contains the houses to be added
+   * to the community.
    * 
-   * The function performs the following operations:
+   * * `@Valid`: The `AddCommunityHouseRequest` object is validated using the `@Valid`
+   * annotation.
+   * * `@PathVariable String communityId`: The community ID is passed as a path variable
+   * in the URL.
+   * * `@RequestBody AddCommunityHouseRequest request`: The `AddCommunityHouseRequest`
+   * object is serialized and passed in the body of the HTTP request.
    * 
-   * 1/ Logs a trace message with the community ID.
-   * 2/ Maps the `AddCommunityHouseRequest` body's `houses` field to a set of
-   * `CommunityHouse` objects using the `communityApiMapper`.
-   * 3/ Calls the `addHousesToCommunity` method on the `communityService` with the
-   * community ID and the set of `CommunityHouse` objects as arguments.
-   * 4/ Checks if any houses were successfully added to the community by comparing the
-   * size of the `houseIds` set to 0. If it is not 0, a `AddCommunityHouseResponse`
-   * object is created with the `houseIds` set as its body and the response status code
-   * is set to `HttpStatus.CREATED`.
-   * 5/ Otherwise, the response status code is set to `HttpStatus.BAD_REQUEST`.
+   * @returns a `ResponseEntity` with a `HttpStatus.CREATED` code and a `AddCommunityHouseResponse`
+   * object containing the newly created house IDs.
    * 
-   * @param request AddCommunityHouseRequest object containing the house names to be
-   * added to the specified community, which is passed from the client side as a valid
-   * JSON request body.
-   * 
-   * 	- `@Valid`: This annotation is used to indicate that the input request body must
-   * be valid according to the specified schema.
-   * 	- `@PathVariable`: This annotation is used to inject a path variable from the URL
-   * into the function as a String parameter. In this case, it is used to pass the
-   * `communityId` parameter from the URL.
-   * 	- `@RequestBody`: This annotation is used to indicate that the input request body
-   * must be serialized and passed to the function as a single entity.
-   * 	- `AddCommunityHouseRequest`: This is the class that contains the properties of
-   * the input request, which are described below:
-   * 	+ `getHouses()`: This method returns a set of `CommunityHouseName` objects, which
-   * represent the houses to be added to the community.
-   * 	+ `getCommunityId()`: This method returns the ID of the community where the houses
-   * will be added.
-   * 
-   * The function first logs a trace message indicating that it has received a request
-   * to add houses to a community with the specified ID. Then, it performs the following
-   * actions:
-   * 
-   * 1/ It converts the set of `CommunityHouseName` objects returned by `request.getHouses()`
-   * into a set of `CommunityHouse` objects using the
-   * `communityApiMapper.communityHouseNamesSetToCommunityHouseSet()` method.
-   * 2/ It adds the houses to the community using the `communityService.addHousesToCommunity()`
-   * method, passing in the ID of the community and the set of `CommunityHouse` objects
-   * as arguments.
-   * 3/ If the addition was successful (i.e., the number of added houses is non-zero
-   * and the number of house IDs in the response is non-zero), it returns a `ResponseEntity`
-   * with a status code of `CREATED` and a body containing an `AddCommunityHouseResponse`
-   * object. Otherwise, it returns a `ResponseEntity` with a status code of `BAD_REQUEST`.
-   * 
-   * @returns a `ResponseEntity` object with a status code of `CREATED` and a
-   * `AddCommunityHouseResponse` object containing the added house IDs.
-   * 
-   * 	- `AddCommunityHouseResponse`: This is the class that represents the response to
-   * the API request. It has a single property called `houses`, which is a set of strings
-   * representing the IDs of the added houses.
-   * 	- `HttpStatus`: This is an enumeration that represents the HTTP status code of
-   * the response. In this case, it can be either `CREATED` or `BAD_REQUEST`.
-   * 	- `ResponseEntity`: This is a class that represents the overall response to the
-   * API request. It has a `status` property and an `body` property, where the body
-   * contains the `AddCommunityHouseResponse` object.
+   * * `AddCommunityHouseResponse`: This is the class that represents the response to
+   * the API request.
+   * * `setHouses()`: This method sets the `houses` attribute of the `AddCommunityHouseResponse`
+   * object to a set of strings representing the IDs of the added houses.
+   * * `status()`: The HTTP status code of the response, which is set to `HttpStatus.CREATED`
+   * if the request was successful and `HttpStatus.BAD_REQUEST` otherwise.
+   * * `body()`: The body of the response, which is an instance of `AddCommunityHouseResponse`.
    */
   @Override
   public ResponseEntity<AddCommunityHouseResponse> addCommunityHouses(
@@ -469,31 +383,31 @@ public class CommunityController implements CommunitiesApi {
   }
 
   /**
-   * deletes a house from a community based on the given community ID and house ID,
-   * returning a response entity indicating whether the operation was successful or not.
+   * deletes a house from a community based on its ID, using the community service to
+   * retrieve the community details and remove the house from the community.
    * 
-   * @param communityId 12-digit unique identifier of a community that contains the
-   * house to be removed.
+   * @param communityId ID of the community that the house to be deleted belongs to.
    * 
-   * 	- `String communityId`: The unique identifier for a community.
-   * 	- `String houseId`: The unique identifier for a house within a community.
+   * @param houseId ID of the house to be removed from the specified community.
    * 
-   * @param houseId identifier of the house to be removed from the specified community.
+   * @returns a `ResponseEntity` object with a status code of `noContent`, indicating
+   * that the house was successfully removed from the community.
    * 
-   * 	- `communityId`: The ID of the community that the house belongs to.
-   * 	- `houseId`: The unique identifier of the house to be removed from the community.
+   * * `ResponseEntity<Void>`: This represents an empty response entity with a type of
+   * Void.
+   * * `noContent()`: This is a builder class that creates an instance of `ResponseEntity`
+   * with a status code of 204 (No Content) and a body of Void.
+   * * `<Void>`: This is the type of the body of the response entity, indicating that
+   * the response contains no content.
    * 
-   * @returns a `ResponseEntity` object representing a successful deletion of a house
-   * from a community, with a status code of `noContent`.
-   * 
-   * 	- `ResponseEntity<Void>`: The type of the output is a response entity with a void
-   * type.
-   * 	- `<Void>`: The type parameter of the response entity is void.
-   * 	- `.noContent()`: The `build()` method returns a response entity with a status
-   * code of 204 (No Content).
-   * 	- `.orElseGet()`: This method allows for alternative ways to return a response
-   * entity if the `getCommunityDetailsById` and `removeHouseFromCommunityByHouseId`
-   * methods return a null value.
+   * The function first logs a trace message to indicate that it has received a request
+   * to delete a house from a community. Then, it uses the `getCommunityDetailsById`
+   * method of the `communityService` class to obtain an optional reference to a
+   * `Community` object associated with the provided community ID. If the community is
+   * found, the function uses the `removeHouseFromCommunityByHouseId` method to remove
+   * the house from the community. Finally, the function returns a response entity with
+   * a status code of 204 (No Content) and an empty body, indicating that the request
+   * was successful.
    */
   @Override
   public ResponseEntity<Void> removeCommunityHouse(
@@ -512,28 +426,21 @@ public class CommunityController implements CommunitiesApi {
   }
 
   /**
-   * receives the community ID and admin ID as path variables, and uses the `communityService`
-   * to remove an admin from a community. If successful, it returns a HTTP NO_CONTENT
-   * status code, otherwise it returns a NOT_FOUND status code.
+   * removes an admin from a community based on the community ID and admin ID provided
+   * in the path variables. It first checks if the admin was successfully removed, then
+   * returns a NO_CONTENT status code if successful or a NOT_FOUND status code otherwise.
    * 
-   * @param communityId id of the community that the admin belongs to.
+   * @param communityId identifier of the community to which the admin belongs.
    * 
-   * 	- `communityId`: This is a string that represents the unique identifier for a
-   * community in the application. It could be a UUID or any other suitable identifier.
+   * @param adminId ID of the admin to be removed from the community.
    * 
-   * @param adminId identifier of the admin to be removed from the community.
-   * 
-   * 	- `communityId`: The ID of the community where the admin is to be removed.
-   * 	- `adminId`: The ID of the admin to be removed from the community.
-   * 
-   * @returns a `ResponseEntity` with a status code of either `NO_CONTENT` or `NOT_FOUND`,
+   * @returns a response entity with a status code of either `NO_CONTENT` or `NOT_FOUND`,
    * depending on whether the admin was successfully removed from the community.
    * 
-   * 	- `HttpStatus.NO_CONTENT`: This status code indicates that the admin was successfully
-   * removed from the community.
-   * 	- `HttpStatus.NOT_FOUND`: This status code indicates that the admin could not be
-   * found in the community, which means that either the admin ID or the community ID
-   * is invalid.
+   * * `HttpStatus.NO_CONTENT`: This status code indicates that the requested resource
+   * has been successfully deleted and no content was returned in the response body.
+   * * `HttpStatus.NOT_FOUND`: This status code indicates that the admin to be removed
+   * could not be found in the community with the provided ID.
    */
   @Override
   public ResponseEntity<Void> removeAdminFromCommunity(
@@ -550,19 +457,22 @@ public class CommunityController implements CommunitiesApi {
   }
 
   /**
-   * deletes a community identified by the `communityId` parameter, returning a
-   * `ResponseEntity` object indicating whether the deletion was successful or not.
+   * handles requests to delete a community. It checks if the community is deleted
+   * successfully and returns a `NO_CONTENT` status code if successful, or a `NOT_FOUND`
+   * status code otherwise.
    * 
    * @param communityId ID of the community to be deleted.
    * 
-   * 	- `communityId`: A string representing the ID of the community to be deleted.
+   * @returns a `ResponseEntity` with a status code of either `NO_CONTENT` or `NOT_FOUND`,
+   * depending on whether the community was successfully deleted.
    * 
-   * @returns a HTTP NO_CONTENT status code if the community was successfully deleted,
-   * and a NOT_FOUND status code otherwise.
-   * 
-   * 	- HttpStatus.NO_CONTENT: This indicates that the community was successfully deleted.
-   * 	- HttpStatus.NOT_FOUND: This indicates that the specified community could not be
-   * found.
+   * * `ResponseEntity<Void>`: This is the type of the output returned by the function.
+   * It represents an empty response entity with a status code.
+   * * `HttpStatus.NO_CONTENT`: This is the status code associated with the output. It
+   * indicates that the requested resource has been successfully deleted and no content
+   * was returned.
+   * * `HttpStatus.NOT_FOUND`: This is the alternative status code associated with the
+   * output when the delete operation fails due to the community not found.
    */
   @Override
   public ResponseEntity<Void> deleteCommunity(@PathVariable String communityId) {

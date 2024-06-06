@@ -22,8 +22,8 @@ import java.util.Set;
 import org.mapstruct.Mapper;
 
 /**
- * provides mapping between House Member objects and their corresponding REST API
- * response versions.
+ * maps between House Member objects and their corresponding REST API response versions
+ * using a set-based mapping approach.
  */
 @Mapper
 public interface HouseMemberMapper {

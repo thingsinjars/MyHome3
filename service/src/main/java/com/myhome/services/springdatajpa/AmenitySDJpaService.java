@@ -33,7 +33,10 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 /**
- * TODO
+ * retrieves, creates, updates, and deletes amenities in a database using JPA and
+ * Hibernate. It provides methods for listing all amenities associated with a specific
+ * community, creating new amenities, getting an individual amenity's details, deleting
+ * an amenity, and updating an amenity's details.
  */
 @Service
 @RequiredArgsConstructor
@@ -45,50 +48,42 @@ public class AmenitySDJpaService implements AmenityService {
   private final AmenityApiMapper amenityApiMapper;
 
   /**
-   * takes a set of `AmenityDto` objects, a community ID, and returns an `Optional`
-   * list of created `Amenity` objects. It retrieves the community details using the
-   * ID, maps each `AmenityDto` to an `Amenity` object, saves the mapped objects in the
-   * repository, and returns the created amenities in an `Optional` list.
+   * creates a list of amenities for a community by mapping amenity DTOs to amenities
+   * and saving them to the database. It returns an optional list of created amenities.
    * 
-   * @param amenities set of amenities to be created or updated in the system, which
-   * are then transformed into a list of `AmenityDto` objects and saved in the database
-   * using the `amenityRepository`.
+   * @param amenities set of amenities that need to be created or updated in the system.
    * 
-   * 	- `Set<AmenityDto> amenities`: This parameter represents a set of `AmenityDto`
-   * objects that will be transformed into `Amenity` objects.
-   * 	- `String communityId`: This parameter represents the ID of a `Community` object,
-   * which is used to retrieve the details of the community from the service.
+   * * `Set<AmenityDto>` represents a set of amenities that are to be created in the community.
+   * * `communityId` is a string representing the ID of the community where the amenities
+   * will be created.
+   * * `Community` is an optional object that contains information about the community
+   * where the amenities will be created. If the community does not exist, this field
+   * will be absent.
+   * * `AmenityDto` represents a single amenity to be created in the community. It has
+   * several attributes:
+   * 	+ `id`: an ID of the amenity.
+   * 	+ `name`: the name of the amenity.
+   * 	+ `type`: the type of the amenity (e.g., "park", "library", etc.).
+   * 	+ `description`: a brief description of the amenity.
+   * 	+ `latitude`: the latitude coordinate of the amenity.
+   * 	+ `longitude`: the longitude coordinate of the amenity.
+   * 	+ `address`: the address of the amenity.
    * 
-   * The function first checks if the community with the provided ID exists by calling
-   * the `communityService.getCommunityDetailsById(communityId)` method. If the community
-   * does not exist, the function returns an empty `Optional`. Otherwise, it proceeds
-   * to transform each `AmenityDto` object in the `amenities` set into a corresponding
-   * `Amenity` object using the `amenityApiMapper.amenityDtoToAmenity()` method. The
-   * transformed `Amenity` objects are then collected into a list using the
-   * `Collectors.toList()` method. Finally, the list of created `Amenity` objects is
-   * saved to the database using the `amenityRepository.saveAll()` method, and the
-   * resulting list of `AmenityDto` objects is returned in an `Optional`.
+   * @param communityId ID of a specific community that the amenities will be associated
+   * with.
    * 
-   * @param communityId unique identifier of a community that the amenities will be
-   * associated with.
+   * @returns a list of `AmenityDto` objects representing newly created amenities.
    * 
-   * The `communityId` parameter is a String representing the unique identifier of a community.
-   * 
-   * @returns an optional list of amenity DTOs representing created amenities.
-   * 
-   * 	- The Optional<List<AmenityDto>> return value represents an optional list of
-   * amenities that have been created in the system. If no amenities were created
-   * successfully, the list will be empty.
-   * 	- The List<Amenity> contained within the Optional is a list of amenities that
-   * have been mapped from their corresponding DTOs using the `amenityApiMapper`. Each
-   * amenity has a community associated with it, which is obtained from the `Community`
-   * object retrieved from the service.
-   * 	- The List<AmenityDto> contained within the Optional is a list of DTOs representing
-   * the created amenities. Each DTO contains the same attributes as the original amenity
-   * DTO passed in the function, including the id, name, and community ID.
-   * 	- The `saveAll` method used to save the created amenities returns a stream of
-   * `Amenity` objects that have been persisted in the database. These objects are then
-   * mapped back to their corresponding DTOs using the `amenityApiMapper`.
+   * * The Optional object contains a list of AmenityDto objects, representing the newly
+   * created amenities in the database.
+   * * The list is not empty by default, as the function will always return at least
+   * one element (the created amenities).
+   * * Each element in the list is an AmenityDto object, which has been converted from
+   * the original amenity entity using the `amenityApiMapper`.
+   * * The `Community` object associated with each amenity is obtained from the database
+   * using the `communityService`, and is stored as part of the amenity entity.
+   * * The list of created amenities can be used for further processing or storage,
+   * depending on the context of the function call.
    */
   @Override
   public Optional<List<AmenityDto>> createAmenities(Set<AmenityDto> amenities, String communityId) {
@@ -111,24 +106,20 @@ public class AmenitySDJpaService implements AmenityService {
   }
 
   /**
-   * retrieves the details of an amenity based on its ID, by querying the amenity
-   * repository using the `findByAmenityId` method.
+   * retrieves an optional instance of `Amenity` based on the provided `amenityId`. It
+   * makes a call to the `amenityRepository` to find the details of the amenity using
+   * its `amenityId`.
    * 
-   * @param amenityId identifier of an amenity that is to be retrieved from the repository.
+   * @param amenityId identifier of an amenity for which details are being requested.
    * 
-   * 	- `amenityId`: The unique identifier for an amenity, which is retrieved from the
-   * repository using the `findByAmenityId` method.
+   * @returns an Optional containing the details of the amenity with the provided ID.
    * 
-   * @returns an Optional object containing the details of the amenity with the provided
-   * ID.
-   * 
-   * 	- `Optional<Amenity>`: The output is an optional object of type `Amenity`, which
-   * means that if no amenity details exist for the provided `amenityId`, the method
-   * will return an empty `Optional`.
-   * 	- `amenityRepository.findByAmenityId(amenityId)`: This method call returns a
-   * single `Amenity` object based on the specified `amenityId`. The `amenityRepository`
-   * is likely a data access layer or a database connection, and the `findByAmenityId`
-   * method performs a query to retrieve the amenity details for the given `amenityId`.
+   * * The `Optional` class represents a container for holding a value that may be
+   * present or absent.
+   * * The `findByAmenityId` method in the `amenityRepository` returns an optional
+   * object containing details of the amenity with the provided `amenityId`.
+   * * If no amenity is found with the given `amenityId`, the returned `Optional` will
+   * be `empty()`.
    */
   @Override
   public Optional<Amenity> getAmenityDetails(String amenityId) {
@@ -136,20 +127,11 @@ public class AmenitySDJpaService implements AmenityService {
   }
 
   /**
-   * deletes an amenity from the database by finding it using its ID, removing it from
-   * the community's amenities list, and then deleting it.
+   * deletes an amenity from a community by first finding the amenity to be deleted,
+   * then removing it from the community's amenities list and finally deleting it from
+   * the repository.
    * 
-   * @param amenityId ID of an amenity that needs to be deleted.
-   * 
-   * 	- `amenityId`: A unique identifier for an amenity in a community.
-   * 
-   * The function retrieves the amenity from the repository using the `findByAmenityIdWithCommunity`
-   * method and then performs the following operations:
-   * 
-   * 	- Removes the amenity from the community's list of amenities.
-   * 	- Deletes the amenity from the repository.
-   * 
-   * The return value is `true` if the amenity was successfully deleted, or `false` otherwise.
+   * @param amenityId id of an amenity to be deleted.
    * 
    * @returns a boolean value indicating whether the amenity was successfully deleted.
    */
@@ -166,35 +148,26 @@ public class AmenitySDJpaService implements AmenityService {
   }
 
   /**
-   * retrieves a community's amenities by querying the community repository and mapping
-   * the resulting Community objects to their respective amenity sets using the
-   * `getAmenities()` method.
+   * retrieves a set of amenities for a given community by querying the community
+   * repository and mapping the community's amenities to a set.
    * 
-   * @param communityId identifier of the community whose amenities are to be listed.
+   * @param communityId ID of the community whose amenities should be listed.
    * 
-   * 	- `communityRepository`: This is an instance of `CommunityRepository`, which is
-   * responsible for managing community data.
-   * 	- `findByCommunityIdWithAmenities`: This method returns a `List` of `Community`
-   * objects that match the given `communityId`. It also includes the amenities associated
-   * with each community.
-   * 	- `map`: This method applies a transformation to the returned list, in this case
-   * mapping each `Community` object to its associated amenities using the `getAmenities()`
-   * method.
-   * 	- `orElse`: This method returns an alternative value if the original method call
-   * returns `null`. In this case, it returns an empty `HashSet` of amenities if the
-   * method call returns `null`.
+   * @returns a set of amenity objects associated with a specific community.
    * 
-   * @returns a set of amenities associated with a specific community.
+   * The output is a `Set` of `Amenity` objects, which represent all the amenities
+   * associated with a particular community.
    * 
-   * 	- The function returns a `Set<Amenity>` data structure, indicating that it is a
-   * collection of amenities associated with a particular community.
-   * 	- The `CommunityRepository` class is used to fetch the community information along
-   * with its amenities, using the `findByCommunityIdWithAmenities` method.
-   * 	- The `map` method is applied to the result of the previous step, which transforms
-   * the `Community` objects into `Amenity` objects. This allows for the creation of a
-   * single collection of amenities that can be used by the application.
-   * 	- If no community information is found, the function returns an empty `Set<Amenity>`,
-   * indicating that there are no amenities associated with the given community ID.
+   * The `Set` is generated by combining the results of two queries: first, finding all
+   * communities with a specific `communityId`, and second, mapping each found community
+   * to its associated amenities using the `getAmenities()` method.
+   * 
+   * If no amenities are associated with a particular community, the output will be an
+   * empty `Set`.
+   * 
+   * Overall, the `listAllAmenities` function provides a convenient way to access all
+   * the amenities associated with a given community, without having to perform multiple
+   * queries or manually constructing the result set.
    */
   @Override
   public Set<Amenity> listAllAmenities(String communityId) {
@@ -204,33 +177,36 @@ public class AmenitySDJpaService implements AmenityService {
   }
 
   /**
-   * updates an amenity in the database by retrieving the existing amenity with the
-   * matching amenity ID, updating its name, price, and description, and then saving
-   * the updated amenity or returning null if failed.
+   * updates an amenity in the database by finding the corresponding amenity record,
+   * updating its fields, and saving it to the database if successful.
    * 
-   * @param updatedAmenity updated amenity object containing the modified values for
-   * name, price, id, description, and community Id.
+   * @param updatedAmenity updated amenity object containing the new name, price, and
+   * other attributes of the amenity to be saved in the database.
    * 
-   * 	- `amenityId`: The ID of the amenity being updated.
-   * 	- `communityId`: The ID of the community to which the amenity belongs.
-   * 	- `name`: The name of the amenity.
-   * 	- `price`: The price of the amenity.
-   * 	- `description`: A description of the amenity.
+   * * `amenityId`: The ID of the amenity being updated.
+   * * `communityId`: The ID of the community associated with the amenity.
+   * * `name`: The name of the amenity.
+   * * `price`: The price of the amenity.
+   * * `description`: A description of the amenity.
    * 
-   * @returns a boolean value indicating whether the amenity was updated successfully.
+   * The function first retrieves the existing amenity with the same `amenityId` using
+   * `amenityRepository.findByAmenityId(amenityId)`. If such an amenity is found, it
+   * then retrieves the community associated with the amenity using
+   * `communityRepository.findByCommunityId(updatedAmenity.getCommunityId())`. Finally,
+   * it updates the amenity with the new values for `name`, `price`, and `description`
+   * and saves it to the repository using `amenityRepository.save()`.
    * 
-   * 	- `map(amenity -> communityRepository.findByCommunityId(updatedAmenity.getCommunityId())`:
-   * This method retrieves the `Community` object associated with the given `Amenity`
-   * object's `CommunityId`.
-   * 	- `map(community -> { ... }):` This method performs an operation on the retrieved
-   * `Community` object, which is then returned as a new `Amenity` object.
-   * 	- `orElse(null)`: If no `Community` object is found, the function returns `null`.
-   * 	- `map(amenityRepository::save):` This method saves the updated `Amenity` object
-   * in the repository.
+   * @returns a boolean value indicating whether the amenity was updated successfully
+   * or not.
    * 
-   * The output of the `updateAmenity` function is a `Optional` object containing the
-   * updated `Amenity` object or `null`, depending on whether a `Community` object was
-   * found and saved successfully.
+   * * `map(amenity -> communityRepository.findByCommunityId(updatedAmenity.getCommunityId())`:
+   * This step retrieves the community associated with the updated amenity.
+   * * `map(community -> { ... })`: This step updates the amenity object with the name,
+   * price, id, amenity id, and description from the input `updatedAmenity`.
+   * * `orElse(null)`: This step returns the updated amenity object if the community
+   * associated with the updated amenity exists, or returns `null` otherwise.
+   * * `map(amenityRepository::save)`: This step saves the updated amenity object to
+   * the repository.
    */
   @Override
   public boolean updateAmenity(AmenityDto updatedAmenity) {

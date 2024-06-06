@@ -22,22 +22,21 @@ import lombok.Getter;
 import lombok.Setter;
 
 /**
- * in Java is a data transfer object for storing and manipulating user information,
+ * represents a data transfer object for storing and manipulating user information,
  * including id, userId, name, email, password, encryptedPassword, communityIds, and
  * emailConfirmed fields.
  * Fields:
- * 	- id (Long): of the UserDto class represents a unique identifier for each user.
- * 	- userId (String): in the UserDto class represents a unique identifier for a user.
- * 	- name (String): in the UserDto class represents the user's name.
- * 	- email (String): in the UserDto class stores an user's email address.
- * 	- password (String): in the UserDto class stores the user's password as a string
- * value.
- * 	- encryptedPassword (String): in the UserDto class is likely an encoded version
+ * 	- id (Long): represents a unique identifier for each user in the application.
+ * 	- userId (String): represents a unique identifier for a user in the system.
+ * 	- name (String): stores a string value representing the user's name.
+ * 	- email (String): in the UserDto class stores a user's email address.
+ * 	- password (String): stores a string value representing the user's password.
+ * 	- encryptedPassword (String): in the UserDto class contains an encoded version
  * of the user's password for added security.
- * 	- communityIds (Set<String>): in the UserDto class represents a set of strings
- * indicating the communities to which a user belongs.
- * 	- emailConfirmed (boolean): in the UserDto class indicates whether an user's email
- * address has been confirmed through a verification process.
+ * 	- communityIds (Set<String>): in the UserDto class stores a set of strings
+ * representing the communities to which a user belongs.
+ * 	- emailConfirmed (boolean): indicates whether an user's email address has been
+ * confirmed through a verification process.
  */
 @Builder
 @Getter

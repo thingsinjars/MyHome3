@@ -26,7 +26,12 @@ import org.springframework.stereotype.Component;
  * Concrete implementation of {@link AppJwtEncoderDecoder}. Use this only in testing.
  */
 /**
- * TODO
+ * is an implementation of the AppJwtEncoderDecoder interface that decodes a JSON Web
+ * Token (JWT) and returns an instance of the AppJwt class with extracted user ID and
+ * expiration time. The class splits the encoded JWT into two parts using a separator
+ * and then uses these values to construct the AppJwt object's user ID and expiration
+ * fields. Additionally, the class provides an encode method that concatenates the
+ * user ID and expiration time of the JWT and returns the encoded string.
  */
 @Profile("test")
 @Component
@@ -35,42 +40,30 @@ public class NoSecretJwtEncoderDecoder implements AppJwtEncoderDecoder {
 
   /**
    * decodes a JSON Web Token (JWT) and returns an instance of the `AppJwt` class with
-   * the extracted values: user ID, expiration time.
+   * the extracted user ID and expiration time.
    * 
-   * @param encodedJwt JSON Web Token (JWT) that needs to be decoded and converted into
-   * an instance of `AppJwt`.
+   * @param encodedJwt JSON Web Token (JWT) that is being decoded and transformed into
+   * an `AppJwt` object.
    * 
-   * 	- `encodedJwt`: A string containing the encrypted JWT token, which is split into
-   * two parts using the provided separator `SEPARATOR`.
-   * 	- `secret`: The secret key used for decoding the JWT token.
+   * @param secret secret key used for signing the JWT, which is required to validate
+   * the signature and unserstand the content of the JWT.
    * 
-   * @param secret secret key used to verify the digital signature of the JWT, which
-   * is necessary for authenticating the user and determining whether the JWT has been
-   * tampered with.
-   * 
-   * The `encodedJwt` parameter is split into an array of strings using the `SEPARATOR`
-   * constant.
-   * 
-   * The first element in the array represents the user ID, which is used to construct
-   * the `AppJwt` object's `userId` field.
-   * 
-   * The second element in the array represents the expiration time of the JWT, which
-   * is converted to a `LocalDateTime` object using the `parse()` method. This object
-   * is then used to set the `expiration` field of the `AppJwt` object.
-   * 
-   * @returns an instance of `AppJwt` containing the user ID and expiration date extracted
+   * @returns an instance of `AppJwt` with the user ID and expiration time extracted
    * from the encoded JWT.
    * 
-   * 	- `AppJwt`: This is the class being modified to decode an JWT token.
-   * 	- `builder()`: This is a method used to create a new instance of the `AppJwt`
-   * class with default values.
-   * 	- `userId(strings[0])`: The `userId` property is set to the first element of the
-   * array `strings`, which is obtained by splitting the encoded JWT token using the `SEPARATOR`.
-   * 	- `expiration(LocalDateTime.parse(strings[1]))`: The `expiration` property is set
-   * to the second element of the array `strings`, which is a string in the format
-   * `YYYY-MM-DDTHH:mm:ssZ`. This value represents the expiration time of the JWT token.
-   * 	- `build()`: This method creates a new instance of the `AppJwt` class with the
-   * properties set using the `builder()` method.
+   * * `AppJwt`: This is the class that represents an JSON Web Token (JWT). It has
+   * several attributes such as `userId`, `expiration`, and `build()` method to construct
+   * a new JWT instance.
+   * * `builder()` method: This is a factory method used to create a new `AppJwt` builder
+   * instance, which can be used to modify the properties of the JWT before building it.
+   * * `split(SEPARATOR)`: This method splits the input `encodedJwt` string into an
+   * array of strings using the specified `SEPARATOR`.
+   * * `LocalDateTime.parse()`: This method parses the second element of the array,
+   * which represents the expiration time of the JWT in ISO 8601 format. It creates a
+   * `LocalDateTime` object representing the expiration date and time.
+   * 
+   * The output of the `decode` function is an instance of `AppJwt`, which contains the
+   * user ID and expiration date and time extracted from the input `encodedJwt`.
    */
   @Override public AppJwt decode(String encodedJwt, String secret) {
     String[] strings = encodedJwt.split(SEPARATOR);
@@ -78,28 +71,19 @@ public class NoSecretJwtEncoderDecoder implements AppJwtEncoderDecoder {
   }
 
   /**
-   * takes a `AppJwt` object and a secret as input, and returns a modified `AppJwt`
-   * object with an additional field containing the user ID and expiration date.
-   * 
-   * @param jwt JSON Web Token being encoded, which contains the user ID and expiration
-   * time.
-   * 
-   * 	- `jwt`: A `AppJwt` object containing information about the JWT token, including
+   * takes a JWT object and a secret as input, and returns a encoded string containing
    * the user ID and expiration time.
+   * 
+   * @param jwt Java library for JSON Web Tokens, which is used to generate and validate
+   * tokens in this function.
+   * 
+   * * `jwt`: A `AppJwt` object representing a JSON Web Token.
+   * * `secret`: The secret used to sign the token.
    * 
    * @param secret secret key used to sign the JWT token.
    * 
-   * 	- `secret`: The secret used to sign the JWT.
-   * 	- `jwt`: The JWT object containing the user ID and expiration time.
-   * 
-   * @returns a concatenation of the `userId` and `expiration` properties of the `AppJwt`
-   * object, separated by a separator.
-   * 
-   * 	- `jwt.getUserId()`: This is a string representing the user ID.
-   * 	- `SEPARATOR`: This is a constant string used to separate the user ID and expiration
-   * time.
-   * 	- `jwt.getExpiration()`: This is an integer representing the expiration time of
-   * the JWT in milliseconds since the Unix epoch (January 1, 1970, 00:00:00 UTC).
+   * @returns a base64-encoded string representing the user ID and expiration time of
+   * the JWT.
    */
   @Override public String encode(AppJwt jwt, String secret) {
     return jwt.getUserId() + SEPARATOR + jwt.getExpiration();

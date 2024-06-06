@@ -4,9 +4,8 @@ import com.myhome.domain.SecurityToken;
 import com.myhome.domain.User;
 
 /**
- * provides methods for sending various types of emails related to user accounts,
- * including password recovery codes, account creation and confirmation, and password
- * changes.
+ * provides methods for sending emails related to user accounts, including password
+ * recovery codes, account creation and confirmation, and password changes.
  */
 public interface MailService {
 

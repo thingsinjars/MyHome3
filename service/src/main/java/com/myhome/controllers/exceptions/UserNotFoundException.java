@@ -3,8 +3,9 @@ package com.myhome.controllers.exceptions;
 import lombok.extern.slf4j.Slf4j;
 
 /**
- * extends AuthenticationException and provides additional logging information when
- * a user is not found using their email address.
+ * is an extension of AuthenticationException with additional logging information
+ * when a user is not found using their email address, using the @Slf4j annotation
+ * for logging purposes.
  */
 @Slf4j
 public class UserNotFoundException extends AuthenticationException {

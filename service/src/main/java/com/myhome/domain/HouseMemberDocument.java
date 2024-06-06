@@ -25,13 +25,11 @@ import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
 /**
- * represents a document associated with a house member, containing a unique filename
- * and binary content.
+ * represents a unique document belonging to a member of a house with binary content.
  * Fields:
- * 	- documentFilename (String): in the HouseMemberDocument class represents a unique
- * filename for a document belonging to a member of a house.
- * 	- documentContent (byte[]): in the HouseMemberDocument class represents an array
- * of bytes containing the contents of a document, with a default size of zero bytes.
+ * 	- documentFilename (String): represents a unique filename for a document associated
+ * with a member of a house.
+ * 	- documentContent (byte[]): is an array of bytes with a default size of zero bytes.
  */
 @Entity
 @AllArgsConstructor

@@ -21,7 +21,8 @@ import com.myhome.domain.Community;
 import org.mapstruct.Mapper;
 
 /**
- * maps between CommunityDto and Community objects through a single method, communityDtoToCommunity().
+ * maps between a CommunityDto object and its corresponding Community object using a
+ * single method, communityDtoToCommunity().
  */
 @Mapper
 public interface CommunityMapper {

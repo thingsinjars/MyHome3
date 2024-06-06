@@ -28,8 +28,7 @@ import org.springframework.stereotype.Repository;
 
 /**
  * provides methods for interacting with the CommunityHouse entity in a Spring Data
- * JPA environment, including finding and deleting individual CommunityHouses or
- * communities of CommunityHouses by their respective IDs.
+ * JPA environment.
  */
 @Repository
 public interface CommunityHouseRepository extends PagingAndSortingRepository<CommunityHouse, Long> {

@@ -24,7 +24,9 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.util.unit.DataSize;
 
 /**
- * TODO
+ * configures a `MultipartConfig` object with maximum file and request size limits
+ * in kilobytes. The `multipartConfigElement()` method creates a `MultipartConfig`
+ * instance with set maximum file and request sizes, and returns it as a `MultipartConfigElement`.
  */
 @Configuration
 public class FileUploadConfig {
@@ -33,18 +35,20 @@ public class FileUploadConfig {
   private int maxSizeKBytes;
 
   /**
-   * creates a `MultipartConfig` object, setting limits on maximum file size and request
-   * size.
+   * creates a `MultipartConfig` object with customized maximum file and request sizes,
+   * which can be used to configure the multipart request handler in Spring.
    * 
-   * @returns a `MultipartConfig` object configured with maximum file and request sizes
-   * in kilobytes.
+   * @returns a `MultipartConfig` instance with configured maximum file and request
+   * sizes in kilobytes.
    * 
-   * 	- The MultipartConfigFactory object is created with the `setMaxFileSize()` and
-   * `setMaxRequestSize()` methods, which set the maximum file size in kilobytes (KB)
-   * and request size in KB, respectively.
-   * 	- The createMultipartConfig() method returns a newly created MultipartConfig instance.
-   * 	- The MultipartConfig instance has several attributes, including the maximum file
-   * size, maximum request size, and the number of files that can be uploaded simultaneously.
+   * * `MultipartConfigFactory`: This is the class that is used to create the
+   * `MultipartConfig` object.
+   * * `setMaxFileSize()` and `setMaxRequestSize()`: These two methods define the maximum
+   * file size and maximum request size, respectively, in kilobytes (KB). The values
+   * are set using `DataSize.ofKilobytes()` method, which is a part of Spring Boot's
+   * built-in `DataSize` class.
+   * * `createMultipartConfig()`: This method creates a new instance of the `MultipartConfig`
+   * class and returns it as output.
    */
   @Bean
   public MultipartConfigElement multipartConfigElement() {

@@ -31,25 +31,26 @@ import lombok.NoArgsConstructor;
  * IDs to get the data to enrich this request
  */
 /**
- * extends SchedulePaymentRequest and provides additional information on admin and
- * house member details to enrich the payment request.
+ * extends the SchedulePaymentRequest class and provides additional information on
+ * admin and house member details to enrich the payment request.
  * Fields:
- * 	- adminEntityId (Long): represents an entity associated with the admin user, such
- * as a department or organization, based on which the request is enriched.
+ * 	- adminEntityId (Long): represents an entity associated with the administrative
+ * user who created or updated the enriched payment request.
  * 	- adminName (String): represents the human name of an administrative user associated
  * with the payment request.
- * 	- adminEmail (String): represents an email address associated with the admin
- * entity ID.
- * 	- adminEncryptedPassword (String): likely stores an encrypted password for an
- * administrator of a house member in the system.
- * 	- adminCommunityIds (Set<String>): stores a set of community IDs associated with
- * the admin user who created or updated the EnrichedSchedulePaymentRequest.
+ * 	- adminEmail (String): represents an email address associated with an administrative
+ * user entity in the system.
+ * 	- adminEncryptedPassword (String): stores an encrypted password for an administrator
+ * of a house member in the system.
+ * 	- adminCommunityIds (Set<String>): represents a set of community IDs associated
+ * with an administrative user who created or updated the EnrichedSchedulePaymentRequest.
  * 	- memberEntityId (Long): represents an entity in the system of interest.
  * 	- houseMemberDocumentName (String): represents the name of a document related to
  * the member's house information.
- * 	- houseMemberName (String): represents the name of a member of a particular household.
- * 	- houseMemberHouseID (String): represents the unique identifier of the member's
- * house within their community.
+ * 	- houseMemberName (String): represents the name of a member of a particular
+ * household within their community.
+ * 	- houseMemberHouseID (String): represents a unique identifier for a member's
+ * household within their community.
  */
 @NoArgsConstructor
 @AllArgsConstructor

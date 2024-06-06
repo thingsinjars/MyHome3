@@ -20,8 +20,8 @@ import java.util.Optional;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 /**
- * defines a set of methods for interacting with payments in a database using Spring
- * Data JPA.
+ * provides methods for interacting with payments in a database using Spring Data
+ * JPA, including finding and deleting specific payments by ID.
  */
 public interface PaymentRepository extends JpaRepository<Payment, Long> {
   Optional<Payment> findByPaymentId(String paymentId);
