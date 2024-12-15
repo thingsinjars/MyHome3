@@ -37,7 +37,12 @@ import org.springframework.web.multipart.MultipartFile;
  * REST Controller which provides endpoints for managing house member documents
  */
 /**
- * TODO
+ * from the file provides functions for handling house member documents. The class
+ * includes methods for retrieving and updating house member documents, as well as
+ * deleting them. The functions log trace messages to indicate that they have received
+ * a request to perform an operation on a house member document. The class also uses
+ * the `HttpHeaders` and `ResponseEntity` objects to return status codes and headers
+ * to the client.
  */
 @RestController
 @Slf4j
@@ -47,25 +52,27 @@ public class HouseMemberDocumentController implements DocumentsApi {
   private final HouseMemberDocumentService houseMemberDocumentService;
 
   /**
-   * retrieves a house member document from the service and returns it as a byte array
-   * with an appropriate HTTP status code and headers.
+   * retrieves a house member document given its ID and returns it as a byte array in
+   * an HTTP response entity with appropriate headers for caching and content type.
    * 
-   * @param memberId ID of the house member whose document is requested.
+   * @param memberId id of the house member for whom the document is being retrieved.
    * 
-   * 	- `memberId`: A string representing the member ID for which the document is being
-   * requested.
+   * @returns a `ResponseEntity` object containing the requested house member document
+   * content as a byte array, along with headers setting the cache control and content
+   * type.
    * 
-   * @returns a `ResponseEntity` object containing the requested document content as a
-   * byte array, with appropriate headers and status code.
-   * 
-   * 	- `HttpHeaders headers`: This object contains metadata about the response, such
-   * as caching instructions and content type.
-   * 	- `byte[] content`: The document's contents, represented as a byte array.
-   * 	- `ContentDisposition contentDisposition`: A builder for creating a ContentDisposition
-   * header, which specifies how the response should be handled by the client. In this
-   * case, it is set to "inline" and includes the filename of the document.
-   * 	- `ResponseEntity<byte[]> entity`: The overall response object, containing the
-   * headers and content.
+   * * `ResponseEntity<byte[]>` represents an entity containing the house member document
+   * as a byte array.
+   * * `HttpHeaders` is an instance of `HttpHeaders`, which contains headers related
+   * to caching and content type.
+   * * `ContentDisposition` is an instance of `ContentDisposition`, which provides
+   * information about how the response should be displayed in the browser, including
+   * the filename of the document.
+   * * `HttpStatus.OK` indicates that the request was successful and the document could
+   * be retrieved.
+   * * The `map` method is used to transform the `Optional<HouseMemberDocument>` into
+   * a `ResponseEntity<byte[]>` if the house member document exists, or an empty
+   * `ResponseEntity` otherwise.
    */
   @Override
   public ResponseEntity<byte[]> getHouseMemberDocument(@PathVariable String memberId) {
@@ -93,37 +100,32 @@ public class HouseMemberDocumentController implements DocumentsApi {
   }
 
   /**
-   * processes a request to add a house member document, creating a new document entity
-   * if one does not exist for the provided member ID, and returning a `NO_CONTENT`
-   * status code upon successful addition or a `NOT_FOUND` status code otherwise.
+   * receives a request to upload a house member document and creates a new house member
+   * document in the database using the provided multipart file. It then returns a
+   * response entity indicating whether the document was successfully created or not.
    * 
-   * @param memberId unique identifier of the house member whose document is being uploaded.
+   * @param memberId ID of the house member whose document is being uploaded.
    * 
-   * 	- `memberId`: A string representing the unique identifier for a house member.
+   * @param memberDocument MultipartFile containing the member's document to be added
+   * to the house member documents.
    * 
-   * @param memberDocument document to be uploaded for the specified member ID.
-   * 
-   * 	- `@RequestParam("memberDocument") MultipartFile memberDocument`: This is a request
-   * parameter containing the file to be uploaded as a house member document. The type
-   * of this parameter is `MultipartFile`, which means it can contain only files and
-   * not other types of data.
-   * 	- `log.trace("Received request to add house member documents"`: This line logs a
-   * trace message indicating that the function has received a request to upload a house
-   * member document.
+   * * `@RequestParam("memberDocument") MultipartFile memberDocument`: This represents
+   * a file uploaded by the user as part of the House Member document upload process.
+   * The `MultipartFile` class provides access to the file's metadata, such as its name
+   * and size.
+   * * `log.trace("Received request to add house member documents")` : This line logs
+   * an informational message indicating that a request has been received to add new
+   * House Member documents.
    * 
    * @returns a `ResponseEntity` object with a status code indicating whether the
-   * operation was successful or not.
+   * document was successfully uploaded or not.
    * 
-   * 	- `ResponseEntity.status(HttpStatus.NO_CONTENT)` - This status code indicates
-   * that the request was successful and no content was returned.
-   * 	- `ResponseEntity.status(HttpStatus.NOT_FOUND)` - This status code indicates that
-   * the requested member document could not be found.
-   * 
-   * The function returns an `Optional` object, which contains a `HouseMemberDocument`
-   * object if it exists, or an empty `Optional` if it does not exist. The `map` method
-   * is used to transform the `Optional` into a `ResponseEntity` object with a status
-   * code indicating whether the request was successful or not. If the `Optional` is
-   * empty, the function returns a `ResponseEntity` with a status code of `HttpStatus.NOT_FOUND`.
+   * * `ResponseEntity.status(HttpStatus.NO_CONTENT).build()`: This returns a response
+   * entity with a status code of NO_CONTENT, indicating that the operation was successful
+   * and no additional content was provided.
+   * * `ResponseEntity.status(HttpStatus.NOT_FOUND).build()`: This returns a response
+   * entity with a status code of NOT_FOUND, indicating that the requested resource
+   * could not be found.
    */
   @Override
   public ResponseEntity uploadHouseMemberDocument(
@@ -138,37 +140,27 @@ public class HouseMemberDocumentController implements DocumentsApi {
   }
 
   /**
-   * updates a house member's document based on a provided MultipartFile and member ID,
-   * returning a ResponseEntity with a NO_CONTENT status if successful or a NOT_FOUND
-   * status otherwise.
+   * updates a house member's document based on the inputted file. It returns a
+   * ResponseEntity with a status code indicating whether the update was successful or
+   * not.
    * 
-   * @param memberId 12-digit unique identifier of the member whose document is being
-   * updated.
+   * @param memberId identifier of the house member whose document is being updated.
    * 
-   * 	- `memberId`: A string representing the unique identifier of a house member.
+   * @param memberDocument file containing the updated member document to be saved in
+   * the database by the `houseMemberDocumentService`.
    * 
-   * The function first logs a message to trace the request receipt and then attempts
-   * to update the house member document using the `houseMemberDocumentService`. If the
-   * update is successful, the function returns a `ResponseEntity` with a status code
-   * of `NO_CONTENT`, indicating that the operation was successful. Otherwise, it returns
-   * a `ResponseEntity` with a status code of `NOT_FOUND`, indicating that the house
-   * member document could not be found.
+   * * `memberId`: The ID of the member whose document is being updated.
+   * * `memberDocument`: A `MultipartFile` object representing the document to be updated.
    * 
-   * @param memberDocument file containing the member's document that needs to be updated.
+   * @returns a response entity with a status code of NO_CONTENT or NOT_FOUND, depending
+   * on whether the update was successful.
    * 
-   * 	- `memberId`: A string representing the ID of the house member whose document is
-   * being updated.
-   * 	- `memberDocument`: A `MultipartFile` object containing the updated document for
-   * the house member.
-   * 
-   * @returns a `ResponseEntity` object with a status code of either `NO_CONTENT` or
-   * `NOT_FOUND`, depending on whether the document was successfully updated or not.
-   * 
-   * 	- `map`: This method is used to map the Optional<HouseMemberDocument> to a
-   * ResponseEntity. If the update operation was successful, it returns a ResponseEntity
-   * with a status code of NO_CONTENT (204).
-   * 	- `orElseGet`: This method is used as a fallback when the `map` method returns
-   * an empty Optional. It returns a ResponseEntity with a status code of NOT_FOUND (404).
+   * * `ResponseEntity.status(HttpStatus.NO_CONTENT).build()`: This is a response entity
+   * with a status code of NO_CONTENT, indicating that the request was successful and
+   * no content was returned.
+   * * `ResponseEntity.status(HttpStatus.NOT_FOUND).build()`: This is a response entity
+   * with a status code of NOT_FOUND, indicating that the requested resource could not
+   * be found.
    */
   @Override
   public ResponseEntity updateHouseMemberDocument(
@@ -182,23 +174,20 @@ public class HouseMemberDocumentController implements DocumentsApi {
   }
 
   /**
-   * deletes a house member document based on the provided `memberId`. If the document
-   * is successfully deleted, a `HttpStatus.NO_CONTENT` response is returned. If the
-   * document cannot be found, a `HttpStatus.NOT_FOUND` response is returned.
+   * deletes a house member document based on the given `memberId`. If the document is
+   * deleted successfully, a `NO_CONTENT` status code is returned. Otherwise, a `NOT_FOUND`
+   * status code is returned.
    * 
-   * @param memberId ID of the house member whose document is to be deleted.
+   * @param memberId unique identifier of the house member whose document is to be deleted.
    * 
-   * 	- `memberId`: This is a string variable that represents the unique identifier for
-   * a house member. It could be obtained from various sources such as user input or
-   * data stored in a database.
+   * @returns a `ResponseEntity` object with a status code of either `NO_CONTENT` or
+   * `NOT_FOUND`, depending on whether the document was successfully deleted.
    * 
-   * @returns a `ResponseEntity` with a status code of either `NO_CONTENT` or `NOT_FOUND`,
-   * depending on whether the document was successfully deleted or not.
-   * 
-   * 	- `isDocumentDeleted`: A boolean value indicating whether the house member document
-   * was successfully deleted or not.
-   * 	- `HttpStatus`: The HTTP status code returned by the function, which can be either
-   * `NO_CONTENT` (204) or `NOT_FOUND` (404).
+   * * `HttpStatus`: This is an instance of `HttpStatus`, which represents the HTTP
+   * status code of the response. In this case, it can be either `NO_CONTENT` or `NOT_FOUND`.
+   * * `ResponseEntity`: This is an instance of `ResponseEntity`, which is a higher-level
+   * object that contains both the `HttpStatus` and the body of the response. In this
+   * case, the body is ` Void`, which means the response has no content.
    */
   @Override
   public ResponseEntity<Void> deleteHouseMemberDocument(@PathVariable String memberId) {

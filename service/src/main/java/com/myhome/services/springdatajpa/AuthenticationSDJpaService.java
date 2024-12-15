@@ -16,7 +16,11 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 /**
- * TODO
+ * is responsible for authenticating users by checking their email and password,
+ * creating an encoded JWT token, and returning an `AuthenticationData` object
+ * containing the token and user ID. It also compares a provided password with an
+ * encrypted version stored in a database and returns a boolean indicating whether
+ * they match.
  */
 @Slf4j
 @Service
@@ -42,43 +46,34 @@ public class AuthenticationSDJpaService implements AuthenticationService {
   }
 
   /**
-   * authenticates a user by checking their email and password, creating an encoded JWT
-   * token, and returning an `AuthenticationData` object containing the token and user
-   * ID.
+   * authenticates a user by checking their password and creating an JWT token for
+   * authentication. If the password is incorrect, it throws an exception with the user
+   * ID. The encoded JWT token is returned as the AuthenticationData object along with
+   * the user ID.
    * 
-   * @param loginRequest login request received from the client and contains the email
-   * address of the user to be authenticated, along with their password.
+   * @param loginRequest логин request received by the function, providing the email
+   * address and password of the user attempting to log in.
    * 
-   * 	- `log.trace("Received login request")`: This line logs a message indicating that
-   * the login request has been received.
-   * 	- `final UserDto userDto = userSDJpaService.findUserByEmail(loginRequest.getEmail())`:
-   * This line retrieves the user details from the database using the provided email
-   * address. The method `findUserByEmail` returns a `Optional<UserDto>` object, which
-   * contains the user details if found, or an empty `Optional` otherwise.
-   * 	- `orElseThrow(() -> new UserNotFoundException(loginRequest.getEmail()))`: This
-   * line handles the case where the user is not found in the database. It throws a
-   * `UserNotFoundException` with the provided email address as its message.
-   * 	- `if (!isPasswordMatching(loginRequest.getPassword(), userDto.getEncryptedPassword()))
-   * {`: This line checks whether the provided password matches the encrypted password
-   * of the retrieved user details. If they don't match, an exception is thrown.
-   * 	- `throw new CredentialsIncorrectException(userDto.getUserId())`: This line throws
-   * a `CredentialsIncorrectException` with the user ID as its message, indicating that
-   * the provided credentials are incorrect.
-   * 	- `final AppJwt jwtToken = createJwt(userDto);`: This line creates a new JWT token
-   * using the retrieved user details.
-   * 	- `final String encodedToken = appJwtEncoderDecoder.encode(jwtToken, tokenSecret)`:
-   * This line encodes the JWT token using the provided secret key.
-   * 	- `return new AuthenticationData(encodedToken, userDto.getUserId());`: This line
-   * returns an `AuthenticationData` object containing the encoded token and the user
-   * ID.
+   * 1/ `getEmail()`: retrieves the email address of the user attempting to log in.
+   * 2/ `getPassword()`: retrieves the password entered by the user for authentication
+   * verification.
+   * 3/ `orElseThrow()`: throws a `UserNotFoundException` if no user is found with the
+   * provided email address.
+   * 4/ `isPasswordMatching()`: compares the entered password to the encrypted password
+   * stored in the user's profile and returns `true` if they match, otherwise returns
+   * `false`.
+   * 5/ `throw new CredentialsIncorrectException()`: throws an exception with the user
+   * ID of the user who attempted to log in if the passwords do not match.
    * 
    * @returns an `AuthenticationData` object containing an encoded JWT token and the
    * user ID.
    * 
-   * 	- `encodedToken`: This is a string that represents an encoded JWT token, generated
-   * using the `createJwt` method and the `tokenSecret`.
-   * 	- `userId`: This is the unique identifier of the user who has successfully logged
-   * in.
+   * * `AuthenticationData`: This is the class that represents the login response. It
+   * contains two properties:
+   * 	+ `encodedToken`: This is a string representing the JWT token encoded with the
+   * secret key.
+   * 	+ `userId`: This is an integer representing the user ID associated with the encoded
+   * token.
    */
   @Override
   public AuthenticationData login(LoginRequest loginRequest) {
@@ -94,22 +89,14 @@ public class AuthenticationSDJpaService implements AuthenticationService {
   }
 
   /**
-   * compares a provided password with an encrypted version stored in a database and
-   * returns a boolean indicating whether they match.
+   * compares a provided `requestPassword` with the corresponding value stored in the
+   * database using the password encoder to ensure they match.
    * 
-   * @param requestPassword password provided by the user for authentication purposes.
+   * @param requestPassword password provided by the user for comparison with the
+   * corresponding password stored in the database.
    * 
-   * 	- `requestPassword`: A string parameter representing the user-provided password.
-   * 	- `databasePassword`: A string parameter representing the stored password in the
-   * database.
-   * 
-   * @param databasePassword encrypted password stored in the database.
-   * 
-   * 	- `passwordEncoder`: This is an object responsible for encoding and decoding
-   * passwords in the system.
-   * 	- `requestPassword`: This is the password entered by the user.
-   * 	- `databasePassword`: This is the password stored in the database that needs to
-   * be compared with the user-entered password.
+   * @param databasePassword password stored in the database that is being compared to
+   * the `requestPassword`.
    * 
    * @returns a boolean value indicating whether the provided request password matches
    * the corresponding database password.
@@ -119,21 +106,20 @@ public class AuthenticationSDJpaService implements AuthenticationService {
   }
 
   /**
-   * creates an AppJwt object representing a JSON Web Token (JWT) for a given user ID,
-   * with an expiration time calculated based on a provided tokenExpirationTime value.
+   * creates a JWT token for a given user by setting its expiration time and building
+   * the token using the user ID and expiration date.
    * 
-   * @param userDto user's details, including their ID, which are used to create a
-   * unique JWT token.
+   * @param userDto user information that will be used to generate the JWT token.
    * 
-   * 	- `userId`: The unique identifier of the user.
+   * * `userId`: The user ID associated with the JWT.
+   * * `expirationTime`: The time when the JWT will expire, calculated by adding the
+   * token expiration time to the current date and time.
    * 
-   * @returns a `AppJwt` instance containing user details and expiration time.
+   * @returns an AppJwt object containing user ID and expiration time.
    * 
-   * 	- `userId`: The user ID of the user to whom the JWT is being created.
-   * 	- `expiration`: The expiration time of the JWT, calculated as the current date
-   * and time plus the tokenExpirationTime parameter.
-   * 	- `build()`: This method creates a new instance of the `AppJwt` class with the
-   * specified properties.
+   * * `userId`: The user ID associated with the JWT token.
+   * * `expiration`: The expiration time of the JWT token in LocalDateTime format.
+   * * `builder()`: The builder method used to construct the JWT token.
    */
   private AppJwt createJwt(UserDto userDto) {
     final LocalDateTime expirationTime = LocalDateTime.now().plus(tokenExpirationTime);

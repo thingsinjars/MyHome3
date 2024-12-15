@@ -6,7 +6,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 /**
  * provides methods for interacting with the database to find amenity booking items
- * by their IDs.
+ * by their IDs using JPA repository functions.
  */
 public interface AmenityBookingItemRepository extends JpaRepository<AmenityBookingItem, String> {
   Optional<AmenityBookingItem> findByAmenityBookingItemId(String amenityBookingItemId);

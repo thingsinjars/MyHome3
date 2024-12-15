@@ -13,9 +13,9 @@ import org.springframework.web.bind.annotation.RestController;
 /**
  * is a Spring Boot REST controller that implements the AuthenticationApi interface.
  * It handles login requests and returns an HTTP response with the user ID and JWT
- * token for authentication. The class has one method, `login()`, which takes a valid
- * `LoginRequest` object as input and returns a ResponseEntity with the user ID and
- * JWT token.
+ * token for authentication purposes. The class has one method, `login()`, which takes
+ * a valid `LoginRequest` object as input and returns a ResponseEntity with the user
+ * ID and JWT token for authentication.
  */
 @RequiredArgsConstructor
 @RestController
@@ -24,35 +24,27 @@ public class AuthenticationController implements AuthenticationApi {
   private final AuthenticationService authenticationService;
 
   /**
-   * authenticates a user using the provided login request data and returns an
-   * `ResponseEntity` with a `Void` body and custom headers containing authentication
-   * data.
+   * authenticates a user by calling the `loginService` and returning an `ResponseEntity`
+   * with a success status code and headers containing information about the authenticated
+   * user.
    * 
-   * @param loginRequest authentication request containing the user credentials for
-   * authentication verification and validation by the `authenticationService`.
+   * @param loginRequest authentication request, containing the user credentials and
+   * other relevant information for the login process.
    * 
-   * 	- The `@Valid` annotation on the `LoginRequest` parameter indicates that the
-   * object must be validated before it can be processed by the method.
-   * 	- The `authenticationService` field is used to call the `login` method, which
-   * takes the `LoginRequest` object as a parameter and returns an authentication data
-   * object.
+   * AuthenticationData authenticationData = authenticationService.login(loginRequest);
    * 
-   * @returns a `ResponseEntity` object containing an `OK` status and custom headers
-   * generated based on the `AuthenticationData` result.
+   * @returns a `ResponseEntity` object with a `headers` field containing authentication-related
+   * headers.
    * 
-   * 	- `ResponseEntity`: This is an instance of a class that represents a response
-   * entity, which is a general-purpose response class in Spring WebFlux. It contains
-   * information about the status code, headers, and body of the response.
-   * 	- `ok()`: This is a method that returns a `ResponseEntity` instance with a status
-   * code of 200 (OK), indicating that the login request was successful.
-   * 	- `headers()`: This is a method that returns a list of headers, which are key-value
-   * pairs that provide additional information about the response. In this case, the
-   * headers contain information about the authentication data.
-   * 	- `build()`: This is a method that builds the response entity by combining the
-   * status code, headers, and body.
-   * 
-   * Overall, the output of the `login` function is a successful response with information
-   * about the authentication data.
+   * * `ResponseEntity`: This is an instance of the `ResponseEntity` class, which
+   * represents a response object that contains both a body and headers.
+   * * `ok()`: The `ok()` method returns a `ResponseEntity` instance with a status code
+   * of 200 (OK), indicating that the login operation was successful.
+   * * `headers`: This is an instance of the `Headers` class, which contains metadata
+   * about the response, such as caching and security headers.
+   * * `build()`: The `build()` method is used to construct the complete response object,
+   * by combining the `ResponseEntity`, `Headers`, and any other metadata required for
+   * the operation.
    */
   @Override
   public ResponseEntity<Void> login(@Valid LoginRequest loginRequest) {
@@ -63,24 +55,33 @@ public class AuthenticationController implements AuthenticationApi {
   }
 
   /**
-   * generates HTTP headers for login authentication, adding user ID and JWT token to
-   * the headers.
+   * creates an HTTP headers object containing user ID and JWT token for login
+   * authentication purposes based on input `AuthenticationData`.
    * 
-   * @param authenticationData login data of a user, providing the user ID and JWT token
-   * for authentication purposes.
+   * @param authenticationData user's identification information, including their user
+   * ID and JWT token, which are used to create the HTTP headers for login authentication.
    * 
-   * 	- `getUserId()`: Retrieves the user ID associated with the authentication data.
-   * 	- `getJwtToken()`: Retrieves the JWT token issued for the user ID.
+   * * `getUserId`: A string representing the user ID associated with the authentication
+   * request.
+   * * `getJwtToken`: A string representing the JWT token issued to the user for login
+   * purposes.
    * 
    * @returns a set of HTTP headers containing the user ID and JWT token for authentication
    * purposes.
    * 
-   * 	- `HttpHeaders`: This is an instance of the `HttpHeaders` class in Java, which
-   * contains a collection of HTTP headers.
-   * 	- `userId`: The value of this header is a string representing the user ID associated
-   * with the login credentials provided in the `authenticationData` parameter.
-   * 	- `token`: The value of this header is a string representing the JWT token issued
-   * to the user for authentication purposes.
+   * * `HttpHeaders`: This is an instance of the `HttpHeaders` class from the `java.net.http`
+   * package. It contains key-value pairs representing HTTP headers that can be used
+   * in a request or response.
+   * * `add()` methods: The `add()` methods are used to add new header fields to the
+   * `HttpHeaders` instance. In this function, two such methods are called, one for
+   * adding a header field with the key "userId" and another for adding a header field
+   * with the key "token".
+   * 
+   * The attributes of the returned output can be inferred from the method name and the
+   * code inside it. The `createLoginHeaders` function takes an `AuthenticationData`
+   * object as input and returns an instance of `HttpHeaders`. This suggests that the
+   * output is related to authentication and can be used in a request or response to
+   * provide authentication information.
    */
   private HttpHeaders createLoginHeaders(AuthenticationData authenticationData) {
     final HttpHeaders httpHeaders = new HttpHeaders();

@@ -22,17 +22,16 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 /**
- * represents a community with an ID, community ID, name, district, and a set of admins.
+ * represents a community object with an ID, community ID, name, district, and set
+ * of admins.
  * Fields:
  * 	- id (Long): represents a unique identifier for a community object in the program.
- * 	- communityId (String): in the CommunityDto class represents a unique identifier
- * for a specific community.
- * 	- name (String): in the CommunityDto class is a string representing the name of
- * a community.
+ * 	- communityId (String): represents a unique identifier for a specific community.
+ * 	- name (String): represents a string value representing the name of a community.
  * 	- district (String): in the CommunityDto class represents a string value specifying
  * the name of the district associated with the community.
- * 	- admins (Set<UserDto>): in the CommunityDto class is a set of UserDtos representing
- * the administrators of a community.
+ * 	- admins (Set<UserDto>): in the CommunityDto class represents a set of UserDtos
+ * containing the administrators of a community.
  */
 @AllArgsConstructor
 @NoArgsConstructor

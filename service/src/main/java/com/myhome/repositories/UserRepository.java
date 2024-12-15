@@ -27,9 +27,8 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 /**
- * provides methods for interacting with Users in a Spring Data JPA environment,
- * including finding users by email or user ID, and querying users based on community
- * IDs.
+ * provides methods for finding and querying users in a Spring Data JPA environment,
+ * including by email or user ID, and with communities or tokens.
  */
 @Repository
 public interface UserRepository extends JpaRepository<User, Long> {

@@ -25,13 +25,13 @@ import lombok.ToString;
  * Represents a JWT in the application.
  */
 /**
- * in Java represents a JWT token used for authentication in an application, containing
- * user ID and expiration date information.
+ * represents a JWT token used for authentication in an application containing user
+ * ID and expiration date information.
  * Fields:
  * 	- userId (String): in the AppJwt class represents a unique identifier for a
- * specific user within the application.
+ * specific user within an application.
  * 	- expiration (LocalDateTime): represents the date and time after which the JWT
- * token is no longer valid or usable.
+ * token ceases to be valid or usable.
  */
 @Builder
 @ToString

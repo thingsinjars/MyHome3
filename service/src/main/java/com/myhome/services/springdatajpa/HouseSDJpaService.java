@@ -33,7 +33,10 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 
 /**
- * TODO
+ * provides methods for managing house members within a Spring Boot application using
+ * JPA and Hibernate. The class offers functionality for adding, updating, deleting,
+ * and retrieving house members based on their unique identifiers. Additionally, it
+ * provides methods for listing house members for a specific user ID using pagination.
  */
 @RequiredArgsConstructor
 @Service
@@ -43,38 +46,28 @@ public class HouseSDJpaService implements HouseService {
   private final CommunityHouseRepository communityHouseRepository;
 
   /**
-   * generates a unique identifier based on a randomly generated UUID string, returning
-   * it as a string.
+   * generates a unique identifier using the `UUID` class and returns it as a string.
    * 
-   * @returns a randomly generated unique string of characters.
-   * 
-   * The generated unique ID is a string of random characters, created using the
-   * `UUID.randomUUID()` method.
-   * It is a deterministic sequence of characters, meaning that it will always generate
-   * the same output for the same input.
-   * The length of the generated ID can vary between 10 and 36 characters, depending
-   * on the system architecture.
+   * @returns a randomly generated unique identifier in the form of a string.
    */
   private String generateUniqueId() {
     return UUID.randomUUID().toString();
   }
 
   /**
-   * retrieves a set of `CommunityHouse` objects from the database using the `findAll()`
-   * method of the `communityHouseRepository`. The retrieved objects are then added to
-   * a new `Set` instance.
+   * retrieves a set of `CommunityHouse` objects from the repository using findAll()
+   * method and returns the set.
    * 
-   * @returns a set of `CommunityHouse` objects representing all houses stored in the
-   * repository.
+   * @returns a set of `CommunityHouse` objects representing all houses in the database.
    * 
-   * 	- The `Set<CommunityHouse>` object represents a collection of all community houses
-   * in the system.
-   * 	- The set is created using the `new HashSet<>()` method, which ensures that the
-   * elements in the set are unique and do not contain duplicates.
-   * 	- The function first calls the `findAll()` method on the `communityHouseRepository`
-   * object to retrieve a list of all community houses.
-   * 	- Then, the `forEach()` method is called on the list of community houses to add
-   * each one to the set.
+   * * The output is a `Set` of `CommunityHouse` objects, which represents a collection
+   * of all the community houses in the system.
+   * * The `Set` is created using the `HashSet` class, which provides an unordered set
+   * of elements with no duplicates.
+   * * The function uses the `findAll()` method from the `communityHouseRepository` to
+   * fetch all the community houses from the database or data source.
+   * * Each `CommunityHouse` object in the set is added to the set using the `add()`
+   * method, which adds the element to the set without affecting its order.
    */
   @Override
   public Set<CommunityHouse> listAllHouses() {
@@ -84,29 +77,23 @@ public class HouseSDJpaService implements HouseService {
   }
 
   /**
-   * retrieves a set of `CommunityHouse` objects from the database using the `findAll`
-   * method and stores them in a new `Set`.
+   * takes a `Pageable` object and returns a set of `CommunityHouse` objects retrieved
+   * from the repository.
    * 
-   * @param pageable pagination information for retrieving a subset of the community
-   * houses from the repository.
+   * @param pageable page number and the number of houses to display on each page,
+   * allowing for pagination of the list of community houses.
    * 
-   * 	- `Pageable` is an interface that provides methods for navigating and manipulating
-   * a page of results. It typically contains several attributes such as `pageNumber`,
-   * `pageSize`, and `sort`.
+   * * `Pageable pageable`: Represents an object that allows for navigating through a
+   * collection of items, such as a list or a set, in a specific order. It provides
+   * methods for moving to previous or next pages of results, as well as for retrieving
+   * the current page of results.
    * 
    * @returns a set of `CommunityHouse` objects.
    * 
-   * The `Set<CommunityHouse>` object represents a collection of CommunityHouse instances
-   * that have been retrieved from the database.
-   * 
-   * The `CommunityHouse` class has properties such as the name, address, and other
-   * relevant details related to the community houses.
-   * 
-   * The `pageable` parameter is used to specify how the results should be paginated
-   * and displayed.
-   * 
-   * Overall, the function returns a collection of CommunityHouses that have been
-   * retrieved from the database based on the specified pageable criteria.
+   * * `Set<CommunityHouse> communityHouses`: This is the set of all houses returned
+   * by the function, which is an instance of `HashSet`.
+   * * `pageable`: This is the pageable object passed as a parameter to the function,
+   * which contains information about the pagination of the houses.
    */
   @Override
   public Set<CommunityHouse> listAllHouses(Pageable pageable) {
@@ -116,46 +103,43 @@ public class HouseSDJpaService implements HouseService {
   }
 
   /**
-   * adds new house members to an existing community house, generates unique member
-   * IDs, and updates the community house's member list in the repository.
+   * adds new members to a community house by generating unique IDs, associating them
+   * with the community house, and saving them in the database.
    * 
    * @param houseId unique identifier of the house for which the members are being added.
    * 
-   * 	- `houseId`: A string representing the unique identifier for a community house.
-   * 	- `houseMembers`: A set of `HouseMember` objects that represent the members
-   * associated with the specified community house.
+   * @param houseMembers set of house members to be added to the community house, and
+   * its elements are modified by generating unique member IDs and associating each
+   * member with the corresponding community house.
    * 
-   * The function first checks if there is already a saved community house with the
-   * matching `houseId`. If such a community house is found, the function maps it to a
-   * new set of `HouseMember` objects, each with a newly generated unique ID. The
-   * existing members are then updated by setting their `CommunityHouse` field to the
-   * mapped community house, and their IDs are saved in the `house MemberRepository`.
-   * Finally, the updated community house is saved.
+   * * `houseMembers`: A set of `HouseMember` objects that represent the members of the
+   * house.
+   * * `houseId`: The unique identifier of the house to which the members belong.
+   * * `memberId`: Each member's unique identifier, generated using `generateUniqueId()`.
+   * * `CommunityHouse`: Each member's community house, which is the house that contains
+   * the members.
+   * * `setMemberId()` and `setCommunityHouse()`: Methods used to set the unique
+   * identifier and community house of each member.
    * 
-   * @param houseMembers set of HouseMembers that will be added or updated in the
-   * community house.
+   * The function first checks if a community house with the provided `houseId` exists
+   * in the repository. If it does, it proceeds to deserialize the input `houseMembers`
+   * into a new set of `HouseMember` objects, each with a unique identifier generated
+   * using `generateUniqueId()`. The original members are then saved in the repository
+   * along with their updated community house. If no matching community house is found,
+   * the function returns an empty set.
    * 
-   * 	- `houseId`: The unique identifier of the house where the members will be added.
-   * 	- `houseMembers`: A set of HouseMember objects that contain information about the
-   * members to be added. Each member has an ID generated using the `generateUniqueId()`
-   * method and a reference to the corresponding CommunityHouse object.
-   * 	- `communityHouseOptional`: An optional reference to a CommunityHouse object,
-   * which is used to retrieve the house details and associated members. If absent, a
-   * new CommunityHouse object will be created with the provided house ID.
+   * @returns a set of house members that have been added to a community house.
    * 
-   * @returns a set of house members, each with a unique ID and associated with a
-   * specific community house.
-   * 
-   * 	- The output is a `Set` containing the newly added house members.
-   * 	- The `Set` contains only the unique member IDs generated for each member in the
-   * input `houseMembers` set.
-   * 	- Each member ID is assigned a unique value using the `generateUniqueId()` method.
-   * 	- Each member is associated with the corresponding community house by setting its
-   * `CommunityHouse` field to the saved community house object.
-   * 	- The `Set` also contains all the saved members from the input `houseMembers`
-   * set, which are added to the community house's `HouseMembers` field.
-   * 	- The community house is saved with its updated `HouseMembers` field after adding
-   * the new members.
+   * * The output is a `Set` of `HouseMember` objects, which represents the newly added
+   * members to the community house.
+   * * The `Set` contains only the unique member IDs generated by the function for each
+   * member.
+   * * Each `House Member` object in the set has a `CommunityHouse` field set to the
+   * corresponding community house.
+   * * The `HouseMember` objects are not necessarily in the same order as they were
+   * passed in, as the function modifies their `MemberId` and saves them in a new order.
+   * * The function returns the `Set` of `House Member` objects that have been saved
+   * to the database.
    */
   @Override public Set<HouseMember> addHouseMembers(String houseId, Set<HouseMember> houseMembers) {
     Optional<CommunityHouse> communityHouseOptional =
@@ -173,40 +157,15 @@ public class HouseSDJpaService implements HouseService {
   }
 
   /**
-   * removes a member from a house by searching for the member in the house's members
-   * list, removing them if found, and saving the changes to the community house and
-   * member entities.
+   * deletes a member from a house by removing them from the house's membership list
+   * and saving the changes to the database.
    * 
-   * @param houseId ID of the community house that the member belongs to, which is used
-   * to locate the relevant community house record in the database for removal of the
-   * member.
+   * @param houseId id of the house for which the member is being removed.
    * 
-   * 	- `Optional<CommunityHouse> communityHouseOptional`: This represents an optional
-   * reference to a `CommunityHouse` object that may or may not be present in the repository.
-   * 	- `map()`: This method is used to map the `Optional` reference to a `CommunityHouse`
-   * object, which contains information about the house and its members.
-   * 	- `findByHouseIdWithHouseMembers()`: This method from the `communityHouseRepository`
-   * class is used to retrieve a `CommunityHouse` object based on the `houseId`.
-   * 	- `getHouseMembers()`: This method returns a set of `HouseMember` objects that
-   * belong to the specified `CommunityHouse`.
-   * 	- `isEmpty()`: This method is used to check if the `HouseMembers` set is empty.
-   * 	- `setHouseMembers()`: This method sets the `HouseMembers` set of the `CommunityHouse`
-   * object to the given `Set`.
-   * 	- `save()`: This method from the `communityHouseRepository` class is used to save
-   * the modified `CommunityHouse` object in the database.
-   * 	- `getMemberId()`: This method returns the ID of a specific `HouseMember` object.
-   * 	- `setCommunityHouse(null)`: This method sets the `CommunityHouse` reference of
-   * a specific `HouseMember` object to `null`.
-   * 	- `save()`: This method from the `houseMemberRepository` class is used to save
-   * the modified `HouseMember` object in the database.
+   * @param memberId member ID to be removed from the community house.
    * 
-   * @param memberId ID of the member to be removed from the community house.
-   * 
-   * 	- `houseId`: The ID of the house to which the member belongs.
-   * 	- `memberId`: The unique identifier of the member to be removed from the house.
-   * 
-   * @returns a boolean value indicating whether the specified member was removed from
-   * the house.
+   * @returns a boolean value indicating whether the specified member was successfully
+   * removed from the house.
    */
   @Override
   public boolean deleteMemberFromHouse(String houseId, String memberId) {
@@ -233,22 +192,20 @@ public class HouseSDJpaService implements HouseService {
   }
 
   /**
-   * retrieves the details of a specific community house based on its ID, by querying
-   * the `communityHouseRepository`.
+   * retrieves the details of a specific house based on its ID, using a repository to
+   * query the database.
    * 
-   * @param houseId unique identifier for a specific community house to be retrieved
-   * from the repository.
+   * @param houseId unique identifier of a house for which details are to be retrieved.
    * 
-   * 	- `houseId`: A unique identifier for a community house.
+   * @returns an optional object containing the details of a house with the provided
+   * ID, if found in the repository.
    * 
-   * @returns an optional instance of `CommunityHouse`.
-   * 
-   * 	- `Optional<CommunityHouse>`: This type represents an optional reference to a
-   * `CommunityHouse` object, which means that the function may return either an instance
-   * of `CommunityHouse` or `Optional.empty()`.
-   * 	- `communityHouseRepository.findByHouseId(houseId)`: This method retrieves a
-   * `CommunityHouse` object from the database based on the provided `houseId`. It
-   * returns an instance of `CommunityHouse` if found, otherwise it returns `Optional.empty()`.
+   * * `Optional<CommunityHouse>`: This represents an optional result, meaning that the
+   * function may return `None` if no house details are found for the provided ID.
+   * * `communityHouseRepository.findByHouseId(houseId)`: This is a method call that
+   * retrieves the community house details for the given ID from the repository. The
+   * method returns an `Optional` object, which contains either the detailed information
+   * of the house or `None` if it does not exist.
    */
   @Override
   public Optional<CommunityHouse> getHouseDetailsById(String houseId) {
@@ -256,34 +213,28 @@ public class HouseSDJpaService implements HouseService {
   }
 
   /**
-   * retrieves a list of `HouseMember` objects associated with a specific `houseId`.
-   * It returns an optional list, which means that if no `HouseMember` objects are
-   * found, the function will return `Optional.ofNullable(emptyList())`.
+   * retrieves a paginated list of `HouseMember` objects associated with a given `houseId`.
    * 
-   * @param houseId identifier of the house for which the list of members is being retrieved.
+   * @param houseId id of the community house whose members are being retrieved.
    * 
-   * 	- `houseId`: This parameter represents the unique identifier for a house in the
-   * community. It is typically an integer value.
+   * @param pageable pagination information for the requested house members, allowing
+   * the function to filter and return only a subset of the total number of house members
+   * based on the specified page size and current page number.
    * 
-   * @param pageable paging information for the HouseMember data, allowing the function
-   * to retrieve a subset of the data from the repository based on the specified page
-   * number and size.
+   * * `houseId`: The identifier of the house for which members are to be retrieved.
+   * * `Pageable`: A class that provides a way to page through large data sets efficiently.
+   * It consists of various attributes such as `getNumberOfElements`, `getNumberOfPages`,
+   * `getPageSize`, and `getTotalElements`.
    * 
-   * 	- `houseId`: The unique identifier for the house being searched for members.
-   * 	- `Pageable`: An interface representing a pagination mechanism, which allows for
-   * the retrieval of a subset of data from a large dataset in a managed and efficient
-   * manner.
+   * @returns a list of `HouseMember` objects associated with the specified house ID.
    * 
-   * @returns a Optional<List<HouseMember>> containing the list of HouseMembers associated
-   * with the specified house ID.
-   * 
-   * 	- `Optional<List<HouseMember>>`: This is an optional list of HouseMembers, which
-   * means that it may be empty if no HouseMembers are found for the given house ID.
-   * 	- `getHouseMembersById(String houseId, Pageable pageable)`: This function takes
-   * two parameters - `houseId` and `pageable`. The first parameter is a string
-   * representing the ID of the house for which the HouseMembers are being retrieved,
-   * while the second parameter is a `Pageable` object that defines how the list of
-   * HouseMembers should be paginated.
+   * * `Optional<List<HouseMember>>`: This type represents an optional list of house
+   * members, where `Optional` is an interface that provides a way to safely handle
+   * null values. The list contains `HouseMember` objects.
+   * * `houseId`: This parameter represents the unique identifier for a particular
+   * community house.
+   * * `Pageable pageable`: This parameter represents the pagination information for
+   * the house members, which determines how many members are returned in each page.
    */
   @Override
   public Optional<List<HouseMember>> getHouseMembersById(String houseId, Pageable pageable) {
@@ -293,38 +244,32 @@ public class HouseSDJpaService implements HouseService {
   }
 
   /**
-   * retrieves a list of `HouseMember` objects from the database based on the user ID
-   * and pageable parameters.
+   * retrieves a list of `HouseMember` objects associated with a user's houses using
+   * the `houseMemberRepository`. The list is filtered and paginated based on the input
+   * `pageable` object.
    * 
-   * @param userId user for whom the list of HouseMembers is being retrieved.
+   * @param userId identifier of the user for whom the list of house members is being
+   * retrieved.
    * 
-   * 	- `userId`: A `String` representing the user ID for which the house members are
-   * to be listed.
+   * @param pageable PageRequest object that specifies the pagination criteria for
+   * retrieving the list of house members.
    * 
-   * The function returns an optional list of `HouseMember` instances retrieved from
-   * the `houseMemberRepository`. The returned list is filtered based on the
-   * `communityHouse_Community_Admins_UserId` field in the database, using the `findAllBy`
-   * method with the `pageable` parameter.
+   * * `userId`: The unique identifier of the user for whom the house members are being
+   * retrieved.
+   * * `pageable`: An object that encapsulates paging information, such as the page
+   * number, size, and Sort parameters.
    * 
-   * @param pageable pagination information for the query, allowing the function to
-   * retrieve a subset of the house members for a given user ID.
+   * @returns a Optional<List<HouseMember>> object containing the list of HouseMembers
+   * associated with the specified user ID.
    * 
-   * 	- `userId`: A String representing the user ID for which house members are to be
-   * listed.
-   * 	- `pageable`: An instance of `Pageable`, which allows for pagination and sorting
-   * of results. Its properties include `getPageNumber()` (an integer representing the
-   * current page number), `getPageSize()` (an integer representing the number of
-   * elements per page), and `getSort()` (a String representing the sort order, or an
-   * empty String if no sorting is required).
-   * 
-   * @returns a pageable list of house members for the specified user ID.
-   * 
-   * 	- `Optional<List<HouseMember>>`: The output is an optional list of HouseMembers,
-   * which means that it may be null if there are no HouseMembers found for the given
-   * user ID.
-   * 	- `listHouseMembersForHousesOfUserId(String userId, Pageable pageable)`: This
-   * method takes a user ID as input and returns a pageable list of HouseMembers
-   * associated with that user ID.
+   * * The `Optional` object represents a possible non-null value, which is a List of
+   * HouseMember objects.
+   * * The `listHouseMembersForHousesOfUserId` function returns an Optional object
+   * because it makes use of a database query to retrieve data and the result may be
+   * null if no matching rows are found in the database.
+   * * The List of HouseMember objects contained within the Optional object represents
+   * the list of HouseMembers associated with the specified user Id, fetched using the
+   * `houseMemberRepository.findAllByCommunityHouse_Community_Admins_UserId` method.
    */
   @Override
   public Optional<List<HouseMember>> listHouseMembersForHousesOfUserId(String userId,

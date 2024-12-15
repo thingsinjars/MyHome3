@@ -22,19 +22,18 @@ import java.time.LocalDateTime;
 import javax.persistence.*;
 
 /**
- * represents a booking item for an amenity with unique amenity ID and booking user,
- * along with start and end dates for the booking.
+ * represents a booking item for an amenity with unique identifier, amenity association,
+ * start and end dates for the booking, and user information.
  * Fields:
- * 	- amenityBookingItemId (String): in the AmenityBookingItem class represents a
- * unique identifier for each booking item, used to distinguish it from other bookings
- * of the same amenity by different users.
- * 	- amenity (Amenity): in the AmenityBookingItem entity represents an amenity or
- * service associated with a booking item.
- * 	- bookingStartDate (LocalDateTime): represents the date and time when the booking
- * for the amenity started.
+ * 	- amenityBookingItemId (String): represents a unique identifier for each booking
+ * item associated with a specific amenity and user.
+ * 	- amenity (Amenity): represents an amenity or service associated with a booking
+ * item.
+ * 	- bookingStartDate (LocalDateTime): represents the date and time when a user
+ * started reserving an amenity.
  * 	- bookingEndDate (LocalDateTime): represents the end time of a booking for an amenity.
- * 	- bookingUser (User): in the AmenityBookingItem class represents the user who
- * made the booking for the amenity item.
+ * 	- bookingUser (User): represents the user who made the booking for the associated
+ * amenity item.
  */
 @Entity
 @AllArgsConstructor

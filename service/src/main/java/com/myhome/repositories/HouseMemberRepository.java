@@ -23,8 +23,9 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.repository.CrudRepository;
 
 /**
- * provides methods for querying and manipulating HouseMembers within a Spring Data
- * repository context.
+ * provides methods for querying and manipulating HouseMembers in a Spring Data
+ * repository context, including finding individual members by ID and listing all
+ * members within a specific community or group.
  */
 public interface HouseMemberRepository extends CrudRepository<HouseMember, Long> {
   Optional<HouseMember> findByMemberId(String memberId);

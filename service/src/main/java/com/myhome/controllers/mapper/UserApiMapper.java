@@ -28,8 +28,8 @@ import org.mapstruct.Mapper;
  * Interface to automatic conversion by Mapstruct
  */
 /**
- * provides a mapping between different data structures related to users, such as
- * from CreateUserRequest to UserDto and vice versa, and from Set<User> to RestApiResponseUserSet.
+ * provides a mapping between various data structures related to users, such as from
+ * CreateUserRequest to UserDto and vice versa, and from Set<User> to RestApiResponseUserSet.
  */
 @Mapper
 public interface UserApiMapper {

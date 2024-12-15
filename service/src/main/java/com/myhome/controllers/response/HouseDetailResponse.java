@@ -22,9 +22,10 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 /**
- * from the given file represents a response containing a CommunityHouseDto object.
+ * represents a response containing a CommunityHouseDto object.
  * Fields:
- * 	- house (CommunityHouseDto): in HouseDetailResponse contains CommunityHouseDto objects.
+ * 	- house (CommunityHouseDto): in the HouseDetailResponse class contains an instance
+ * of the CommunityHouseDto object.
  */
 @NoArgsConstructor
 @AllArgsConstructor

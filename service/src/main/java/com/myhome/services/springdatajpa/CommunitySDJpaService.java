@@ -41,7 +41,10 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 /**
- * TODO
+ * is responsible for managing communities in a system. It provides various methods
+ * for creating, updating, and deleting communities, as well as their houses and
+ * members. The service uses JPA (Java Persistence API) to interact with the database
+ * and provides transactional support for atomicity and consistency.
  */
 @Slf4j
 @RequiredArgsConstructor
@@ -54,34 +57,34 @@ public class CommunitySDJpaService implements CommunityService {
   private final HouseService houseService;
 
   /**
-   * creates a new community and adds an administrator with the user's ID to it, then
-   * saves it to the repository for later retrieval.
+   * creates a new community and adds an administrator with the specified user ID to
+   * it, saves the community to the repository, and logs a trace message.
    * 
-   * @param communityDto CommunityDto object containing the data for the community to
-   * be created, which is used to create a new community instance and save it to the repository.
+   * @param communityDto CommunityDTO object containing the data for the community to
+   * be created, which is then used to create a new community instance and save it to
+   * the repository.
    * 
-   * 	- `communityDto.setCommunityId(generateUniqueId());`: This line generates a unique
-   * ID for the community and sets it as the `id` attribute of the `Community` object.
-   * 	- `String userId = (String) SecurityContextHolder.getContext().getAuthentication().getPrincipal();`:
-   * This line retrieves the authenticated user's ID, which is used to add an admin to
-   * the community.
-   * 	- `Community community = addAdminToCommunity(communityMapper.communityDtoToCommunity(communityDto),
-   * userId);`: This line adds an admin to the community using the `addAdminToCommunity`
-   * method, which takes the `Community` object and the user ID as inputs.
-   * 	- `Community savedCommunity = communityRepository.save(community);`: This line
-   * saves the created community in the repository, using the `save` method of the
-   * `CommunityRepository` interface.
+   * * `communityDto.setCommunityId(generateUniqueId());`: This line sets the `id`
+   * property of the newly created community to a generated unique identifier.
+   * * `String userId = (String) SecurityContextHolder.getContext().getAuthentication().getPrincipal();`:
+   * This line retrieves the current user's ID from the security context holder.
+   * * `Community community = addAdminToCommunity(communityMapper.communityDtoToCommunity(communityDto),
+   * userId);`: This line creates a new community instance and adds an admin to it using
+   * the `addAdminToCommunity` method, passing in the deserialized `communityDto` and
+   * the user's ID as arguments.
+   * * `Community savedCommunity = communityRepository.save(community);`: This line
+   * saves the newly created community instance to the repository, which persists the
+   * changes to the underlying data storage.
    * 
    * @returns a saved community object in the repository.
    * 
-   * 	- `community`: This is the community object that has been created and saved in
-   * the repository. It has an `id` attribute that represents the unique identifier
-   * assigned to the community.
-   * 	- `savedCommunity`: This is the community object that has been saved to the
-   * repository. It has an `id` attribute that represents the actual id of the community
-   * in the database.
-   * 	- `log.trace`: This line logs a trace message indicating that the community has
-   * been saved to the repository with its actual id.
+   * * `community`: The created community object, which contains the unique ID generated
+   * by the function, as well as other properties such as the user ID of the admin who
+   * added it.
+   * * `savedCommunity`: The saved community object in the repository, which contains
+   * the ID of the community and other attributes such as its name and description.
+   * * `log.trace()`: A logging statement that indicates the community was saved to the
+   * repository with its ID.
    */
   @Override
   public Community createCommunity(CommunityDto communityDto) {
@@ -95,36 +98,29 @@ public class CommunitySDJpaService implements CommunityService {
   }
 
   /**
-   * adds a user as an admin to a Community by updating the Community's admin set with
-   * the provided user ID and then returning the updated Community object.
+   * adds a user as an administrator to a community by retrieving the user's existing
+   * communities and then adding the specified community to those communities.
    * 
-   * @param community Community object that is being updated with the provided `userId`.
+   * @param community Community object to which an administrator is being added.
    * 
-   * 	- `community`: This is the Community object to which an admin will be added.
-   * 	- `userId`: The user ID of the admin to be added to the community.
-   * 	- `communityAdminRepository`: A repository for finding admins associated with a
-   * given user ID and communities.
-   * 	- `admins`: A set of admins associated with the community, which will be updated
-   * upon successful addition of the new admin.
-   * 	- `community.setAdmins()`: This method sets the list of admins associated with
-   * the community to the new set containing the added admin.
+   * The `Community` object represents a community in the system, with attributes such
+   * as `id`, `name`, and `description`. Additionally, it has a set of `User` objects
+   * representing its admins, which are stored in the `admins` field. The function
+   * modifies this field by adding a new admin to the community if one is present, or
+   * replacing the existing admins with a new set if none were previously present.
    * 
-   * @param userId ID of the user who is being added as an administrator to the specified
-   * community.
+   * @param userId ID of the user to be added as an administrator to the
+   * given community.
    * 
-   * 	- `community`: The Community object that is being updated to add an administrator.
-   * 	- `userId`: A string representing the ID of the user who will be added as an
-   * administrator to the Community.
+   * @returns a modified Community object with the added admin and their associated communities.
    * 
-   * @returns a modified Community object with the added admin user.
-   * 
-   * 	- The community object is updated by adding the specified user Id to the list of
-   * admins.
-   * 	- The admin object is created with the user Id and communities added to it.
-   * 	- The admin object's set of communities is updated by adding the specified community
-   * to it.
-   * 	- The community object's set of admins is updated by adding the newly created
-   * admin to it.
+   * * The `community` variable is updated with the added admin(s) by setting its
+   * `admins` field to a new Set containing all the admins.
+   * * The `userId` parameter is passed as a parameter to the repository method
+   * `findByUserIdWithCommunities`, indicating which user to find and add as an admin.
+   * * The `ifPresent` method is used to handle the case where a user with the specified
+   * `userId` exists in the database, allowing for efficient handling of non-existent
+   * users.
    */
   private Community addAdminToCommunity(Community community, String userId) {
     communityAdminRepository.findByUserIdWithCommunities(userId).ifPresent(admin -> {
@@ -137,33 +133,33 @@ public class CommunitySDJpaService implements CommunityService {
   }
 
   /**
-   * retrieves a list of communities from the repository and returns it as a set.
+   * takes a `Pageable` object and returns a `Set` of `Community` objects that are
+   * retrieved from the database using the `findAll` method of the `communityRepository`.
    * 
-   * @param pageable pagination information for retrieving a subset of the Community
-   * objects from the database, allowing the listAll method to retrieve the required
-   * number of communities per page.
+   * @param pageable page of data to be retrieved from the `CommunityRepository`, and
+   * it is used to control the iteration over the results in the `listAll()` method.
    * 
-   * 	- `Pageable`: This is an interface that defines methods for pagination, such as
-   * `getNumberOfElements()` and `getPagePosition()`.
-   * 	- `Set<Community> communityListSet`: This is a set of community objects that will
-   * be returned by the function.
-   * 
-   * The function first creates a new `HashSet` to store the list of communities and
-   * then iterates over the result of `communityRepository.findAll(pageable)` using the
-   * `forEach()` method, adding each community object to the `Set`. Finally, the function
-   * returns the `Set`.
+   * * `Pageable`: This interface represents a pagination mechanism that allows for the
+   * retrieval of a subset of objects from a data source. It contains various attributes
+   * such as `getPageNumber()` for getting the current page number and `getPageSize()`
+   * for getting the number of objects per page.
    * 
    * @returns a set of `Community` objects.
    * 
-   * 	- `Set<Community> communityListSet`: This is a set of `Community` objects that
-   * contains all the communities retrieved from the database.
-   * 	- The elements in the set are obtained by calling the `forEach` method on the
-   * `communityRepository.findAll(pageable)` result, and passing the `add` method as
-   * an action to be performed on each element. This means that the set contains all
-   * the communities retrieved from the database, regardless of their status (e.g.,
-   * active or inactive).
-   * 	- The `Set` type is used instead of a `List` to avoid any potential duplicates
-   * in the list.
+   * The Set<Community> object represents a collection of Community objects that have
+   * been retrieved from the database using the findAll method of the communityRepository.
+   * 
+   * Each element in the set is a Community object, which contains information about a
+   * particular community, such as its name, description, and location.
+   * 
+   * The Set<Community> object is an unmodifiable collection, meaning that it cannot
+   * be modified or changed once it has been created. This ensures that the data remains
+   * consistent and tamper-proof.
+   * 
+   * The pageable argument passed to the findAll method represents a pagination
+   * configuration, which determines how many Community objects are retrieved from the
+   * database at a time. This allows for efficient retrieval of large datasets in smaller
+   * chunks, rather than loading all the data into memory at once.
    */
   @Override
   public Set<Community> listAll(Pageable pageable) {
@@ -173,19 +169,17 @@ public class CommunitySDJpaService implements CommunityService {
   }
 
   /**
-   * retrieves a list of all `Community` instances from the database and returns them
-   * in a `Set`.
+   * returns a set of all `Community` objects stored in the repository, by calling
+   * `findAll()` and adding each object to the set using `add()`.
    * 
-   * @returns a set of all available `Community` objects stored in the repository.
+   * @returns a set of all communities stored in the repository.
    * 
-   * 	- The output is a `Set` of `Community` objects, which represents a collection of
-   * all communities in the system.
-   * 	- The `Set` is populated by calling the `findAll()` method on the `communityRepository`,
-   * which retrieves all community objects from the database or storage.
-   * 	- Each community object added to the `Set` is an instance of the `Community`
-   * class, which has attributes such as name, location, and description.
-   * 	- The `listAll` function returns a `Set` of these community objects, allowing for
-   * efficient iteration and manipulation of all communities in the system.
+   * * The output is of type `Set`, indicating that it is a collection of elements, in
+   * this case, `Community` objects.
+   * * The set contains all the communities retrieved from the database using the
+   * `findAll()` method of the `communityRepository`.
+   * * The `HashSet` implementation ensures that the set will contain no duplicates and
+   * will not allow for null values.
    */
   @Override public Set<Community> listAll() {
     Set<Community> communities = new HashSet<>();
@@ -194,37 +188,30 @@ public class CommunitySDJpaService implements CommunityService {
   }
 
   /**
-   * retrieves a list of community houses associated with a given community ID using a
-   * pageable parameter. It first checks if the community exists, and then returns an
-   * Optional containing the list of community houses if it does, or an empty Optional
-   * otherwise.
-   * 
-   * @param communityId identifier of a community that the method is meant to find
-   * Community Houses for.
-   * 
-   * 	- `communityId`: A string representing the unique identifier for a community. It
-   * is used to filter the community houses in the database.
-   * 
-   * @param pageable paging information for the community houses to be retrieved,
-   * allowing for efficient retrieval of a subset of the data.
-   * 
-   * 	- `communityId`: The unique identifier for the community whose houses are to be
-   * retrieved.
-   * 	- `pageable`: A Pageable object, which allows for pagination and sorting of the
-   * house list based on various attributes such as creation date, price, and location.
-   * 
-   * @returns a `Optional` containing a list of `CommunityHouse` objects if the community
-   * exists, otherwise an empty `Optional`.
-   * 
-   * 	- `Optional<List<CommunityHouse>>`: This is an optional list of community houses,
-   * which means that it may or may not be present depending on whether any community
-   * houses exist for the given community ID.
-   * 	- `findAllByCommunity_CommunityId`: This method returns a list of all community
-   * houses associated with the given community ID.
-   * 	- `communityRepository.existsByCommunityId`: This method checks whether a community
-   * exists with the given community ID. If it does, the function proceeds to return a
-   * list of community houses associated with that community. If it doesn't, the function
+   * retrieves a list of community houses associated with a given community ID. If a
+   * match is found, it returns an optional list of community houses; otherwise, it
    * returns an empty list.
+   * 
+   * @param communityId community ID that is used to filter the community houses in the
+   * database.
+   * 
+   * @param pageable pagination information for the community houses, allowing the
+   * function to retrieve a specific page of results from the database.
+   * 
+   * * `communityId`: The ID of the community for which the houses are sought.
+   * * `Pageable`: A pageable object that provides a way to navigate through a large
+   * dataset. It has various attributes such as `size`, `pageNumber`, `totalPages`, and
+   * `totalElements`.
+   * 
+   * @returns a pageable list of community houses associated with the provided community
+   * ID.
+   * 
+   * * The `Optional<List<CommunityHouse>>` represents a list of community houses that
+   * match the given community ID.
+   * * If the `exists` boolean is true, then the list is not empty and contains at least
+   * one community house.
+   * * If the `exists` boolean is false, then the list is empty and no community houses
+   * were found for the given community ID.
    */
   @Override
   public Optional<List<CommunityHouse>> findCommunityHousesById(String communityId,
@@ -238,37 +225,31 @@ public class CommunitySDJpaService implements CommunityService {
   }
 
   /**
-   * retrieves a list of community admins for a given community ID using two repository
-   * calls: `communityRepository.existsByCommunityId()` and
-   * `communityAdminRepository.findAllByCommunities_CommunityId()`. If any admins exist,
-   * the function returns an optional list of admins; otherwise, it returns an empty list.
+   * queries the community and communityAdmin tables to retrieve a list of community
+   * admins for a given community ID, returning an optional list of users if found,
+   * otherwise returning an empty list.
    * 
-   * @param communityId identifier of the community for which the list of community
-   * admins is to be retrieved.
+   * @param communityId identifier of the community whose admin users are to be retrieved.
    * 
-   * 	- `communityId`: A String representing the ID of a community.
+   * @param pageable page of results to be returned by the query, allowing for pagination
+   * and control over the number of results returned per page.
    * 
-   * @param pageable page of results that the user wants to view, allowing for pagination
-   * and efficient retrieval of the desired data.
+   * * `communityId`: A string representing the unique identifier for a community.
+   * * `Pageable`: An object that represents a page of data in a collection. It contains
+   * the page number and the size of each page.
    * 
-   * 	- `communityId`: A String that represents the ID of the community to find admins
-   * for.
-   * 	- `Pageable`: An interface that provides a way to page (i.e., limit and offset)
-   * the results of a query. The properties of `pageable` may include `getPageNumber()`
-   * (which returns the current page number), `getPageSize()` (which returns the number
-   * of items per page), `getTotalElements()` (which returns the total number of elements
-   * in the result set), and others.
+   * @returns a `Optional` of a list of `User` objects, where each element in the list
+   * represents an admin for the specified community.
    * 
-   * @returns a `Optional<List<User>>` containing the list of community admins for the
+   * * `Optional<List<User>>`: The output is an optional list of users who are community
+   * admins for the specified community ID. If no users exist with the provided community
+   * ID, the output will be `Optional.empty()`.
+   * * `List<User>`: The list contains all the users who are community admins for the
    * specified community ID.
-   * 
-   * 	- `Optional<List<User>>`: The function returns an optional list of users who are
-   * community admins for the given community ID. If no such users exist, the function
-   * returns an empty Optional.
-   * 	- `List<User>`: The list of users returned in the Optional contains the community
-   * admins for the specified community ID.
-   * 	- `Pageable`: The pageable parameter is passed to the `findAllByCommunities_CommunityId`
-   * method, which allows for pagination of the results.
+   * * `Pageable`: The pageable interface is used to define a page of results that can
+   * be retrieved from the database.
+   * * `communityId`: The input parameter represents the ID of the community for which
+   * the list of community admins is being retrieved.
    */
   @Override
   public Optional<List<User>> findCommunityAdminsById(String communityId,
@@ -283,24 +264,23 @@ public class CommunitySDJpaService implements CommunityService {
   }
 
   /**
-   * retrieves a `Optional<User>` instance containing the community administrator
-   * associated with the specified `adminId`.
+   * retrieves a `User` object representing the community administrator with the specified
+   * `adminId`.
    * 
-   * @param adminId user ID of the community administrator to be retrieved from the database.
+   * @param adminId user ID of the community administrator to be retrieved.
    * 
-   * 	- `communityAdminRepository`: This is an instance of `UserRepository`, which
-   * represents a database repository for storing and retrieving user data.
-   * 	- `findByUserId`: This method performs a query on the repository to find the
-   * community administrator associated with the specified `adminId`.
+   * @returns an Optional object containing a `User` instance if the admin exists,
+   * otherwise it is empty.
    * 
-   * @returns an optional `User` object representing the community administrator with
-   * the provided `adminId`.
+   * The `Optional<User>` return type indicates that the function may return `None` if
+   * no community administrator is found for the given `adminId`.
    * 
-   * 	- `Optional<User>`: The type of the output indicates that it may contain a value
-   * or be empty, which is represented by the `<>` symbol.
-   * 	- `findByUserId(adminId)`: The method call within the `findCommunityAdminById`
-   * function retrieves a user from the `communityAdminRepository` using the `findByUserId`
-   * method and passing in the `adminId` parameter.
+   * The `findByUserId` method call within the function retrieves a `User` object from
+   * the `communityAdminRepository`, where the `User.id()` field matches the `adminId`
+   * parameter passed to the function.
+   * 
+   * The returned `Optional<User>` contains the retrieved `User` object if found,
+   * otherwise it is `None`.
    */
   @Override
   public Optional<User> findCommunityAdminById(String adminId) {
@@ -308,48 +288,34 @@ public class CommunitySDJpaService implements CommunityService {
   }
 
   /**
-   * retrieves community details by ID from the repository.
+   * retrieves the details of a community with the provided `communityId`.
    * 
-   * @param communityId identifier of the community to retrieve details for.
+   * @param communityId ID of a community that is being retrieved from the database.
    * 
-   * 	- `communityId`: This is a string input parameter that represents the unique
-   * identifier for a community. It is used to retrieve community details from the repository.
+   * @returns an optional instance of `Community`.
    * 
-   * @returns an Optional<Community> object containing the details of the specified
-   * community if found, or an emptyOptional if not found.
-   * 
-   * The Optional object represents a possible value of the Community object, which
-   * contains information about a community.
-   * 
-   * If the Optional object is present, it means that the community with the specified
-   * ID exists in the repository, and its details can be retrieved.
-   * 
-   * If the Optional object is absent, it means that either there is no community with
-   * the specified ID or the repository could not find any matching community.
+   * Optional<Community> represents an optional Community object, which means that it
+   * may be null if no Community with the given communityId exists.
+   * Community is a class that contains information about a community, including its
+   * id, name, and location.
    */
   @Override public Optional<Community> getCommunityDetailsById(String communityId) {
     return communityRepository.findByCommunityId(communityId);
   }
 
   /**
-   * retrieves a community's details along with its administrators from the repository.
+   * retrieves a community's details and admins based on its ID.
    * 
-   * @param communityId identity of the community for which details and administrators
-   * are being requested.
+   * @param communityId ID of the community for which details and administrators are
+   * being retrieved.
    * 
-   * The `findByCommunityIdWithAdmins` method returns an `Optional` object containing
-   * the community details along with its admins. The `Optional` type allows for the
-   * possibility that no community details or admins may be found.
+   * @returns an optional object containing the details of a community along with its
+   * administrators.
    * 
-   * @returns an optional `Community` object containing details of the specified community
-   * and its administrators.
-   * 
-   * 	- The `Optional` class represents a container for a value that may or may not be
-   * present. In this case, it contains a `Community` object if one exists with the
-   * given `communityId`, otherwise it is empty.
-   * 	- The `Community` object has several attributes: `id`, `name`, `description`,
-   * `icon`, and `admins`. These attributes represent the details of the community,
-   * including its identifier, name, description, icon, and list of administrators.
+   * * `Optional<Community>` represents an optional Community object that may or may
+   * not be present depending on the existence of a community with the specified ID.
+   * * `communityRepository.findByCommunityIdWithAdmins(communityId)` is used to retrieve
+   * a Community object associated with the given ID, along with its admin users.
    */
   @Override
   public Optional<Community> getCommunityDetailsByIdWithAdmins(String communityId) {
@@ -357,50 +323,32 @@ public class CommunitySDJpaService implements CommunityService {
   }
 
   /**
-   * adds a set of admins to a community by finding the community, iterating over the
-   * admins, and adding them as members of the community.
+   * takes a community ID and a set of admin IDs, adds the admins to the community's
+   * admin list, and returns an Optional<Community> representing the updated community.
    * 
-   * @param communityId ID of the community whose admins are to be added.
+   * @param communityId identifier of the community for which the admins are being added.
    * 
-   * 	- `findByCommunityIdWithAdmins`: This method is used to find a community with the
-   * given `communityId`. It returns an optional instance of `Community`.
-   * 	- `getCommunities`: This method retrieves a set of `Community` instances that are
-   * associated with the given `communityId`.
-   * 	- `getAdmins`: This method retrieves a set of `User` instances that are associated
-   * with the given `communityId`.
-   * 	- `save`: This method saves a `Community` instance after modifying its properties.
+   * @param adminsIds set of user IDs of the admins to be added to the community.
    * 
-   * The function takes two input parameters: `communityId` and `adminsIds`. The
-   * `adminsIds` parameter is a set of strings that represent the user IDs of the admins
-   * to be added to the community.
+   * * `Set<String> adminsIds`: This is a set of strings representing user IDs that
+   * will be added as admins to a community.
+   * * `communityId`: This is the ID of the community that the admins will be added to.
    * 
-   * The function first calls `findByCommunityIdWithAdmins` to retrieve an optional
-   * instance of `Community`. If the community is found, it then iterates over the
-   * `adminsIds` set and calls `findByUserIdWithCommunities` to retrieve a set of `Admin`
-   * instances associated with each user ID. Then, for each admin, it adds the admin
-   * to the community by calling `save` on the admin instance. Finally, it saves the
-   * modified community instance using `save`.
+   * @returns an optional `Community` object that has been updated with the provided admins.
    * 
-   * @param adminsIds IDs of users who are to be added as admins to a community.
-   * 
-   * 	- Set<String> adminsIds: A set of strings representing the IDs of the admins to
-   * be added to the community.
-   * 	- String communityId: The ID of the community where the admins will be added.
-   * 
-   * @returns an `Optional` object containing the updated community with added admins.
-   * 
-   * 	- The `Optional<Community>` return type indicates that the function may return
-   * `None` if no community is found with the given `communityId`, or if there is an
-   * error during the execution.
-   * 	- The `map` method is used to transform the `Optional<Community>` into a
-   * `Optional<User>` using the `save` method of the `UserRepository`. This method call
-   * creates a new `User` object and saves it in the database, linking it to the community.
-   * 	- The `orElseGet` method is used as a fallback to return an `Optional.empty()`
-   * if the `map` method fails to find a `User` object associated with the given `adminId`.
-   * 
-   * Overall, this function is designed to add multiple admins to a community by finding
-   * the community and then adding each admin to the community's list of admins, saving
-   * the changes to the database.
+   * * `Optional<Community> communitySearch`: This represents an optional `Community`
+   * object that is found by its `communityId`. If no such `Community` object exists,
+   * this will be `Optional.empty()`.
+   * * `map()` method: This method returns a new `Optional` containing the result of
+   * applying the given function to the `Community` object. In this case, the function
+   * adds the provided admins to the community by updating the `admins` field and then
+   * saving the modified `Community` object.
+   * * `orElseGet()` method: This method returns a new `Optional` containing either the
+   * result of the given function or an empty `Optional` if the original `Optional` is
+   * empty. In this case, the function is called with the `admin` object and its
+   * `Community` field is updated and saved. If the `Optional` returned by the
+   * `findByCommunityIdWithAdmins` method is empty, this method will return an empty `Optional`.
+   * * `save()` method: This method saves the modified `Community` object in the repository.
    */
   @Override
   public Optional<Community> addAdminsToCommunity(String communityId, Set<String> adminsIds) {
@@ -420,42 +368,50 @@ public class CommunitySDJpaService implements CommunityService {
   }
 
   /**
-   * adds new or modified houses to a community by first checking if the community
-   * exists, then iterating through the provided houses and either adding them to the
-   * community's house list or generating a unique ID for a new house.
+   * adds new or modified houses to a community by checking if they already exist in
+   * the community, creating a unique ID if necessary, and then adding them to the
+   * community's house list. If a house already exists, it is updated with a new unique
+   * ID and saved.
    * 
-   * @param communityId unique identifier of the community for which the houses are
-   * being added, and is used to find the existing houses in the community and to save
-   * the new houses in the community after they have been processed.
-   * 
-   * 	- `Optional<Community> communitySearch`: This represents an optional instance of
-   * the `Community` class, which may or may not be present in the input. If present,
-   * it contains a reference to a `Community` object that has been fetched from the repository.
-   * 	- `Set<CommunityHouse> houses`: This is a set of `CommunityHouse` objects that
-   * are being added to the community. Each element in the set represents a single
-   * house, with its own unique `houseId` and `name`.
+   * @param communityId ID of the community to which the houses will be added.
    * 
    * @param houses set of houses to be added to the community.
    * 
-   * 	- `houses`: A set of `CommunityHouse` objects, each representing a house in a community.
-   * 	- `communityId`: The ID of the community to which the houses belong.
-   * 	- `CommunityHouse`: Represents a house in a community, having attributes such as
-   * `houseId`, `name`, and `communities`.
-   * 	- `generateUniqueId()`: A method that generates a unique ID for each newly created
-   * house.
+   * * `houses` is a `Set` containing `CommunityHouse` objects.
+   * * Each `CommunityHouse` object has several attributes, including `houseId`, `name`,
+   * and `community`.
+   * * The `houseId` attribute is a unique identifier for each house.
+   * * The `name` attribute is the name of the house.
+   * * The `community` attribute refers to the community that the house belongs to.
+   * 
+   * The function first searches for an existing community with the given `communityId`
+   * using the `communityRepository`. If a match is found, the function adds each house
+   * in the `houses` set to the existing community and saves the community. Otherwise,
+   * the function creates a new community with the `generateUniqueId()` method, adds
+   * each house to the community, and saves the community.
    * 
    * @returns a set of unique house IDs that have been added to the community, along
-   * with the corresponding community ID.
+   * with the updated community entity.
    * 
-   * 	- `Set<String> addedIds`: This set contains the house IDs that were newly created
-   * or updated in the community. Each element in the set is a unique house ID.
-   * 	- `Optional<Community> communitySearch`: This optional field represents the result
-   * of searching for a community with the given `communityId`. If the community is
-   * found, the `community` field will contain the community object, and the `map`
-   * method will be called to update the houses in the community. Otherwise, the field
-   * will be `None`, and no updates will be made to the community.
-   * 	- `Set<CommunityHouse> houses`: This set contains the houses that are being added
-   * or updated in the community. Each element in the set is a community house object.
+   * * `Set<String> addedIds`: This set contains the house IDs that were successfully
+   * added to the community. These IDs are unique and have been generated using a unique
+   * identifier algorithm.
+   * * `Optional<Community> communitySearch`: This is an optional object that represents
+   * the community being searched for. If the community is found, the function will
+   * return the community with its houses. Otherwise, the function will return an empty
+   * set.
+   * * `Set<CommunityHouse> communityHouses`: This set contains the existing houses in
+   * the community. The function iterates over these houses and checks if each one
+   * matches the house being added. If a match is found, the house ID is already occupied,
+   * and a new unique ID is generated for the added house.
+   * * `CommunityHouseRepository save(house)`: This method saves the updated house
+   * object in the repository.
+   * 
+   * The function returns a set of house IDs that have been successfully added to the
+   * community. These IDs are unique and have been generated using a unique identifier
+   * algorithm. The function also checks if the house exists in the community before
+   * adding it, and if so, it updates the existing house object instead of creating a
+   * new one.
    */
   @Override
   public Set<String> addHousesToCommunity(String communityId, Set<CommunityHouse> houses) {
@@ -489,23 +445,15 @@ public class CommunitySDJpaService implements CommunityService {
   }
 
   /**
-   * removes an admin from a community by finding the community and removing the admin
-   * from its admin list if present, saving the community, and returning true if
-   * successful, otherwise false.
+   * removes an admin from a community by searching for the community in the repository,
+   * removing the admin from the community's admin list, and saving the community if
+   * the removal was successful.
    * 
-   * @param communityId unique identifier of the community whose admins are to be removed.
+   * @param communityId unique identifier of a community for which an admin is to be removed.
    * 
-   * 	- `communityId`: This is an String representing the unique identifier for a community.
-   * 	- `adminId`: This is a String representing the unique identifier of an admin to
-   * be removed from the community.
+   * @param adminId ID of an admin to be removed from a community.
    * 
-   * @param adminId ID of the admin to be removed from the community.
-   * 
-   * 	- `String communityId`: The unique identifier for a community in the system.
-   * 	- `String adminId`: A unique identifier for an administrator within a community,
-   * representing a user account ID.
-   * 
-   * @returns a boolean value indicating whether the admin has been successfully removed
+   * @returns a boolean value indicating whether the admin was successfully removed
    * from the community.
    */
   @Override
@@ -525,30 +473,34 @@ public class CommunitySDJpaService implements CommunityService {
   }
 
   /**
-   * deletes a community by finding all houses associated with it and removing them,
-   * then deleting the community from the repository.
+   * deletes a community based on its ID, retrieves all houses associated with it, and
+   * then removes each house from the community using its ID before deleting the community
+   * itself.
    * 
-   * @param communityId ID of the community to be deleted.
-   * 
-   * 	- `communityRepository`: This is an instance of `CrudRepository`, which represents
-   * a repository for working with communities in the application.
-   * 	- `findByCommunityIdWithHouses()`: This method returns a stream of community
-   * objects that match the specified `communtyId`. The method calls `map` on the
-   * resulting stream to transform each community object into a new stream of `String`
-   * values, representing the IDs of the houses associated with each community.
-   * 	- `getHouses()`: This method returns a stream of `CommunityHouse` objects, which
-   * represent the houses associated with each community. The method calls `map` on the
-   * resulting stream to transform each `CommunityHouse` object into a new stream of
-   * `String` values, representing the IDs of the houses.
-   * 	- `collect(Collectors.toSet())`: This line collects the set of house IDs from the
-   * transformed streams using the `toSet()` method.
-   * 	- `removeHouseFromCommunityByHouseId()`: This is a utility method that removes a
-   * house from a community based on its ID. The method takes two parameters: `community`
-   * and `houseId`.
-   * 	- `orElse(false)`: This line returns `true` if the `findByCommunityIdWithHouses`
-   * method returns a non-empty stream, or `false` otherwise.
+   * @param communityId Id of the community to be deleted.
    * 
    * @returns a boolean value indicating whether the community was successfully deleted.
+   * 
+   * * `return`: This indicates the function returns a boolean value indicating whether
+   * the community was successfully deleted.
+   * * `communityRepository.findByCommunityIdWithHouses(communityId)`: This is a method
+   * call that retrieves all houses associated with the given community ID. The method
+   * returns a stream of `CommunityHouse` objects, which are then mapped to a set of
+   * house IDs using the `map()` method.
+   * * `.map(community -> { ... })`: This is a lambda expression that takes the `Community`
+   * object returned by the previous method call and performs an operation on it. The
+   * lambda expression returns a new stream of `String` values, which represent the
+   * house IDs associated with the community.
+   * * `Set<String> houseIds = ...`: This line of code creates a set of `String` values
+   * that represent the house IDs associated with the community.
+   * * `houseIds.forEach(houseId -> removeHouseFromCommunityByHouseId(community,
+   * houseId))`: This line of code performs an operation on each value in the `houseIds`
+   * set. Specifically, it calls the `removeHouseFromCommunityByHouseId()` function
+   * with the community and house ID arguments.
+   * * `communityRepository.delete(community)`: This is a method call that deletes the
+   * community from the repository.
+   * * `.orElse(false)`: This line of code returns the result of the previous method
+   * call, or `false` if the community could not be deleted.
    */
   @Override
   @Transactional
@@ -569,77 +521,46 @@ public class CommunitySDJpaService implements CommunityService {
   }
 
   /**
-   * generates a unique identifier using the `UUID.randomUUID()` method and returns it
-   * as a string.
+   * generates a unique identifier based on a Universally Unique Identifier (UUID)
+   * generated using the `UUID.randomUUID()` method.
    * 
-   * @returns a unique, randomly generated string of characters.
-   * 
-   * 	- The output is a string that represents a unique identifier generated using the
-   * `UUID` class.
-   * 	- The `UUID.randomUUID()` method generates a universally unique identifier (UUID)
-   * that is randomly generated and has no correlation with any other UUID.
-   * 	- The resulting string has a maximum length of 36 characters, consisting of a
-   * series of letters and numbers separated by dashes (-).
+   * @returns a unique, randomly generated string of letters and numbers.
    */
   private String generateUniqueId() {
     return UUID.randomUUID().toString();
   }
 
   /**
-   * removes a house from a community by first removing the house from the community's
-   * houses collection, then deleting the house members associated with it, and finally
-   * saving the community and deleting the house.
+   * removes a house from a community by first removing it from the community's houses
+   * collection, then deleting its members from the house, and finally saving the
+   * community and deleting the house.
    * 
    * @param community Community object that contains the houses to be removed, and is
-   * used to retrieve the Set of house members associated with each house and delete
-   * them before deleting the houses themselves.
+   * used to perform the actual removal of the houses from the community.
    * 
-   * 	- `community`: A `Community` object, which represents a community of houses and
-   * their members.
-   * 	- `houseId`: The unique identifier of the house to be removed from the community.
-   * 
-   * The function first checks if the `community` is null or invalid, and returns false
-   * in such cases. Otherwise, it uses an optional `CommunityHouse` object to find the
-   * house with the specified `houseId`. If a house is found, the function performs
-   * several operations:
-   * 
-   * 	- It removes the house from the community's list of houses using the `Set` data
-   * structure.
-   * 	- It streams the house's member IDs and collects them in a set using `Collectors.toSet()`.
-   * 	- It deletes each member ID from the house using the `houseService.deleteMemberFromHouse()`
-   * function.
-   * 	- It saves the updated community using the `communityRepository.save()` function.
-   * 	- It deletes the house with the specified `houseId` using the
-   * `communityHouseRepository.deleteByHouseId()` function.
-   * 
-   * The function returns `true` if the operation was successful, and `false` otherwise.
-   * 
-   * @param houseId ID of the house to be removed from the community.
-   * 
-   * 	- `community`: A `Community` object representing the community where the house
-   * to be removed is located.
-   * 	- `houseId`: A string representing the unique identifier of the house to be removed.
+   * * `community`: A `Community` object that represents a community in the application.
+   * It has various attributes such as `id`, `name`, `description`, and `members`.
+   * * `houseId`: The unique identifier of the house to be removed from the community.
    * 
    * The function first checks if the `community` parameter is null, and returns false
-   * in that case. Then, it uses the `findByHouseIdWithHouseMembers` method provided
-   * by the `communityHouseRepository` to find the house with the given `houseId`. If
-   * no house is found, the function returns false.
+   * if it is. Otherwise, it finds an optional `CommunityHouse` object using the
+   * `findByHouseIdWithHouseMembers` method of the `communityHouseRepository`. If there
+   * is no house with the given `houseId`, the function returns false.
    * 
-   * Next, the function removes the house from the community's list of houses using the
-   * `set` method. This is necessary because otherwise, the Set relationship between
-   * the community and its houses would be broken, and the `remove` method would not
-   * work correctly.
+   * Next, the function modifies the `community` object by removing the house with the
+   * specified `houseId` from its `houses` set. This is necessary because the Set
+   * relationship between a community and its houses is not mutable, and removing a
+   * house without first updating the community would result in a broken Set.
    * 
-   * After removing the house from the community, the function uses a stream to collect
-   * all the member IDs associated with the removed house. These member IDs are then
-   * deleted from the house using the `deleteMemberFromHouse` service. Finally, the
-   * function saves the updated community and deletes the removed house using the
-   * `communityRepository` and `communityHouseRepository`, respectively.
+   * After removing the house, the function streams the members of the house and maps
+   * their `memberId` attributes to a `Set`. It then deletes each member from the house
+   * using the `deleteMemberFromHouse` function.
    * 
-   * In summary, the `removeHouseFromCommunityByHouseId` function is responsible for
-   * removing a house from a community based on its unique identifier, while also
-   * updating the community's houses list and deleting any member IDs associated with
-   * the removed house.
+   * Finally, the function saves the updated community using the `communityRepository`,
+   * and deletes the removed house using the `communityHouseRepository`. The function
+   * returns true if the removal was successful, or false otherwise.
+   * 
+   * @param houseId id of the house to be removed from the community.
    * 
    * @returns a boolean value indicating whether the house was successfully removed
    * from the community.

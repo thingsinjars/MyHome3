@@ -21,12 +21,13 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 /**
- * has a String houseId field and a String name field used for representing community
- * houses.
+ * has properties for a unique identifier and name for representing community houses
+ * within a given context.
  * Fields:
- * 	- houseId (String): represents a unique identifier for a community house within
- * a given context.
- * 	- name (String): in the CommunityHouseDto class represents the name of a house.
+ * 	- houseId (String): in the CommunityHouseDto class represents a unique identifier
+ * for a community house within a given context.
+ * 	- name (String): represents the name of a house within the context of the
+ * CommunityHouseDto class.
  */
 @Data
 @AllArgsConstructor

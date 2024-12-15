@@ -13,7 +13,9 @@ import org.thymeleaf.templateresolver.ITemplateResolver;
 import java.util.Locale;
 
 /**
- * TODO
+ * defines properties for email localization and creates a ResourceBundleMessageSource
+ * instance to handle email messages. It also sets up a Spring Template Engine with
+ * Thymeleaf template resolver and message source.
  */
 @Configuration
 @RequiredArgsConstructor
@@ -23,24 +25,20 @@ public class EmailTemplateConfig {
   private final EmailTemplateLocalizationProperties localizationProperties;
 
   /**
-   * creates a `ResourceBundleMessageSource` instance that retrieves email messages
-   * from a resource bundle file. The file path, default locale, and encoding are set
-   * using properties from an external `localizationProperties` object. The cache seconds
-   * can also be set using the same object.
+   * creates a `ResourceBundleMessageSource` instance with configuration parameters set
+   * from localization properties.
    * 
-   * @returns a ResourceBundleMessageSource instance set with configuration properties
-   * for email localization.
+   * @returns a `ResourceBundleMessageSource` object configured to handle email-related
+   * messages.
    * 
-   * 	- `ResourceBundleMessageSource messageSource`: The output is a `ResourceBundleMessageSource`,
-   * which means it provides access to message keys in a resource bundle.
-   * 	- `setBasename(localizationProperties.getPath())`: The basename of the resource
-   * bundle is set to the value of `localizationProperties.getPath()`.
-   * 	- `setDefaultLocale(Locale.ENGLISH)`: The default locale for the resource bundle
-   * is set to English.
-   * 	- `setDefaultEncoding(localizationProperties.getEncoding())`: The default encoding
-   * for the resource bundle is set to the value of `localizationProperties.getEncoding()`.
-   * 	- `setCacheSeconds(localizationProperties.getCacheSeconds())`: The number of
-   * seconds that the resource bundle will be cached is set to the value of `localizationProperties.getCacheSeconds()`.
+   * * `ResourceBundleMessageSource`: This is the class that represents the message source.
+   * * `setBasename()`: Sets the basename of the message source to the value of the
+   * `localizationProperties.getPath()` method.
+   * * `setDefaultLocale()`: Sets the default locale of the message source to English.
+   * * `setDefaultEncoding()`: Sets the default encoding of the message source to the
+   * value of the `localizationProperties.getEncoding()` method.
+   * * `setCacheSeconds()`: Sets the cache seconds for the message source to the value
+   * of the `localizationProperties.getCacheSeconds()` method.
    */
   @Bean
   public ResourceBundleMessageSource emailMessageSource() {
@@ -53,29 +51,28 @@ public class EmailTemplateConfig {
   }
 
   /**
-   * creates a new instance of the `SpringTemplateEngine` class and sets its template
-   * resolver and message source to the specified values, returning the instance.
+   * creates a new instance of Spring Template Engine, sets its template resolver and
+   * message source, and returns it.
    * 
-   * @param emailMessageSource message source for email-related messages in the Spring
-   * Template Engine.
+   * @param emailMessageSource message source for email-related templates, providing
+   * messages related to emails to the Spring Template Engine.
    * 
-   * 1/ ResourceBundleMessageSource: This is an interface that provides a way to retrieve
-   * message keys in a resource bundle format. It has methods for getting message keys
-   * and their corresponding values.
+   * * `ResourceBundleMessageSource`: This is a message source that provides messages
+   * in a resource bundle format. It has various attributes such as `basenames`,
+   * `defaultBasename`, and `fallbackFactory`. These attributes enable the message
+   * source to retrieve messages from a resource bundle and provide them to the template
+   * engine.
    * 
-   * @returns a Spring Template Engine instance configured to use Thymeleaf templates
-   * and email message source.
+   * @returns a Spring Template Engine instance with Thymeleaf template resolver and
+   * email message source.
    * 
-   * 	- The `SpringTemplateEngine` instance is created with various configuration options
-   * set, including the `templateResolver` and `templateEngineMessageSource`.
-   * 	- The `templateResolver` sets the template engine's resolver to `thymeleafTemplateResolver`,
-   * which allows for the use of Thymeleaf templates.
-   * 	- The `templateEngineMessageSource` sets the message source for the template
-   * engine, in this case an instance of `ResourceBundleMessageSource` for handling
-   * email-related messages.
+   * The `SpringTemplateEngine` instance is set with a `templateResolver`, which is an
+   * object of type `ThymeleafTemplateResolver`. This resolver provides access to
+   * Thymeleaf-specific template engine features.
    * 
-   * The other attributes of the returned output, such as its name or any other
-   * configuration options set, are not explicitly mentioned in the provided code snippet.
+   * A `MessageSource` object, which is responsible for providing message keys and their
+   * associated messages, is also set as the `templateEngineMessageSource` property.
+   * In this case, it is an instance of `ResourceBundleMessageSource`.
    */
   @Bean
   public SpringTemplateEngine thymeleafTemplateEngine(ResourceBundleMessageSource emailMessageSource) {
@@ -86,23 +83,22 @@ public class EmailTemplateConfig {
   }
 
   /**
-   * creates a Thymeleaf template resolver that sets the prefix, suffix, template mode,
-   * character encoding, and caching based on properties.
+   * creates a Thymeleaf Template Resolver, setting properties such as prefix, suffix,
+   * mode, encoding, and caching based on template properties.
    * 
-   * @returns a `ITemplateResolver` instance set up to resolve Thymeleaf templates based
-   * on properties defined in the `templateProperties` class.
+   * @returns a `ITemplateResolver` object configured to resolve Thymeleaf templates
+   * based on specified properties.
    * 
-   * 	- `templateProperties`: This is an instance of `ITemplateProperties`, which
-   * contains information about the Thymeleaf template resolver.
-   * 	+ `path`: The path to the template file.
-   * 	+ `format`: The template file format (e.g., "html", "xml").
-   * 	+ `mode`: The template rendering mode (e.g., "HTML", "XML").
-   * 	+ `encoding`: The character encoding of the template file.
-   * 	+ `cacheable`: A boolean indicating whether the template is cacheable.
-   * 
-   * The properties are set using the `setPrefix`, `setSuffix`, `setTemplateMode`, and
-   * `setCharacterEncoding` methods, respectively. Additionally, the `setCacheable`
-   * method is used to indicate whether the template is cacheable or not.
+   * * `ClassLoaderTemplateResolver`: The type of template resolver used to resolve templates.
+   * * `templatePath`: The path to the Thymeleaf template file.
+   * * `fileSeparator`: The separator used in the file system.
+   * * `templateProperties`: The properties of the Thymeleaf template, such as mode,
+   * format, encoding, and cacheability.
+   * * `setPrefix()`: Sets the prefix for the resolved template path.
+   * * `setSuffix()`: Sets the suffix for the resolved template path.
+   * * `setTemplateMode()`: Sets the mode of the Thymeleaf template.
+   * * `setCharacterEncoding()`: Sets the character encoding used for the resolved template.
+   * * `setCacheable()`: Indicates whether the resolved template should be cached or not.
    */
   private ITemplateResolver thymeleafTemplateResolver() {
     ClassLoaderTemplateResolver templateResolver = new ClassLoaderTemplateResolver();

@@ -37,20 +37,22 @@ import lombok.With;
  * Entity identifying a valid user in the service.
  */
 /**
- * represents a valid user in the service, with attributes for name, community ID,
- * district, and set of admins, houses, and amenities.
+ * represents a valid user in the service with attributes for name, community ID,
+ * district, and set of admins, houses, and amenities linked through various relationships.
  * Fields:
- * 	- admins (Set<User>): a set of users who are administrators of the community,
- * managed through a many-to-many relationship with the User entity.
- * 	- houses (Set<CommunityHouse>): a set of houses associated with each community
- * entity, where each house is linked to its corresponding community through an
- * optional one-to-one relationship.
- * 	- name (String): a string identifier for a specific community.
- * 	- communityId (String): an identifier for a specific community.
- * 	- district (String): a string value indicating the geographical area where the
- * community is located.
- * 	- amenities (Set<Amenity>): a set of Amenity objects related to the Community
- * entity, where each Amenity object has a reference to the community it belongs to.
+ * 	- admins (Set<User>): represents a set of users who are administrators of the
+ * community, managed through a many-to-many relationship with the User entity.
+ * 	- houses (Set<CommunityHouse>): in the Community class represents a set of houses
+ * associated with each community entity, where each house is linked to its corresponding
+ * community through an optional one-to-one relationship.
+ * 	- name (String): represents a unique identifier for a specific community, with
+ * no additional information provided beyond what is explicitly stated in the code snippet.
+ * 	- communityId (String): represents a unique identifier for each community instance
+ * in the service.
+ * 	- district (String): represents a geographical area where the community is located.
+ * 	- amenities (Set<Amenity>): in the Community class represents a set of Amenity
+ * objects related to the community, with each Amenity object having a reference to
+ * the community it belongs to.
  */
 @AllArgsConstructor
 @NoArgsConstructor

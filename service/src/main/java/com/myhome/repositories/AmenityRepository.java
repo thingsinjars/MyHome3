@@ -25,7 +25,7 @@ import org.springframework.data.repository.query.Param;
 
 /**
  * provides methods for retrieving Optional<Amenity> objects representing amenities
- * based on their amenityId, using Spring Data JPA queries and entity graphs.
+ * based on their amenityId using Spring Data JPA queries and entity graphs.
  */
 public interface AmenityRepository extends JpaRepository<Amenity, Long> {
 
